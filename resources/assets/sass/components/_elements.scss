@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Elements
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. Forms
+ *  3. Horizontal Rows
+ */
+
+/*********************
+  1. Declarations
+**********************/
+
+
+/*********************
+  2. Forms
+**********************/
+.central-form {
+    background: $white;
+    padding: 15px 70px 35px 70px;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/*********************
+  3. Horizontal Rows
+**********************/
+hr.light {
+    margin: 20px;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #d8d8d8, rgba(0, 0, 0, 0));
+}

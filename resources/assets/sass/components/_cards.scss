@@ -1,0 +1,144 @@
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. Cards List
+ *  3. Cards
+ */
+
+/*********************
+  1. Declarations
+**********************/
+$card-height: 180px;
+$card-width: 270px;
+$card-margin: 10px;
+
+$card-hover-transition-duration: .5s;
+
+$card-big-height: 2 * ($card-height + $card-margin);
+$card-big-width: 2 * ($card-width + $card-margin);
+
+/*********************
+  2. Cards List
+**********************/
+.card-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &::after {
+        clear: both;
+    }
+
+    .card {
+        float: left;
+        margin: $card-margin;
+    }
+}
+
+/*********************
+  3. Cards
+**********************/
+.card {
+    height: $card-height;
+    width: $card-width;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+
+    &.big, &.big-width {
+        width: $card-big-width;
+    }
+
+    &.big, &.big-height {
+        height: $card-big-height;
+    }
+
+    > a {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        &:hover {
+            .card-header > .card-image {
+                transform: scale(1.2);
+                opacity: 0.3;
+            }
+        }
+    }
+
+    .card-header {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        background: $dark-color;
+        flex: 1;
+
+        .card-image {
+            background-position: 50%;
+            background-size: cover;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            transition: all $card-hover-transition-duration;
+            opacity: 0.6;
+        }
+
+        .card-header-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 2;
+
+            > * {
+                color: $white-smooth;
+            }
+
+            > i {
+                font-size: 2.5rem;
+            }
+        }
+    }
+
+    .card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: $white;
+        padding: 10px;
+        z-index: 2;
+
+        .title {
+            margin-top: 0;
+            color: $dark-color;
+        }
+
+        .subtitle {
+            color: $grey;
+            font-size: $font-size-small;
+        }
+
+        .card-info {
+            flex: 1;
+            font-size: $font-size-small;
+        }
+
+        .card-extra {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            color: $grey;
+
+            .price {
+                color: $dark-color;
+                font-size: $font-size-x-large;
+            }
+        }
+    }
+}

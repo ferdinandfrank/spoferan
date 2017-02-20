@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. Collections
+ *  3. Helper Classes
+ *  4. Typography
+ *  5. Navbar
+ *  6. Inputs
+ *  7. Buttons
+ *  8. Dropdowns
+ *  9. Lists
+ */
+
+/*********************
+  1. Declarations
+**********************/
+
+$white: #fff !default;
+$white-smooth: #f2f2f2 !default;
+
+$grey: #555 !default;
+$grey-dark: #1D2127 !default;
+$grey-medium: #808697 !default;
+$grey-light: #d8d8d8 !default;
+$grey-transparent: #eaeaea !default;
+
+$black: #171717 !default;
+$black-smooth: #262626 !default;
+
+$dark-color: $black !default;
+$dark-inverse-color: $white;
+
+$primary-color: #008200 !default;
+$primary-inverse-color: $white !default;
+
+$secondary-color: #f0820a !default;
+$secondary-inverse-color: $white !default;
+
+$default-color: #ebebeb !default;
+$default-inverse-color: #777 !default;
+
+$disabled-color: #ebebeb !default;
+$disabled-inverse-color: #999 !default;
+
+$muted-color: #999 !default;
+
+$success-color: #47a447 !default;
+$success-inverse-color: $white !default;
+
+$warning-color: #ed9c28 !default;
+$warning-inverse-color: $white !default;
+
+$error-color: #d2322d !default;
+$error-inverse-color: $white !default;
+
+$info-color: #f0820a !default;
+$info-inverse-color: $white !default;
+
+$website-color: $secondary-color !default;
+$facebook-color: #4267b2 !default;
+$facebook-hover-color: #365899 !default;
+$twitter-color: #1da1f2 !default;
+$twitter-hover-color: #0c7abf !default;
+$whatsapp-color: #25d366 !default;
+$whatsapp-hover-color: #128c7e !default;
+$instagram-color: #405de6 !default;
+$linkedin-color: #0077b5 !default;
+$github-color: #333 !default;
+
+$body-color: #ecedf0;
+
+/*********************
+  2. Collections
+**********************/
+$colors-list: (primary $primary-color $primary-inverse-color) (secondary $secondary-color $secondary-inverse-color) (success $success-color $success-inverse-color) (warning $warning-color $warning-inverse-color) (error $error-color $error-inverse-color) (info $info-color $info-inverse-color) (dark $dark-color $dark-inverse-color);
+
+/*********************
+  3. Helper Classes
+**********************/
+@each $state in $colors-list {
+    .#{nth($state,1)} {
+        color: #{nth($state,2)} !important;
+    }
+}
+
+@each $state in $colors-list {
+    .bg-#{nth($state,1)} {
+        background-color: #{nth($state,2)} !important;
+    }
+}
+
+/*********************
+  4. Typography
+**********************/
+$link-color: $primary-color !default;
+$text-color: $grey !default;
+$heading-color: $grey-dark !default;
+$heading-link-hover-color: $primary-color !default;
+
+/*********************
+  5. Navbar
+**********************/
+$header-background-gradient-start: $default-color 0%;
+$header-background-gradient-end: $white 45%;
+$header-border-bottom-color: $default-color;
+
+$header-buttons-text-color: $grey;
+$header-buttons-background-color: transparent;
+$header-buttons-hover-text-color: $primary-color;
+$header-buttons-hover-background-color: transparent;
+$header-buttons-badge-background-color: $secondary-color;
+$header-buttons-badge-text-color: $secondary-inverse-color;
+
+$header-separator-background-color: $grey-light;
+$header-separator-background-gradient-color: $white-smooth;
+
+$menu-item-text-color: $grey-light;
+$menu-item-arrow-color: $grey-light;
+
+/*********************
+  6. Inputs
+**********************/
+$input-text-color: $grey;
+$input-border-color: $grey-transparent;
+$input-active-border-color: $secondary-color;
+$select-search-choice-background-color: $primary-color;
+$select-search-choice-text-color: $primary-inverse-color;
+$input-background-color: $white;
+
+$datetimepicker-active-background-color: $primary-color;
+$datetimepicker-active-text-color: $white-smooth;
+$datetimepicker-btn-hover-background-color: $primary-color;
+$datetimepicker-btn-disabled-color: $disabled-color;
+
+/*********************
+  7. Buttons
+**********************/
+$button-default-background-color: $primary-color !default;
+$button-default-text-color: $white !default;
+
+$button-disabled-background-color: $white-smooth !default;
+$button-disabled-text-color: $grey-light !default;
+
+/*********************
+  8. Dropdowns
+**********************/
+$dropdown-background-color: $white;
+$dropdown-item-text-color: $grey;
+$dropdown-item-hover-background-color: $primary-color;
+$dropdown-item-hover-text-color: $primary-inverse-color;
+
+/*********************
+  9. Lists
+**********************/
+$notification-list-border-color: $grey-light;
+$notification-list-unread-background-color: $white-smooth;
+$notification-list-title-color: $secondary-color;
+$notification-list-text-color: $text-color;
+$notification-list-date-color: $muted-color;

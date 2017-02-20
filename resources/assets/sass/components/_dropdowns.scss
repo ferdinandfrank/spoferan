@@ -1,0 +1,64 @@
+/* ==========================================================================
+   Dropdowns
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. General
+ */
+
+/*********************
+  1. Declarations
+**********************/
+$dropdown-padding: 10px;
+$user-menu-padding: 45px 10px 0;
+$dropdown-border-radius: 2px;
+$dropdown-item-padding: 10px;
+$dropdown-icon-margin-right: 5px;
+$dropdown-menu-max-width: 300px;
+
+/*********************
+  2. General
+**********************/
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
+    padding: $dropdown-padding;
+    z-index: 992;
+    display: none;
+    max-width: $dropdown-menu-max-width;
+    white-space: normal;
+    line-height: normal;
+    background: $dropdown-background-color;
+    border-radius: $dropdown-border-radius;
+
+    &.user-menu {
+        padding: $user-menu-padding;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    a {
+        border-radius: $dropdown-border-radius;
+        color: $dropdown-item-text-color;
+        display: flex;
+        align-items: center;
+        font-size: $font-size-small;
+        padding: $dropdown-item-padding;
+
+        &:hover {
+            background: $dropdown-item-hover-background-color;
+            color: $dropdown-item-hover-text-color;
+        }
+    }
+
+    i {
+        font-size: $font-size;
+        margin-right: $dropdown-icon-margin-right;
+        vertical-align: middle;
+    }
+}

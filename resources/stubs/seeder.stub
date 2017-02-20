@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+/**
+ * DummyClass
+ * -----------------------
+ * Fills the database with data.
+ * -----------------------
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ */
+class DummyClass extends Seeder {
+
+    /**
+     * Runs the database seeds.
+     */
+    public function run() {
+        //
+    }
+}

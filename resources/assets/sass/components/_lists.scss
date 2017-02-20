@@ -1,0 +1,130 @@
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. General
+ *  3. Status List
+ *  4. Breadcrumb
+ *  5. Notification List
+ *  6. Info List
+ */
+
+/*********************
+  1. Declarations
+**********************/
+$breadcrumb-home-size: $font-size-large;
+$breadcrumb-separator-size: $font-size-small;
+$breadcrumb-separator-margin: 0 10px;
+$breadcrumb-size: $font-size-small;
+
+$notification-list-date-font-size: 0.7rem;
+$notification-list-message-margin: 5px 0;
+$notification-list-title-font-weight: 600;
+/*********************
+  2. General
+**********************/
+
+
+
+/*********************
+  4. Breadcrumb
+**********************/
+.breadcrumb {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    li {
+        display: inline-block;
+        font-weight: 300;
+
+        &:after {
+            content: '/';
+            display: inline-block;
+            font-size: $breadcrumb-separator-size;
+            margin: $breadcrumb-separator-margin;
+            vertical-align: middle;
+        }
+
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+    }
+
+    .fa-home {
+        font-size: $breadcrumb-home-size;
+    }
+
+    i {
+        vertical-align: middle;
+    }
+
+    a,
+    span {
+        display: inline-block;
+        font-size: $breadcrumb-size;
+        line-height: $breadcrumb-home-size + px;
+        vertical-align: middle;
+    }
+}
+
+/*********************
+  5. Notification List
+**********************/
+ul.notification-list {
+
+    width: $dropdown-menu-max-width;
+
+    a {
+        flex-direction: column;
+        align-items: flex-start;
+        color: $notification-list-text-color;
+        white-space: normal;
+
+        &.unread {
+            background: $notification-list-unread-background-color;
+        }
+
+        &:hover {
+            background: $dropdown-item-hover-background-color;
+        }
+    }
+
+    li:not(:last-child) a {
+        border-bottom: 1px solid $notification-list-border-color;
+    }
+
+    .title {
+        color: $notification-list-title-color;
+        font-weight: $notification-list-title-font-weight;
+        display: flex;
+        margin: 2px;
+        align-items: center;
+    }
+
+    .message {
+        margin: $notification-list-message-margin;
+    }
+
+    .date {
+        color: $notification-list-date-color;
+        font-size: $notification-list-date-font-size;
+    }
+}
+
+/*********************
+  6. Info List
+**********************/
+ul.info-list {
+    list-style: none;
+    padding: 0;
+
+    li {
+        color: $grey;
+    }
+}

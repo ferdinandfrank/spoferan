@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Media
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. Images
+ */
+
+/*********************
+  1. Declarations
+**********************/
+$avatar-size: 120px;
+$avatar-size-small: 50px;
+$avatar-size-x-small: 35px;
+$avatar-size-large: 200px;
+
+/*********************
+  2. Images
+**********************/
+.avatar {
+    width: $avatar-size;
+    height: $avatar-size;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    position: relative;
+
+    &.large {
+        width: $avatar-size-large;
+        height: $avatar-size-large;
+    }
+
+    &.small {
+        width: $avatar-size-small;
+        height: $avatar-size-small;
+    }
+
+    &.x-small {
+        width: $avatar-size-x-small;
+        height: $avatar-size-x-small;
+    }
+
+    &.center {
+        margin: 0 auto;
+    }
+}
+
+.img-responsive {
+    width: 100% !important;
+}
+
+.img-center {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+}
