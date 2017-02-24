@@ -13,6 +13,7 @@ class CreateOrganizersTable extends Migration {
      */
     public function up() {
         Schema::create('organizers', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedInteger('user_id')->primary();
             $table->string('name', config('validation.organizer.name.max'))->unique();
             $table->string('slug', config('validation.organizer.slug.max'))->unique();

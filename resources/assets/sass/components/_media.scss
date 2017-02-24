@@ -27,6 +27,32 @@ $avatar-size-large: 200px;
     border-radius: 50%;
     position: relative;
 
+    &.auto {
+        width: auto;
+        height: auto;
+    }
+
+    &.large {
+        width: $avatar-size-large;
+        height: $avatar-size-large;
+    }
+
+    &.small {
+        width: $avatar-size-small;
+        height: $avatar-size-small;
+    }
+
+    &.x-small {
+        width: $avatar-size-x-small;
+        height: $avatar-size-x-small;
+    }
+
+    &.center {
+        margin: 0 auto;
+    }
+}
+
+img {
     &.large {
         width: $avatar-size-large;
         height: $avatar-size-large;

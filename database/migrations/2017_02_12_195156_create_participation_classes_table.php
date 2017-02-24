@@ -13,6 +13,7 @@ class CreateParticipationClassesTable extends Migration {
      */
     public function up() {
         Schema::create('participation_classes', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('event_id');
             $table->string('title', config('validation.participation_class.title.max'));

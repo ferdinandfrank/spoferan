@@ -46,6 +46,11 @@ module.exports = {
         alignment: {
             type: String,
             default: 'right'
+        },
+
+        dropdownActiveClass: {
+            type: String,
+            default: 'dropdown-active'
         }
     },
 
@@ -61,13 +66,13 @@ module.exports = {
     methods: {
 
         activateDropdown: function () {
-            if (!this.dropdownContent.hasClass('active')) {
+            if (!this.dropdownContent.hasClass(this.dropdownActiveClass)) {
                 this.showDropdownContent();
             }
         },
 
         toggleDropdown: function () {
-            if (this.dropdownContent.hasClass('active')) {
+            if (this.dropdownContent.hasClass(this.dropdownActiveClass)) {
                 this.hideDropdownContent();
             } else {
                 this.showDropdownContent();
@@ -77,8 +82,8 @@ module.exports = {
         showDropdownContent: function () {
 
             // Set Dropdown state
-            this.dropdownContent.addClass('active');
-            this.dropdownButton.addClass('active');
+            this.dropdownContent.addClass(this.dropdownActiveClass);
+            this.dropdownButton.addClass(this.dropdownActiveClass);
 
             // Constrain width
             if (this.constrainWidth) {
@@ -89,23 +94,24 @@ module.exports = {
             }
 
             // Offscreen detection
-            var windowHeight = window.innerHeight;
-            var originHeight = this.dropdownButton.innerHeight();
-            var offsetLeft = this.dropdownButton.offset().left;
-            var offsetTop = this.dropdownButton.offset().top - $(window).scrollTop();
-            var currAlignment = this.alignment;
-            var gutterSpacing = 0;
-            var leftPosition = this.dropdownContent.css('left');
+            let windowHeight = window.innerHeight;
+            let originHeight = this.dropdownButton.innerHeight();
+            let offsetLeft = this.dropdownButton.offset().left;
+            let offsetTop = this.dropdownButton.offset().top - $(window).scrollTop();
+            let currAlignment = this.alignment;
+            let gutterSpacing = 0;
+            let leftPosition = this.dropdownContent.css('left');
 
-            var verticalOffset = this.dropdownContent.css('top');
+            let verticalOffset = this.dropdownContent.css('top');
             if (this.belowOrigin === true) {
                 verticalOffset = originHeight;
+                this.dropdownContent.addClass('below-origin');
             }
 
             // Check for scrolling positioned container.
-            var scrollYOffset = 0;
-            var scrollXOffset = 0;
-            var wrapper = this.dropdownButton.parent();
+            let scrollYOffset = 0;
+            let scrollXOffset = 0;
+            let wrapper = this.dropdownButton.parent();
             if (!wrapper.is('body')) {
                 if (wrapper[0].scrollHeight > wrapper[0].clientHeight) {
                     scrollYOffset = wrapper[0].scrollTop;
@@ -127,7 +133,7 @@ module.exports = {
             if (offsetTop + this.dropdownContent.innerHeight() > windowHeight) {
                 // If going upwards still goes offscreen, just crop height of dropdown.
                 if (offsetTop + originHeight - this.dropdownContent.innerHeight() < 0) {
-                    var adjustedHeight = windowHeight - offsetTop - verticalOffset;
+                    let adjustedHeight = windowHeight - offsetTop - verticalOffset;
                     this.dropdownContent.css('max-height', adjustedHeight);
                 } else {
                     // Flow upwards.
@@ -144,7 +150,7 @@ module.exports = {
                 leftPosition = this.dropdownButton.position().left + gutterSpacing;
             }
             else if (currAlignment === 'right') {
-                var offsetRight = this.dropdownButton.position().left + this.dropdownButton.outerWidth() - this.dropdownContent.outerWidth();
+                let offsetRight = this.dropdownButton.position().left + this.dropdownButton.outerWidth() - this.dropdownContent.outerWidth();
                 gutterSpacing = -this.gutter;
                 leftPosition = offsetRight + gutterSpacing;
             }
@@ -174,8 +180,8 @@ module.exports = {
 
         hideDropdownContent: function () {
             this.dropdownContent.fadeOut(this.outDuration);
-            this.dropdownContent.removeClass('active');
-            this.dropdownButton.removeClass('active');
+            this.dropdownContent.removeClass(this.dropdownActiveClass);
+            this.dropdownButton.removeClass(this.dropdownActiveClass);
             setTimeout(() => {
                 this.dropdownContent.css('max-height', '');
             }, this.outDuration);
@@ -185,7 +191,7 @@ module.exports = {
          * Initializes the listener to close the dropdown content, if the user clicks next to the open dropdown content.
          */
         initDropdownClosing: function () {
-            if (this.dropdownContent.hasClass('active')) {
+            if (this.dropdownContent.hasClass(this.dropdownActiveClass)) {
                 $(document).bind('click.' + this.dropdownContent.attr('id') + ' touchstart.' + this.dropdownContent.attr('id'), (e) => {
                     if (!this.dropdownContent.is(e.target) && !this.dropdownButton.is(e.target) && (!this.dropdownButton.find(e.target).length)) {
                         this.hideDropdownContent();

@@ -9,42 +9,44 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Event
-
  *
-*@property int $id
+ * @property int $id
  * @property int $organizer_id
  * @property int $event_group_id
  * @property int $parent_event_id
  * @property string $title
- * @property string                                                                         $slug
- * @property string                                                                         $description_short
- * @property string                                                                         $description
- * @property string                                                                         $email
- * @property string                                                                         $phone
- * @property string                                                                         $cover
- * @property int                                                                            $sport_type_id
- * @property bool                                                                           $published
- * @property \Carbon\Carbon                                                                 $start_date
- * @property \Carbon\Carbon                                                                 $end_date
- * @property \Carbon\Carbon                                                                 $created_at
- * @property \Carbon\Carbon                                                                 $updated_at
- * @property \Carbon\Carbon                                                                 $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CheckPoint[]         $checkPoints
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[]              $childEvents
- * @property-read \App\Models\Organizer                                                     $organizer
- * @property-read \App\Models\Event                                                         $parentEvent
+ * @property string $slug
+ * @property string $description_short
+ * @property string $description
+ * @property string $email
+ * @property string $phone
+ * @property string $cover
+ * @property int $sport_type_id
+ * @property bool $published
+ * @property \Carbon\Carbon $start_date
+ * @property \Carbon\Carbon $end_date
+ * @property string $country
+ * @property string $postcode
+ * @property string $city
+ * @property string $street
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CheckPoint[] $checkPoints
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $childEvents
+ * @property-read \App\Models\Organizer $organizer
+ * @property-read \App\Models\Event $parentEvent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ParticipationClass[] $participationClasses
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[]      $participations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[]            $raters
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $raters
  * @property-read \App\Models\SportType $sportType
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VisitClass[] $visitClasses
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event byDistance($latitude, $longitude, $distance)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event byLocation($country, $city, $postcode)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event byRating($rating)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event byStatus($status)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event onlyMain()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event onlyPublished()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event main()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event open()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event published()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCity($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCountry($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCover($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereDeletedAt($value)
@@ -57,13 +59,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereOrganizerId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereParentEventId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePostcode($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePublished($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereSlug($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereSportTypeId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereStartDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereStreet($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event withStatistics()
  * @mixin \Eloquent
  */
 class Event extends SlugModel {
@@ -73,6 +76,7 @@ class Event extends SlugModel {
     use HasCreator;
     use HasCoverImage;
     use HasStorage;
+    use HasAddress;
     use Rateable;
 
     /**
@@ -88,17 +92,21 @@ class Event extends SlugModel {
      * @var array
      */
     protected $fillable = [
-            'event_group_id',
-            'parent_event_id',
-            'title',
-            'description_short',
-            'description',
-            'email',
-            'phone',
-            'cover',
-            'sport_type_id',
-            'start_date',
-            'end_date'
+        'event_group_id',
+        'parent_event_id',
+        'title',
+        'description_short',
+        'description',
+        'email',
+        'phone',
+        'cover',
+        'sport_type_id',
+        'start_date',
+        'end_date',
+        'country',
+        'city',
+        'postcode',
+        'street'
     ];
 
     /**
@@ -107,10 +115,10 @@ class Event extends SlugModel {
      * @var array
      */
     protected $guarded_after_finish = [
-            'title',
-            'sport_type_id',
-            'start_date',
-            'end_date'
+        'title',
+        'sport_type_id',
+        'start_date',
+        'end_date'
     ];
 
     /**
@@ -119,9 +127,9 @@ class Event extends SlugModel {
      * @var array
      */
     protected $dates = [
-            'deleted_at',
-            'start_date',
-            'end_date'
+        'deleted_at',
+        'start_date',
+        'end_date'
     ];
 
     /**
@@ -135,17 +143,15 @@ class Event extends SlugModel {
 
     /**
      * Gets the corresponding organizer instance, which is the creator of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function organizer() {
-        return $this->belongsTo(Organizer::class);
+        return $this->belongsTo(Organizer::class, 'organizer_id');
     }
 
     /**
      * Gets the sport type of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -155,7 +161,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the participation classes of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -165,7 +170,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the participations of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
@@ -175,7 +179,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the visit classes of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -186,7 +189,6 @@ class Event extends SlugModel {
     /**
      * Gets the parent event of the event. If this property is not null, this event is handled as a
      * child / sub event of the parent event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -196,7 +198,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the child events of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -206,7 +207,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the visits of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
@@ -216,7 +216,6 @@ class Event extends SlugModel {
 
     /**
      * Gets the track points of the event.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -269,6 +268,52 @@ class Event extends SlugModel {
     }
 
     /**
+     * Gets the lowest price of the event's participation classes.
+     *
+     * @return float|null
+     */
+    public function getLowestPrice() {
+
+        $lowestPrice = $this->participationClasses()->select('entry_fee')->min('entry_fee');
+        foreach ($this->childEvents as $childEvent) {
+            $lowestChildPrice = $childEvent->getLowestPrice();
+            $lowestPrice = $lowestPrice && $lowestPrice < $lowestChildPrice ? $lowestPrice : $lowestChildPrice;
+        }
+
+        return $lowestPrice;
+    }
+
+    /**
+     * Gets the total number of participants including child events.
+     *
+     * @return int|mixed
+     */
+    public function getTotalNumOfParticipants() {
+        $participationsCount = property_exists($this, 'participations_count') ? $this->participations_count : count($this->participations);
+
+        foreach ($this->childEvents as $childEvent) {
+            $participationsCount += $childEvent->getTotalNumOfParticipants();
+        }
+
+        return $participationsCount;
+    }
+
+    /**
+     * Gets the total number of visitors including child events.
+     *
+     * @return int|mixed
+     */
+    public function getTotalNumOfVisitors() {
+        $visitsCount = property_exists($this, 'visits_count') ? $this->visits_count : count($this->visits);
+
+        foreach ($this->childEvents as $childEvent) {
+            $visitsCount += $childEvent->getTotalNumOfVisitors();
+        }
+
+        return $visitsCount;
+    }
+
+    /**
      * Set the events title.
      *
      * @param  string $value
@@ -303,26 +348,6 @@ class Event extends SlugModel {
         }
 
         return route('events.children.show', ['event' => $this->parentEvent, 'child' => $this]);
-    }
-
-    /**
-     * Gets the most similar events for the event.
-     *
-     * @param int $limit
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getSimilarEvents(int $limit = null) {
-        return (new EventQuery())->onlySimilar($this, $limit)->get();
-    }
-
-    /**
-     * Gets the sibling events of the event.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getSiblingEvents() {
-        return (new EventQuery())->onlySiblings($this)->get();
     }
 
     /**
@@ -432,15 +457,6 @@ class Event extends SlugModel {
     }
 
     /**
-     * Checks if any other event with the same parent event exists.
-     *
-     * @return bool
-     */
-    public function hasSiblings() {
-        return $this->isChild() && (new EventQuery())->onlySiblings($this)->get()->count() > 0;
-    }
-
-    /**
      * Publishes the event, so athletes can participate.
      */
     public function publish() {
@@ -473,65 +489,26 @@ class Event extends SlugModel {
         return parent::isFillable($key);
     }
 
-
     /**
-     * Scopes a query with including only published events.
+     * Scopes a query to only include  published events.
      *
      * @param Builder $query
      *
      * @return Builder
      */
-    public function scopeOnlyPublished($query) {
-        return (new EventQuery($query))->onlyPublished();
+    public function scopePublished($query) {
+        return $query->where('published', true);
     }
 
     /**
-     * Scopes a query depending on the distance of its track points to a given distance.
+     * Scopes a query to only include open events where an athlete could participate.
      *
      * @param Builder $query
-     * @param double  $latitude
-     * @param double  $longitude
-     * @param int     $distance
      *
      * @return Builder
      */
-    public function scopeByDistance($query, $latitude, $longitude, $distance) {
-        return (new EventQuery($query))->byDistance($latitude, $longitude, $distance);
-    }
-
-    /**
-     * Scopes a query including the stats for the events.
-     *
-     * @param $query
-     *
-     * @return Builder
-     */
-    public function scopeWithStatistics($query) {
-        return (new EventQuery($query))->withStatistics();
-    }
-
-    /**
-     * Scopes a query to events, that have a minimum average rating.
-     *
-     * @param $query
-     * @param $rating
-     *
-     * @return Builder
-     */
-    public function scopeByRating($query, $rating) {
-        return (new EventQuery($query))->byRating($rating);
-    }
-
-    /**
-     * Scopes a query to only include events of a given status.
-     *
-     * @param Builder $query
-     * @param string  $status
-     *
-     * @return Builder
-     */
-    public function scopeByStatus($query, $status) {
-        return (new EventQuery($query))->byStatus($status);
+    public function scopeOpen($query) {
+        return $query->whereDate('start_date', '>=', Carbon::now())->published();
     }
 
     /**
@@ -541,22 +518,8 @@ class Event extends SlugModel {
      *
      * @return Builder
      */
-    public function scopeOnlyMain($query) {
-        return (new EventQuery($query))->onlyMain();
-    }
-
-    /**
-     * Scopes a query to search for an address.
-     *
-     * @param string   $country
-     * @param string   $city
-     * @param          $postcode
-     * @param  Builder $query
-     *
-     * @return Builder
-     */
-    public function scopeByLocation(Builder $query, string $country, string $city, $postcode) {
-        return (new EventQuery($query))->byLocation($country, $city, $postcode);
+    public function scopeMain($query) {
+        return $query->where('parent_event_id', null);
     }
 
 }

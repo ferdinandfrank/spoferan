@@ -9,6 +9,7 @@ use App\Models\User;
 use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Install Command
@@ -22,11 +23,11 @@ use Illuminate\Support\Facades\Validator;
 class Install extends Command {
 
     /**
-     * The name and signature of the console command.
+     * The name of the console command.
      *
      * @var string
      */
-    protected $signature = 'page:install';
+    protected $name = 'page:install';
 
     /**
      * The console command description.
@@ -43,20 +44,92 @@ class Install extends Command {
     private $logger;
 
     /**
+     * The admin to insert during the install.
+     *
+     * @var User
+     */
+    private $admin;
+
+    /**
+     * The setting names to save during the install.
+     *
+     * @var array
+     */
+    private $settings = [
+        'title'             => null,
+        'subtitle'          => null,
+        'email'             => null,
+        'email_technical'   => null,
+        'description'       => null,
+        'description_short' => null,
+        'seo_keywords'      => null,
+        'logo'              => null,
+        'background'        => null,
+        'favicon'           => null,
+        'imprint'           => null,
+        'facebook'          => null,
+        'twitter'           => null,
+        'instagram'         => null,
+    ];
+
+    /**
+     * States if old available date shall be kept in the database.
+     *
+     * @var boolean
+     */
+    private $keepOldData;
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getOptions() {
+        return [
+            ['keep', 'k', InputOption::VALUE_NONE, 'Keep old available data.'],
+        ];
+    }
+
+    /**
      * Executes the console command.
      */
     public function handle() {
         $this->logger = new ConsoleLogger($this, $this->output);
 
+        $this->keepOldData = !!$this->option('keep');
+
         $this->logger->comment('Welcome to the page installation! You\'ll be up and running in no time...');
 
-        if ($this->confirm('Do you wish to setup the page? If it was already setup all of your database tables will be reset.')) {
+        $extraConfirmInfo = $this->keepOldData ? "You've set the option to keep the old data, so your old data from the database will be kept if it exists." : "If it was already setup all of your database tables will be reset.";
+        if ($this->confirm("Do you wish to setup the page? $extraConfirmInfo")
+        ) {
+            $this->saveOldData();
             $this->setupDatabase();
             $this->setupPageInformation();
             $this->setupApplicationKey();
             $this->setupAdditionalSettings();
             $this->seedDatabase();
             $this->finishSetup();
+        }
+    }
+
+    /**
+     * Save the old data.
+     */
+    private function saveOldData() {
+        if ($this->keepOldData) {
+
+            // Save settings
+            foreach ($this->settings as $settingName => $settingValue) {
+                if (empty($settingValue)) {
+                    $this->settings[$settingName] = Settings::getByName($settingName);
+                }
+            }
+
+            // Save the admin
+            if (empty($this->admin)) {
+                $this->admin = User::with('admin')->first();
+            }
         }
     }
 
@@ -76,24 +149,26 @@ class Install extends Command {
      * Setups the page with all the mandatory information.
      */
     private function setupPageInformation() {
-        $this->comment(PHP_EOL . 'Please provide the following information. Don\'t worry, you can always change these settings later from the dashboard.');
+        $this->logger->comment('Please provide the following information. Don\'t worry, you can always change these settings later from the dashboard.');
 
         // Super Admin User
-        $this->comment(PHP_EOL . 'Step 1/4: Creating the first admin user');
+        $steps = $this->keepOldData ? 1 : 4;
+        $this->logger->comment("Step 1/$steps: Creating the first admin user");
         $this->setupAdmin();
 
         // Page Title
-        $pageTitle = $this->ask('Step 2/4: Title of your page');
+        $pageTitle = $this->settings['title'] ?? $this->ask('Step 2/4: Title of your page');
         $this->savePageInfo('title', $pageTitle);
 
         // Page Subtitle
-        $pageSubtitle = $this->ask('Step 3/4: Subtitle of your page', false);
+        $pageSubtitle = $this->settings['subtitle'] ?? $this->ask('Step 3/4: Subtitle of your page', false);
         $this->savePageInfo('subtitle', $pageSubtitle);
 
         // Page Contact email address
-        $pageEmail = $this->ask('Step 4/4: The contact email address to use for the contact form', false);
+        $pageEmail = $this->settings['email'] ?? $this->ask('Step 4/4: The contact email address to use for the contact form', false);
+        $technicalEmail = $this->settings['email_technical'] ?? $pageEmail;
         $this->savePageInfo('email', $pageEmail);
-        $this->savePageInfo('email_technical', $pageEmail);
+        $this->savePageInfo('email_technical', $technicalEmail);
 
     }
 
@@ -115,7 +190,7 @@ class Install extends Command {
      * @param string $consoleName
      */
     private function saveSetting($settingName, $settingValue, $consoleName = 'setting') {
-        $this->comment("Saving $settingName ...");
+        $this->logger->comment("Saving $settingName ...");
         $settings = new Settings();
 
         if (empty($settingValue)) {
@@ -134,15 +209,34 @@ class Install extends Command {
     }
 
     private function setupAdmin() {
-        $emailRules = ['email' => 'unique:users,email'];
-        do {
-            $email = $this->ask('Email address for the user');
-            $validator = Validator::make(['email' => $email], $emailRules);
-            if ($invalidEmail = $validator->fails()) {
-                $this->error('That email already exists in the system.');
-            }
-        } while ($invalidEmail);
 
+        // Check if old admin data exists, if not ask for information
+        if (empty($this->admin)) {
+
+            // Get the email address of the admin
+            $emailRules = ['email' => 'unique:users,email'];
+            do {
+                $email = $this->ask('Email address for the user');
+                $validator = Validator::make(['email' => $email], $emailRules);
+                if ($invalidEmail = $validator->fails()) {
+                    $this->logger->error('That email already exists in the system.');
+                }
+            } while ($invalidEmail);
+
+            // Get the name of the admin
+            $firstName = $this->ask('First name for the user');
+            $lastName = $this->ask('Last name for the user');
+        } else {
+
+            // Fetch the admin data from the old data
+            $email = $this->admin->email;
+            $firstName = $this->admin->admin->first_name;
+            $lastName = $this->admin->admin->last_name;
+
+            $this->logger->info("Old admin data with email '$email'' retrieved from database. You just have to enter your password again.");
+        }
+
+        // Ask for the password, no matter if old data existed
         $passwordRules = ['password' => 'confirmed'];
         do {
             $password = $this->secret('Password for the user');
@@ -150,12 +244,10 @@ class Install extends Command {
             $validator = Validator::make(['password' => $password, 'password_confirmation' => $passwordConfirmation],
                 $passwordRules);
             if ($invalidPassword = $validator->fails()) {
-                $this->error('The passwords do not match.');
+                $this->logger->error('The passwords do not match.');
             }
         } while ($invalidPassword);
 
-        $firstName = $this->ask('First name for the user');
-        $lastName = $this->ask('Last name for the user');
         $user = $this->createUser($email, $password, \Config::get('starmee.user_type.admin'));
         $admin = $this->createAdmin($user, $firstName, $lastName);
         $this->logger->success("The admin $admin->display_name has been created.");
@@ -183,6 +275,7 @@ class Install extends Command {
         $admin->first_name = $firstName;
         $admin->last_name = $lastName;
         $admin->display_name = $firstName . " " . $lastName;
+
         return $user->admin()->save($admin);
     }
 
@@ -201,16 +294,16 @@ class Install extends Command {
     }
 
     private function setupAdditionalSettings() {
-        $this->savePageInfo('description', null);
-        $this->savePageInfo('description_short', null);
-        $this->savePageInfo('seo_keywords', null);
-        $this->savePageInfo('logo', asset('images/logo.png'));
-        $this->savePageInfo('background', asset('images/background.jpg'));
-        $this->savePageInfo('favicon', asset('images/favicon.png'));
-        $this->savePageInfo('imprint', null);
-        $this->savePageInfo('facebook', null);
-        $this->savePageInfo('twitter', null);
-        $this->savePageInfo('instagram', null);
+        $this->savePageInfo('description', $this->settings['description']);
+        $this->savePageInfo('description_short', $this->settings['description_short']);
+        $this->savePageInfo('seo_keywords', $this->settings['seo_keywords']);
+        $this->savePageInfo('logo', $this->settings['logo'] ?? asset('images/logo.png'));
+        $this->savePageInfo('background', $this->settings['background'] ?? asset('images/background.jpg'));
+        $this->savePageInfo('favicon', $this->settings['favicon'] ?? asset('images/favicon.png'));
+        $this->savePageInfo('imprint', $this->settings['imprint']);
+        $this->savePageInfo('facebook', $this->settings['facebook']);
+        $this->savePageInfo('twitter', $this->settings['twitter']);
+        $this->savePageInfo('instagram', $this->settings['instagram']);
     }
 
     private function finishSetup() {

@@ -12,7 +12,7 @@
   1. Declarations
 **********************/
 $dropdown-padding: 10px;
-$user-menu-padding: 45px 10px 0;
+$dropdown-padding-below-origin: 45px 10px 0;
 $dropdown-border-radius: 2px;
 $dropdown-item-padding: 10px;
 $dropdown-icon-margin-right: 5px;
@@ -22,9 +22,9 @@ $dropdown-menu-max-width: 300px;
   2. General
 **********************/
 .dropdown-menu {
-    border: none;
+    border: 1px solid $button-border;
     box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
-    padding: $dropdown-padding;
+    padding: $dropdown-padding-below-origin;
     z-index: 992;
     display: none;
     max-width: $dropdown-menu-max-width;
@@ -33,8 +33,14 @@ $dropdown-menu-max-width: 300px;
     background: $dropdown-background-color;
     border-radius: $dropdown-border-radius;
 
+    &.below-origin {
+        padding: $dropdown-padding;
+    }
+
     &.user-menu {
-        padding: $user-menu-padding;
+        border-radius: 0 0 $dropdown-border-radius;
+        box-shadow: 0 3px 2px 1px rgba(0, 0, 0, 0.2);
+        border-top: none;
     }
 
     ul {
@@ -61,4 +67,8 @@ $dropdown-menu-max-width: 300px;
         margin-right: $dropdown-icon-margin-right;
         vertical-align: middle;
     }
+}
+
+.button.dropdown-active {
+    box-shadow: 0 3px 2px 1px rgba(0, 0, 0, 0.2);
 }

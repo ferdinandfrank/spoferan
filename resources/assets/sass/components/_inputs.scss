@@ -49,8 +49,8 @@ $select-search-choice-font-size: $font-size-x-small;
         @include transition(box-shadow ease-in-out .15s);
     }
 
-    &:not(:first-of-type) {
-        margin-top: 40px;
+    &:not(:first-of-type, .switch-group) {
+        margin-top: 25px;
     }
 
     &.center {
@@ -116,12 +116,12 @@ $select-search-choice-font-size: $font-size-x-small;
         bottom: -20px;
         font-size: $input-counter-font-size;
         display: none;
-        color: $success-color;
+        color: $success;
     }
 
     &.active {
         label {
-            color: $info-color;
+            color: $info;
         }
 
         .counter {
@@ -148,29 +148,29 @@ $select-search-choice-font-size: $font-size-x-small;
 
     &.has-success {
         label {
-            color: $success-color;
+            color: $success;
 
             &:after {
-                color: $success-color;
+                color: $success;
             }
         }
         .form-control, .form-group-addon {
-            border-color: $success-color;
-            @include box-shadow($input-box-shadow $success-color);
+            border-color: $success;
+            @include box-shadow($input-box-shadow $success);
         }
     }
 
     &.has-error {
         label {
-            color: $error-color;
+            color: $danger;
 
             &:after {
-                color: $error-color;
+                color: $danger;
             }
         }
         .form-control, .form-group-addon {
-            border-color: $error-color;
-            @include box-shadow($input-box-shadow $error-color);
+            border-color: $danger;
+            @include box-shadow($input-box-shadow $danger);
         }
     }
 }
@@ -201,8 +201,8 @@ $select-search-choice-font-size: $font-size-x-small;
     }
 
     &.disabled, &:disabled {
-        background-color: $disabled-color;
-        color: $disabled-inverse-color;
+        background-color: $disabled;
+        color: $disabled-invert;
         cursor: not-allowed;
     }
 }
@@ -306,7 +306,7 @@ select.form-control {
 
         .select2-choice,
         .select2-choices {
-            color: $disabled-inverse-color;
+            color: $disabled-invert;
         }
     }
 
@@ -385,11 +385,11 @@ select.form-control {
         }
     }
 
-    @each $state in $colors-list {
-
-        &.switch-#{nth($state,1)} {
+    @each $name, $pair in $colors {
+        $color: nth($pair, 1);
+        &.switch-#{$name} {
             .ios-switch .on-background {
-                background: #{nth($state,2)};
+                background: #{$color};
             }
         }
 

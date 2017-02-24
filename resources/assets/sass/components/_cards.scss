@@ -12,60 +12,35 @@
 /*********************
   1. Declarations
 **********************/
-$card-height: 180px;
-$card-width: 270px;
-$card-margin: 10px;
-
 $card-hover-transition-duration: .5s;
 
-$card-big-height: 2 * ($card-height + $card-margin);
-$card-big-width: 2 * ($card-width + $card-margin);
-
-/*********************
-  2. Cards List
-**********************/
-.card-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    &::after {
-        clear: both;
-    }
-
-    .card {
-        float: left;
-        margin: $card-margin;
-    }
-}
 
 /*********************
   3. Cards
 **********************/
 .card {
-    height: $card-height;
-    width: $card-width;
     display: flex;
+    flex-direction: column;
     position: relative;
     overflow: hidden;
-
-    &.big, &.big-width {
-        width: $card-big-width;
-    }
-
-    &.big, &.big-height {
-        height: $card-big-height;
-    }
+    border-radius: 2px;
 
     > a {
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 100%;
 
         &:hover {
-            .card-header > .card-image {
-                transform: scale(1.2);
-                opacity: 0.3;
+            .card-header {
+               & > .card-image {
+                   transform: scale(1.2);
+                   opacity: 0.3;
+               }
+
+               .card-header-info.toggle {
+                   display: block;
+               }
             }
         }
     }
@@ -75,8 +50,9 @@ $card-big-width: 2 * ($card-width + $card-margin);
         position: relative;
         align-items: center;
         justify-content: center;
-        background: $dark-color;
+        background: $dark;
         flex: 1;
+        min-height: 200px;
 
         .card-image {
             background-position: 50%;
@@ -95,8 +71,20 @@ $card-big-width: 2 * ($card-width + $card-margin);
             flex-direction: column;
             z-index: 2;
 
+            &.toggle {
+                display: none;
+                border-top: 2px solid white;
+                border-bottom: 2px solid white;
+                @include animation(fadeInFromNone $card-hover-transition-duration ease-out);
+            }
+
             > * {
                 color: $white-smooth;
+            }
+
+            > .title {
+                margin-top: 10px;
+                text-align: center;
             }
 
             > i {
@@ -114,9 +102,15 @@ $card-big-width: 2 * ($card-width + $card-margin);
         padding: 10px;
         z-index: 2;
 
+        .level:first-child {
+            border-bottom: 1px solid $grey-light;
+            padding-bottom: 1.5rem;
+        }
+
         .title {
             margin-top: 0;
-            color: $dark-color;
+            color: $dark;
+            font-weight: 400;
         }
 
         .subtitle {
@@ -129,14 +123,23 @@ $card-big-width: 2 * ($card-width + $card-margin);
             font-size: $font-size-small;
         }
 
+        .content {
+            height: 130px;
+
+            .description {
+                height: 60px;
+                position: relative;
+            }
+        }
+
         .card-extra {
             display: flex;
             align-items: center;
-            justify-content: end;
+            justify-content: space-between;
             color: $grey;
 
             .price {
-                color: $dark-color;
+                color: $dark;
                 font-size: $font-size-x-large;
             }
         }

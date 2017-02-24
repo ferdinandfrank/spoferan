@@ -16,32 +16,21 @@
 
 $content-margin: 40px;
 
-$header-height: 80px;
-$header-bottom-top-width: 2px;
-$header-border-bottom-width: 1px;
-$header-margin-left: 40px;
-$header-margin-right: 0;
-$header-separator-margin: 0 15px 0;
-$header-separator-width: 2px;
-$header-search-input-width: 200px;
-$header-item-margin: 0 15px;
-$header-item-font-size: 1rem;
+$navbar-height: 80px;
+$navbar-bottom-top-width: 2px;
+$navbar-border-bottom-width: 1px;
+$navbar-margin-left: 40px;
+$navbar-margin-right: 0;
+$navbar-separator-margin: 0 15px 0;
+$navbar-separator-width: 2px;
+$navbar-search-input-width: 200px;
+$navbar-item-margin: 0 15px;
+$navbar-item-font-size: 1rem;
 
 /*********************
   2. General
 **********************/
-html {
-    min-height: 100%;
 
-    body {
-        background-color: $body-color;
-        width: 100%;
-        color: $grey;
-        line-height: 22px;
-        font-size: $font-size-small !important;
-        margin: 0;
-    }
-}
 
 /*********************
   3. Content
@@ -52,129 +41,60 @@ html {
 
     > .content {
         position: relative;
-        margin-top: $header-height;
+        margin-top: $navbar-height + 10px;
     }
 }
 
 /*********************
   4. Navbar
 **********************/
-.header {
-    position: fixed;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: $header-height;
-    border-top: $header-bottom-top-width solid $primary-color;
-    @include linear-gradient($header-background-gradient-start, $header-background-gradient-end);
-    border-bottom: $header-border-bottom-width solid $header-border-bottom-color;
+.navbar {
+    height: $navbar-height;
+    border-top: $navbar-bottom-top-width solid $primary;
+    @include linear-gradient($navbar-background-gradient-start, $navbar-background-gradient-end);
+    border-bottom: $navbar-border-bottom-width solid $navbar-border-bottom-color;
     box-shadow: 0 1px 2px -2px $grey;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    @extend .nav;
 
     > .container {
-        display: inherit;
-        justify-content: inherit;
-        align-items: inherit;
-        position: relative;
-        height: 100%;
-    }
-
-    .header-left, .header-right {
-        display: flex;
         align-items: center;
+        display: inherit;
+    }
+
+    .nav-left, .nav-right, .nav-center {
+        height: 100%;
+    }
+
+    .nav-item {
         position: relative;
-        height: 100%;
-    }
+        font-size: $font-size-large;
 
-    .header-left {
-        margin-left: $header-margin-left;
+        .logo {
+            max-height: 4rem;
+        }
 
-        @media #{$x-small-only} {
-            margin-left: $header-margin-left / 3;
+        .icon {
+            > i {
+                font-size: $font-size-large;
+            }
         }
     }
 
-    .header-right {
-        margin-right: $header-margin-right;
+    .nav-toggle {
 
-        @media #{$x-small-only} {
-            margin-right: $header-margin-right / 3;
-        }
-
-        > * {
-            margin: $header-item-margin;
+        // Hamburger
+        span {
+            height: 2px;
         }
     }
 
-    a {
-        font-size: $header-item-font-size;
-        cursor: pointer;
-    }
-
-    .header-buttons {
-        list-style: none;
+    .user-button {
         display: flex;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        height: 100%;
-
-        > li > a {
-            display: block;
-            height: 100%;
-            line-height: $header-height;
-            padding: $header-item-margin;
-            color: $header-buttons-text-color;
-            background: $header-buttons-background-color;
-
-
-            &:hover, &.active {
-                color: $header-buttons-hover-text-color;
-                background: $header-buttons-hover-background-color;
-            }
-
-            &.with-badge {
-                color: $header-buttons-badge-background-color;
-            }
-
-            .badge {
-                position: absolute;
-                bottom: 15px;
-                background: $header-buttons-badge-background-color;
-                color: $header-buttons-badge-text-color;
-                padding: 2px 4px;
-                border-radius: 50%;
-                font-size: 0.8rem;
-                right: 10px;
-            }
-        }
-    }
-
-    .separator {
-        background-color: $header-separator-background-color;
-        background-image: -webkit-linear-gradient($header-separator-background-gradient-color 60%, $header-separator-background-color);
-        background-image: linear-gradient($header-separator-background-gradient-color 60%, $header-separator-background-color);
-        display: inline-block;
-        height: 100%;
-        margin: $header-separator-margin;
-        width: $header-separator-width;
-        vertical-align: middle;
-    }
-
-    .search {
-        width: $header-search-input-width;
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .userbox {
-        display: flex;
-        text-decoration: none;
         justify-content: center;
         align-items: center;
-        margin: 3px 17px 0 0;
-        position: relative;
         cursor: pointer;
 
         & > a {
@@ -189,8 +109,9 @@ html {
         }
 
         .profile-info {
-            display: inline-block;
-            vertical-align: middle;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
         }
 
         .profile-info {

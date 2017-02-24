@@ -29,9 +29,20 @@
         @yield('content')
     </div>
 
-    <div class="footer">
-
-    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>
+                    &copy; {{ \Carbon\Carbon::now()->year }} <strong>Starmee</strong> by <a href="http://spoferan.com">Spoferan</a>.
+                </p>
+                <p>
+                    <a class="icon" href="#">
+                        <icon icon="{{ config('icons.facebook') }}"></icon>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
 </div>
 
 <!-- Scripts -->

@@ -16,10 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 abstract class BaseModel extends Model {
 
-    public function getFillab() {
-        
-    }
-
     /**
      * The parents in the route paths as a string array to build the routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.

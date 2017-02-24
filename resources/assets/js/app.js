@@ -35,6 +35,14 @@ require('./vendor/select2/select2');
 require('./vendor/datetimepicker');
 
 /***********************************************************
+ Load Perfect Scrollbar
+ --------------------------
+
+ ************************************************************/
+window.perfectScrollbar = require('perfect-scrollbar');
+require('perfect-scrollbar/jquery')($);
+
+/***********************************************************
  Load VueJS
  --------------------------
  Vue is a modern JavaScript library for building interactive web interfaces

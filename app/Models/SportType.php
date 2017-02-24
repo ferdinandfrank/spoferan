@@ -70,11 +70,7 @@ class SportType extends Model {
      * @return string
      */
     public function getIconAttribute($value) {
-        if ($value == null) {
-            return asset('img/avatar_default.png');
-        }
-
-        return asset('img/icons/' . $value);
+        return $value ?? asset('images/avatar_default.png');
     }
 
 }

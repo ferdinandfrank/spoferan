@@ -7,6 +7,8 @@
  *  1. Declarations
  *  2. Forms
  *  3. Horizontal Rows
+ *  4. Levels
+ *  5. Calendar Icon
  */
 
 /*********************
@@ -23,6 +25,7 @@
     border-radius: 5px;
     max-width: 400px;
     width: 100%;
+    margin: 0 auto;
 }
 
 /*********************
@@ -33,4 +36,59 @@ hr.light {
     border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #d8d8d8, rgba(0, 0, 0, 0));
+}
+
+/*********************
+  4. Levels (Bulma Overwrites)
+**********************/
+.level {
+    .level-item {
+
+        img {
+            max-height: 40px;
+        }
+    }
+}
+
+/*********************
+  5. Calendar Icon
+**********************/
+time.calendar {
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    width: 45px;
+    height: 40px;
+    background-color: #fff;
+    border-radius: 0.6em;
+    box-shadow: 0 1px 0 #bdbdbd, 0 2px 0 #fff, 0 3px 0 #bdbdbd, 0 4px 0 #fff, 0 5px 0 #bdbdbd, 0 0 0 1px #bdbdbd;
+    overflow: hidden;
+
+    .month {
+        width: 100%;
+        font-size: 0.6rem;
+        font-weight: bold;
+        font-style: normal;
+        color: $secondary;
+    }
+
+    .day {
+        width: 100%;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 0.8rem;
+        letter-spacing: -0.05em;
+        color: #2f2f2f;
+    }
+
+    .year {
+        width: 100%;
+        font-size: 0.6rem;
+        font-weight: bold;
+        font-style: normal;
+        color: #fff;
+        background-color: $secondary;
+    }
 }

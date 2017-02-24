@@ -9,19 +9,19 @@ return [
             'max' => 250,
             'min' => 6
         ],
-        'street'               => [
+        'street'             => [
             'max' => 250
         ],
-        'country'               => [
-            'max' => 250
+        'country'            => [
+            'max' => 3
         ],
-        'postcode'               => [
+        'postcode'           => [
             'max' => 10
         ],
         'city'               => [
             'max' => 250
         ],
-        'phone'               => [
+        'phone'              => [
             'max' => 250
         ],
         'confirmation_token' => [
@@ -39,7 +39,7 @@ return [
         'last_name'  => [
             'max' => 250
         ],
-        'slug'               => [
+        'slug'       => [
             'max' => 250
         ]
     ],
@@ -48,7 +48,7 @@ return [
         'name' => [
             'max' => 250
         ],
-        'slug'               => [
+        'slug' => [
             'max' => 250
         ]
     ],
@@ -57,13 +57,13 @@ return [
         'display_name' => [
             'max' => 250
         ],
-        'first_name' => [
+        'first_name'   => [
             'max' => 250
         ],
-        'last_name'  => [
+        'last_name'    => [
             'max' => 250
         ],
-        'slug'               => [
+        'slug'         => [
             'max' => 250
         ]
     ],
@@ -81,18 +81,48 @@ return [
         'phone'             => [
             'max' => 250
         ],
-        'slug'               => [
+        'slug'              => [
             'max' => 250
-        ]
+        ],
+        'street'            => [
+            'max' => 250
+        ],
+        'country'           => [
+            'max' => 3
+        ],
+        'postcode'          => [
+            'max' => 10
+        ],
+        'city'              => [
+            'max' => 250
+        ],
     ],
 
     'check_point' => [
         'title' => [
             'max' => 250
-        ]
+        ],
+        'street'            => [
+            'max' => 250
+        ],
+        'country'           => [
+            'max' => 3
+        ],
+        'postcode'          => [
+            'max' => 10
+        ],
+        'city'              => [
+            'max' => 250
+        ],
     ],
 
     'participation_class' => [
+        'title' => [
+            'max' => 250
+        ]
+    ],
+
+    'visit_class' => [
         'title' => [
             'max' => 250
         ]

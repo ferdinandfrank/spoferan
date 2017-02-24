@@ -13,6 +13,7 @@ class CreateEventsTable extends Migration {
      */
     public function up() {
         Schema::create('events', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('organizer_id')->index();
             $table->unsignedInteger('event_group_id')->nullable();
@@ -28,6 +29,10 @@ class CreateEventsTable extends Migration {
             $table->boolean('published')->default(false);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
+            $table->string('country', config('validation.event.country.max'))->nullable();
+            $table->string('postcode', config('validation.event.postcode.max'))->nullable();
+            $table->string('city', config('validation.event.city.max'))->nullable();
+            $table->string('street', config('validation.event.street.max'))->nullable();
             $table->timestamps();
             $table->softDeletes();
 

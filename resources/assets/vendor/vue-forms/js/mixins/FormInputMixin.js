@@ -58,6 +58,12 @@ module.exports = {
         // No icon will be shown if this property and the property 'helpPath' isn't set.
         helpTooltip: {
             type: String
+        },
+
+        // The size of the input.
+        // Valid values: 'large', 'small', 'medium'
+        size: {
+            type: String
         }
     },
 
@@ -120,6 +126,16 @@ module.exports = {
         // Info: This value is based upon the 'name' property.
         submitName: function () {
             return this.name;
+        },
+
+        // States if the current input value is invalid for showing an error.
+        hasError: function () {
+            return this.invalid && !this.valid;
+        },
+
+        // States if the current input value is valid for showing a success feedback.
+        hasSuccess: function () {
+            return this.valid && this.submitValue;
         }
     },
 

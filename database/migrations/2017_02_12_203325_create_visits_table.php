@@ -13,6 +13,7 @@ class CreateVisitsTable extends Migration {
      */
     public function up() {
         Schema::create('visits', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('athlete_id');
             $table->unsignedInteger('visit_class_id');

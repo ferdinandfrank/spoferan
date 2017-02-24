@@ -5,15 +5,15 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * AdminCreateRequest
+ * EventCreateRequest
  * -----------------------
- * Handles the rules for the request to create a new admin.
+ * Handles the rules for the request to create a new event.
  *
  * @author  Ferdinand Frank
  * @version 1.0
  * @package App\Http\Requests
  */
-class AdminCreateRequest extends FormRequest {
+class EventCreateRequest extends FormRequest {
 
     /**
      * Determines if the user is authorized to make this request.
@@ -31,7 +31,22 @@ class AdminCreateRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'name' => ''
+            'event_group_id' => '',
+			'parent_event_id' => '',
+			'title' => '',
+			'description_short' => '',
+			'description' => '',
+			'email' => '',
+			'phone' => '',
+			'cover' => '',
+			'sport_type_id' => '',
+			'start_date' => '',
+			'end_date' => '',
+			'country' => '',
+			'city' => '',
+			'postcode' => '',
+			'street' => '',
+			
         ];
     }
 }

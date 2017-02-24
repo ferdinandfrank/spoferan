@@ -20,7 +20,7 @@ trait HasAnonymousAthletes {
      * @return Athlete
      */
     public function athlete() {
-        return $this->belongsTo(Athlete::class);
+        return $this->belongsTo(Athlete::class, 'athlete_id');
     }
 
     /**

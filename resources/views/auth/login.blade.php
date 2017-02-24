@@ -1,17 +1,17 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="full-height flex-center" @if(Settings::background())style="background-image: url({{ Settings::background() }})"@endif>
-        <div class="central-form">
-            <h1 class="center m-b-50">{{ trans('action.login') }}</h1>
-            <ajax-form stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false" redirect="{{ route('index') }}">
-                <form-input class="large" type="email" name="email" :required="true"></form-input>
-                <form-input class="large" type="password" name="password" :required="true"></form-input>
+    <div class="full-height">
+        <div class="central-form card">
+            <h1 class="center">{{ trans('action.login') }}</h1>
+            <ajax-form stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false" class="card-content" redirect="{{ route('index') }}">
+                <form-input size="large" type="email" name="email" :required="true"></form-input>
+                <form-input size="large" type="password" name="password" :required="true"></form-input>
 
                 <form-checkbox name="remember" :value="true"></form-checkbox>
 
-                <div class="btn-group center">
-                    <button type="submit" class="btn btn-large btn-primary">{{ trans('action.login') }}</button>
+                <div class="center">
+                    <button type="submit" class="button is-success">{{ trans('action.login') }}</button>
                 </div>
 
                 <hr class="light">

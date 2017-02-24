@@ -27,96 +27,113 @@ $grey-dark: #1D2127 !default;
 $grey-medium: #808697 !default;
 $grey-light: #d8d8d8 !default;
 $grey-transparent: #eaeaea !default;
+$light: $grey-transparent !default;
 
 $black: #171717 !default;
 $black-smooth: #262626 !default;
 
-$dark-color: $black !default;
-$dark-inverse-color: $white;
+$dark: $black !default;
+$dark-invert: $light !default;
+$light-invert: $dark !default;
 
-$primary-color: #008200 !default;
-$primary-inverse-color: $white !default;
+$primary: #008200 !default;
+$primary-invert: $white !default;
 
-$secondary-color: #f0820a !default;
-$secondary-inverse-color: $white !default;
+$secondary: #f0820a !default;
+$secondary-invert: $white !default;
 
-$default-color: #ebebeb !default;
-$default-inverse-color: #777 !default;
+$default: #ebebeb !default;
+$default-invert: #777 !default;
 
-$disabled-color: #ebebeb !default;
-$disabled-inverse-color: #999 !default;
+$disabled: #ebebeb !default;
+$disabled-invert: #999 !default;
 
 $muted-color: #999 !default;
 
-$success-color: #47a447 !default;
-$success-inverse-color: $white !default;
+$success: #47a447 !default;
+$success-invert: $white !default;
 
-$warning-color: #ed9c28 !default;
-$warning-inverse-color: $white !default;
+$warning: #ed9c28 !default;
+$warning-invert: $white !default;
 
-$error-color: #d2322d !default;
-$error-inverse-color: $white !default;
+$danger: #d2322d !default;
+$danger-invert: $white !default;
 
-$info-color: #f0820a !default;
-$info-inverse-color: $white !default;
+$info: #f0820a !default;
+$info-invert: $white !default;
 
-$website-color: $secondary-color !default;
-$facebook-color: #4267b2 !default;
-$facebook-hover-color: #365899 !default;
-$twitter-color: #1da1f2 !default;
-$twitter-hover-color: #0c7abf !default;
-$whatsapp-color: #25d366 !default;
-$whatsapp-hover-color: #128c7e !default;
-$instagram-color: #405de6 !default;
-$linkedin-color: #0077b5 !default;
-$github-color: #333 !default;
+$website: $secondary !default;
+$facebook: #4267b2 !default;
+$facebook-hover: #365899 !default;
+$twitter: #1da1f2 !default;
+$twitter-hover: #0c7abf !default;
+$whatsapp: #25d366 !default;
+$whatsapp-hover: #128c7e !default;
+$instagram: #405de6 !default;
+$linkedin: #0077b5 !default;
+$github: #333 !default;
 
-$body-color: #ecedf0;
+$body-background: $white-smooth !default;
+$background: $grey-light !default;
 
 /*********************
   2. Collections
 **********************/
-$colors-list: (primary $primary-color $primary-inverse-color) (secondary $secondary-color $secondary-inverse-color) (success $success-color $success-inverse-color) (warning $warning-color $warning-inverse-color) (error $error-color $error-inverse-color) (info $info-color $info-inverse-color) (dark $dark-color $dark-inverse-color);
+$colors: (white: ($white, $black), black: ($black, $white), light: ($light, $light-invert), dark: ($dark, $dark-invert), primary: ($primary, $primary-invert), secondary: ($secondary, $secondary-invert), info: ($info, $info-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default;
 
 /*********************
   3. Helper Classes
 **********************/
-@each $state in $colors-list {
-    .#{nth($state,1)} {
-        color: #{nth($state,2)} !important;
-    }
-}
-
-@each $state in $colors-list {
-    .bg-#{nth($state,1)} {
-        background-color: #{nth($state,2)} !important;
+@each $name, $pair in $colors {
+    span, p, h1, h2, h3, h4, h5 {
+        $color: nth($pair, 1);
+        &.is-#{$name} {
+            color: $color
+        }
     }
 }
 
 /*********************
   4. Typography
 **********************/
-$link-color: $primary-color !default;
-$text-color: $grey !default;
-$heading-color: $grey-dark !default;
-$heading-link-hover-color: $primary-color !default;
+
+$heading: $grey-dark !default;
+$heading-link-hover: $primary !default;
+
+$text: $grey !default;
+$text-light: $grey !default;
+$text-strong: $grey-dark !default;
+
+$link-color: $primary !default;
+$link: $primary !default;
+$link-invert: $primary-invert !default;
+$link-visited: $secondary !default;
+
+$link-hover: $primary !default;
+$link-hover-border: $grey-light !default;
+
+$link-focus: $primary !default;
+$link-focus-border: $primary !default;
+
+$link-active: $primary !default;
+$link-active-border: $grey-dark !default;
 
 /*********************
   5. Navbar
 **********************/
-$header-background-gradient-start: $default-color 0%;
-$header-background-gradient-end: $white 45%;
-$header-border-bottom-color: $default-color;
+$navbar-background-gradient-start: $default 0%;
+$navbar-background-gradient-end: $white 45%;
+$navbar-border-bottom-color: $default;
 
-$header-buttons-text-color: $grey;
-$header-buttons-background-color: transparent;
-$header-buttons-hover-text-color: $primary-color;
-$header-buttons-hover-background-color: transparent;
-$header-buttons-badge-background-color: $secondary-color;
-$header-buttons-badge-text-color: $secondary-inverse-color;
+$navbar-buttons-text-color: $grey;
+$navbar-buttons-background-color: transparent;
+$navbar-buttons-hover-text-color: $primary;
+$navbar-buttons-hover-background-color: transparent;
+$navbar-buttons-badge-background-color: $secondary;
+$navbar-buttons-badge-text-color: $secondary-invert;
 
-$header-separator-background-color: $grey-light;
-$header-separator-background-gradient-color: $white-smooth;
+$navbar-separator-background-color: $grey-light;
+$navbar-separator-background-gradient-color: $white-smooth;
 
 $menu-item-text-color: $grey-light;
 $menu-item-arrow-color: $grey-light;
@@ -126,20 +143,20 @@ $menu-item-arrow-color: $grey-light;
 **********************/
 $input-text-color: $grey;
 $input-border-color: $grey-transparent;
-$input-active-border-color: $secondary-color;
-$select-search-choice-background-color: $primary-color;
-$select-search-choice-text-color: $primary-inverse-color;
+$input-active-border-color: $secondary;
+$select-search-choice-background-color: $primary;
+$select-search-choice-text-color: $primary-invert;
 $input-background-color: $white;
 
-$datetimepicker-active-background-color: $primary-color;
+$datetimepicker-active-background-color: $primary;
 $datetimepicker-active-text-color: $white-smooth;
-$datetimepicker-btn-hover-background-color: $primary-color;
-$datetimepicker-btn-disabled-color: $disabled-color;
+$datetimepicker-btn-hover-background-color: $primary;
+$datetimepicker-btn-disabled-color: $disabled;
 
 /*********************
   7. Buttons
 **********************/
-$button-default-background-color: $primary-color !default;
+$button-default-background-color: $primary !default;
 $button-default-text-color: $white !default;
 
 $button-disabled-background-color: $white-smooth !default;
@@ -150,14 +167,14 @@ $button-disabled-text-color: $grey-light !default;
 **********************/
 $dropdown-background-color: $white;
 $dropdown-item-text-color: $grey;
-$dropdown-item-hover-background-color: $primary-color;
-$dropdown-item-hover-text-color: $primary-inverse-color;
+$dropdown-item-hover-background-color: $primary;
+$dropdown-item-hover-text-color: $primary-invert;
 
 /*********************
   9. Lists
 **********************/
 $notification-list-border-color: $grey-light;
 $notification-list-unread-background-color: $white-smooth;
-$notification-list-title-color: $secondary-color;
-$notification-list-text-color: $text-color;
+$notification-list-title-color: $secondary;
+$notification-list-text-color: $text;
 $notification-list-date-color: $muted-color;

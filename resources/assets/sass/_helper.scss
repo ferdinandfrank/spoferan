@@ -9,7 +9,6 @@ $orientations: (
 .no-select {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -32,6 +31,10 @@ $orientations: (
 
 .center, .center-align, .text-center {
     text-align: center !important;
+}
+
+.margin-auto {
+    margin: auto;
 }
 
 .left {
@@ -176,14 +179,4 @@ $orientations: (
 
 .z-depth-large {
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-}
-
-.hoverable {
-    transition: box-shadow .25s;
-    box-shadow: 0;
-}
-
-.hoverable:hover {
-    transition: box-shadow .25s;
-    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

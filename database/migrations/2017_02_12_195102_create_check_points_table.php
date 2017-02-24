@@ -13,16 +13,17 @@ class CreateCheckPointsTable extends Migration {
      */
     public function up() {
         Schema::create('check_points', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('event_id');
             $table->unsignedInteger('position')->default(0);
             $table->string('title', config('validation.check_point.title.max'));
             $table->float('latitude');
             $table->float('longitude');
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
-            $table->string('postcode', 10)->nullable();
-            $table->string('street')->nullable();
+            $table->string('country', config('validation.check_point.country.max'))->nullable();
+            $table->string('postcode', config('validation.check_point.postcode.max'))->nullable();
+            $table->string('city', config('validation.check_point.city.max'))->nullable();
+            $table->string('street', config('validation.check_point.street.max'))->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
 

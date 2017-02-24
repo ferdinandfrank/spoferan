@@ -13,6 +13,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\Event $event
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $event_id
+ * @property string $title
+ * @property string $description
+ * @property int $restr_limit
+ * @property float $entry_fee
+ * @property \Carbon\Carbon $register_date
+ * @property \Carbon\Carbon $unregister_date
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereEntryFee($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereEventId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereRegisterDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereRestrLimit($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUnregisterDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUpdatedAt($value)
  */
 class VisitClass extends BaseModel {
 

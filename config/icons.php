@@ -9,8 +9,10 @@ return [
     'website'       => 'fa fa-fw fa-globe',
     'github'        => 'fa fa-fw fa-github',
     'dashboard'     => 'fa fa-fw fa-home',
-    'event'          => 'fa fa-fw fa-fire',
+    'event'         => 'fa fa-fw fa-fire',
     'comments'      => 'fa fa-fw fa-comments',
+    'date'          => 'fa fa-fw fa-calendar',
+    'location'      => 'fa fa-fw fa-map-marker',
     'tag'           => 'fa fa-fw fa-tags',
     'maintenance'   => 'fa fa-fw fa-wrench',
     'online'        => 'fa fa-fw fa-check',
@@ -48,5 +50,8 @@ return [
     'changelog'     => 'fa fa-fw fa-cloud-upload',
     'advertisement' => 'fa fa-fw fa-info-circle',
     'back'          => 'fa fa-fw fa-chevron-left',
-    'club'          => 'fa fa-fw fa-users'
+    'club'          => 'fa fa-fw fa-users',
+    'participants'  => 'fa fa-fw fa-users',
+    'share'         => 'fa fa-fw fa-share',
+    'watchlist'    => 'fa fa-fw fa-thumb-tack'
 ];

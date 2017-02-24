@@ -132,20 +132,31 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Gets the display name of this user, that acts as the username.
+     * Gets the display name of this user which acts as the username.
      *
      * @return string
      */
     public function getDisplayName() {
         if ($this->isType(config('starmee.user_type.athlete'))) {
-            return $this->athlete->getFullName();
+            return $this->athlete->getDisplayName();
         } else if ($this->isType(config('starmee.user_type.organizer'))) {
-            return $this->organizer->name;
+            return $this->organizer->getDisplayName();
         } else if ($this->isType(config('starmee.user_type.admin'))) {
-            return $this->admin->display_name;
+            return $this->admin->getDisplayName();
         }
 
         return $this->email;
+    }
+
+    /**
+     * Gets the avatar of the user.
+     *
+     * @param $avatar
+     *
+     * @return string
+     */
+    public function getAvatarAttribute($avatar) {
+        return $avatar ?? asset('images/avatar_default.png');
     }
 
     /**
@@ -213,42 +224,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Gets the avatar image as a link.
-     *
-     * @return string
-     */
-    public function getAvatarLink() {
-        return $this->getType()->getAvatarLink();
-    }
-
-    /**
-     * Sets the event cover link.
-     *
-     * @param string $value
-     */
-    public function setAvatarAttribute($value) {
-        $path = $this->getImagesPath() . '/';
-        if (substr($value, 0, strlen($path)) === $path) {
-            $value = substr($value, strlen($path));
-        }
-        $this->attributes['avatar'] = $value;
-    }
-
-    /**
-     * Deletes the avatar image of the user.
-     *
-     * @return bool
-     */
-    public function deleteAvatar() {
-        $avatar = $this->avatar;
-        if (!empty($avatar)) {
-            return $this->getType()->deleteImage($avatar);
-        }
-
-        return true;
-    }
-
-    /**
      * Sets the user's password.
      *
      * @param  string $value
@@ -278,19 +253,5 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function hasRecentlyRegistered($hours_ago = 2) {
         return $this->created_at->diffInHours(Carbon::now()) < $hours_ago;
-    }
-
-    /**
-     * Updates the avatar image of the user.
-     *
-     * @param string $imageName
-     *
-     * @return User
-     */
-    public function updateAvatar($imageName) {
-        $this->avatar = $imageName;
-        $this->save();
-
-        return $this;
     }
 }

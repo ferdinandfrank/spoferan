@@ -26,7 +26,10 @@ window.VueModel = Vue.extend({
     },
 
     mounted() {
-
+        let scrollBarElements = $('.scroll');
+        if (scrollBarElements.length) {
+            scrollBarElements.perfectScrollbar();
+        }
     },
 
     methods: {

@@ -13,6 +13,7 @@ class CreateParticipationsTable extends Migration {
      */
     public function up() {
         Schema::create('participations', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('starter_number');
             $table->unsignedInteger('participation_class_id');

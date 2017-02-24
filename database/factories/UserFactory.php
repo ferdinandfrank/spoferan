@@ -10,7 +10,8 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'postcode' => $faker->postcode,
         'city' => $faker->city,
         'street' => $faker->streetAddress,
-        'phone' => $faker->phoneNumber
+        'phone' => $faker->phoneNumber,
+        'avatar' => $faker->imageUrl(200, 200, 'people')
     ];
 });
 

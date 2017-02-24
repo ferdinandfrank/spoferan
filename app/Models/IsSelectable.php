@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @version 0.1
  * @package App\Models
  */
-
 trait IsSelectable {
 
     /**

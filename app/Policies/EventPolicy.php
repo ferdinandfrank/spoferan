@@ -2,37 +2,37 @@
 
 namespace App\Policies;
 
+use App\Models\Event;
 use App\Models\User;
-use App\Models\Admin;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 /**
- * AdminPolicy
+ * EventPolicy
  * -----------------------
- * Handles the permissions on the admin model.
+ * Handles the permissions on the event model.
  *
  * @author  Ferdinand Frank
  * @version 1.0
  * @package App\Policies
  */
-class AdminPolicy {
+class EventPolicy {
 
     use HandlesAuthorization;
 
     /**
-     * Determines whether the user can view the specified admin.
+     * Determines whether the user can view the specified event.
      *
      * @param  User  $user
-     * @param  Admin  $admin
+     * @param  Event  $event
      *
      * @return boolean
      */
-    public function view(User $user, Admin $admin) {
+    public function view(User $user, Event $event) {
         return true;
     }
 
     /**
-     * Determines whether the user can create admins.
+     * Determines whether the user can create events.
      *
      * @param  User  $user
      * @return boolean
@@ -42,26 +42,26 @@ class AdminPolicy {
     }
 
     /**
-     * Determines whether the user can update the specified admin.
+     * Determines whether the user can update the specified event.
      *
      * @param  User  $user
-     * @param  Admin  $admin
+     * @param  Event  $event
      *
      * @return boolean
      */
-    public function update(User $user, Admin $admin) {
+    public function update(User $user, Event $event) {
         return true;
     }
 
     /**
-     * Determines whether the user can delete the specified admin.
+     * Determines whether the user can delete the specified event.
      *
      * @param  User  $user
-     * @param  Admin  $admin
+     * @param  Event  $event
      *
      * @return boolean
      */
-    public function delete(User $user, Admin $admin) {
+    public function delete(User $user, Event $event) {
         return true;
     }
 }

@@ -8,6 +8,32 @@ namespace App\Models;
  *
  * @property-read \App\Models\Event $event
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $event_id
+ * @property int $position
+ * @property string $title
+ * @property float $latitude
+ * @property float $longitude
+ * @property string $country
+ * @property string $postcode
+ * @property string $city
+ * @property string $street
+ * @property string $description
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCity($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCountry($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereEventId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereLatitude($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereLongitude($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint wherePosition($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint wherePostcode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereStreet($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereUpdatedAt($value)
  */
 class CheckPoint extends BaseModel {
 

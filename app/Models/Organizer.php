@@ -52,6 +52,15 @@ class Organizer extends UserModel {
     }
 
     /**
+     * Gets the display name of this user which acts as the username.
+     *
+     * @return string
+     */
+    public function getDisplayName() {
+        return $this->name;
+    }
+
+    /**
      * Gets the events, which the organizer created.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -11,6 +11,7 @@ class CreateParticipationStatesTable extends Migration {
      */
     public function up() {
         Schema::create('participation_states', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('label', config('validation.participation_state.label.max'))->unique();
             $table->string('color')->nullable();

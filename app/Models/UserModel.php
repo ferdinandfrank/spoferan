@@ -57,20 +57,6 @@ abstract class UserModel extends SlugModel {
     }
 
     /**
-     * Gets the avatar image as a link.
-     *
-     * @return string
-     */
-    public function getAvatarLink() {
-        $avatarLink = $this->getImagesPath() . '/' . $this->user->avatar;
-        if (empty($this->user->avatar)) {
-            return asset('images/avatar_default.png');
-        }
-
-        return asset('storage/' . $avatarLink);
-    }
-
-    /**
      * Scopes a query with including only confirmed users.
      *
      * @param Builder $query
@@ -84,4 +70,11 @@ abstract class UserModel extends SlugModel {
         }
         );
     }
+
+    /**
+     * Gets the display name of this user which acts as the username.
+     *
+     * @return string
+     */
+    public abstract function getDisplayName();
 }

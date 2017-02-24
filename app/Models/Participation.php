@@ -49,7 +49,6 @@ class Participation extends BaseModel {
      */
     protected $fillable = [
         'participation_class_id',
-        'club_id',
         'description',
         'privacy',
         'rank',

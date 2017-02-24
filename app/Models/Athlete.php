@@ -4,6 +4,36 @@ namespace App\Models;
 
 
 
+/**
+ * App\Models\Athlete
+ *
+ * @property int $user_id
+ * @property string $title
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $slug
+ * @property \Carbon\Carbon $birth_date
+ * @property string $gender
+ * @property int $sport_type_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $eventRatings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $nextParticipations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Organizer[] $organizerRatings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $pastParticipations
+ * @property-read \App\Models\SportType $sportType
+ * @property-read \App\Models\User $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereBirthDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereFirstName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereGender($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereLastName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereSlug($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereSportTypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Athlete extends UserModel {
 
     use HasResourceRoutes;
@@ -36,6 +66,14 @@ class Athlete extends UserModel {
      */
     protected $dates = ['birth_date'];
 
+    /**
+     * Gets the display name of this user which acts as the username.
+     *
+     * @return string
+     */
+    public function getDisplayName() {
+        return $this->getFullName();
+    }
 
     /**
      * Get the participations of the athlete.

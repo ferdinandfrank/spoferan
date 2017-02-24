@@ -20,6 +20,11 @@ $font-size: 1.0rem;
 $font-size-small: 0.8rem;
 $font-size-x-small: 0.6rem;
 
+$size-small: $font-size-small !default;
+$size-normal: 1rem !default;
+$size-medium: $font-size-large !default;
+$size-large: $font-size-x-large !default;
+
 $font-size-h1: 2.0rem;
 $font-size-h2: 1.5rem;
 $font-size-h3: 1.17rem;
@@ -29,15 +34,11 @@ $font-size-h6: 0.67rem;
 
 $font-weight-normal: 400;
 
+$family-sans-serif: 'Folks', 'Montserrat', sans-serif;
+
 /*********************
   2. General
 **********************/
-body {
-    font-family: 'Folks', 'Montserrat', sans-serif;
-    font-size: $font-size;
-    color: $text-color;
-}
-
 input, textarea {
     font-family: "Open Sans", Arial, sans-serif;
 }
@@ -85,11 +86,11 @@ p {
 }
 
 .error {
-    color: $error-color !important;
+    color: $danger !important;
 }
 
 .success {
-    color: $success-color !important;
+    color: $success !important;
 }
 
 .muted {
@@ -115,7 +116,7 @@ h6 {
     margin-bottom: .4em;
     word-wrap: break-word;
     font-weight: 700;
-    color: $heading-color;
+    color: $heading;
 }
 
 h1, h1 * {
@@ -160,37 +161,37 @@ h3 a,
 h4 a,
 h5 a,
 h6 a {
-    color: $heading-color;
+    color: $heading;
 
     &:hover {
-        color: $heading-link-hover-color;
+        color: $heading-link-hover;
     }
 }
 
 a {
 
     &.facebook:hover {
-        background: $facebook-color !important;
+        background: $facebook !important;
     }
 
     &.twitter:hover {
-        background: $twitter-color !important;
+        background: $twitter !important;
     }
 
     &.instagram:hover {
-        background: $instagram-color !important;
+        background: $instagram !important;
     }
 
     &.linkedin:hover {
-        background: $linkedin-color !important;
+        background: $linkedin !important;
     }
 
     &.github:hover {
-        background: $github-color !important;
+        background: $github !important;
     }
 
     &.website:hover {
-        background: $website-color !important;
+        background: $website !important;
     }
 
 }

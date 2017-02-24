@@ -52,6 +52,15 @@ class Admin extends UserModel {
     }
 
     /**
+     * Gets the display name of this user which acts as the username.
+     *
+     * @return string
+     */
+    public function getDisplayName() {
+        return $this->display_name;
+    }
+
+    /**
      * Set the admin's first name.
      *
      * @param  string $value

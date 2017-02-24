@@ -13,6 +13,7 @@ class CreateAdminsTable extends Migration {
      */
     public function up() {
         Schema::create('admins', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedInteger('user_id')->primary();
             $table->string('first_name', config('validation.admin.first_name.max'));
             $table->string('last_name', config('validation.admin.last_name.max'));

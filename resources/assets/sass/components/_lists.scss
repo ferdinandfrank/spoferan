@@ -20,14 +20,24 @@ $breadcrumb-separator-size: $font-size-small;
 $breadcrumb-separator-margin: 0 10px;
 $breadcrumb-size: $font-size-small;
 
+$list-icon-margin: 5px;
+
 $notification-list-date-font-size: 0.7rem;
 $notification-list-message-margin: 5px 0;
 $notification-list-title-font-weight: 600;
 /*********************
   2. General
 **********************/
+ul {
+    list-style: none;
+}
 
-
+.content ul, .content ul ul {
+    list-style: none;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+}
 
 /*********************
   4. Breadcrumb
@@ -123,8 +133,27 @@ ul.notification-list {
 ul.info-list {
     list-style: none;
     padding: 0;
+    margin-left: 0.5em;
 
     li {
+        i:first-child {
+            margin-right: $list-icon-margin;
+        }
+
+        i:last-child {
+            margin-left: $list-icon-margin;
+        }
+
+        i:not(.fa) {
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+            background-position: 50%;
+            border-radius: 50px;
+        }
+
         color: $grey;
+        display: flex;
+        align-items: center;
     }
 }

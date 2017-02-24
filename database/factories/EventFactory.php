@@ -10,10 +10,12 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     $start_date->setTime(rand(6, 18), 0);
     $end_date = Carbon\Carbon::instance($start_date)->addHours(rand(5, 24));
 
+    $title = $faker->domainWord . ' ' . $end_date->year;
+
     return [
-        'organizer_id' => $organizer->id,
+        'organizer_id' => $organizer->user_id,
         'parent_event_id' => null,
-        'title' => $faker->domainWord . rand(),
+        'title' => $title,
         'description_short' => $faker->text(config('validation.event.description_short.max')),
         'description' => $faker->text,
         'email' => $faker->companyEmail,
@@ -22,6 +24,11 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
         'published' => true,
         'start_date' => $start_date,
         'end_date' => $end_date,
+        'country' => $faker->countryCode,
+        'postcode' => $faker->postcode,
+        'city' => $faker->city,
+        'street' => $faker->streetAddress,
+        'cover' => $faker->imageUrl(600, 300, 'sports')
     ];
 });
 
@@ -35,7 +42,7 @@ $factory->define(App\Models\CheckPoint::class, function (Faker\Generator $faker)
         'title' => $faker->domainWord,
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
-        'country' => $faker->country,
+        'country' => $faker->countryCode,
         'city' => $faker->city,
         'postcode' => $faker->postcode,
         'street' => $faker->streetAddress,

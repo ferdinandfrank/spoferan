@@ -13,6 +13,7 @@ class CreateEventRatingsTable extends Migration {
      */
     public function up() {
         Schema::create('event_ratings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedInteger('event_id');
             $table->unsignedInteger('athlete_id');
             $table->float('rating', 2, 1);

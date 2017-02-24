@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+
 class IndexController extends Controller {
 
     /**
@@ -10,6 +12,8 @@ class IndexController extends Controller {
      * @return \Illuminate\View\View
      */
     public function index() {
-        return view('index');
+        $events = Event::with('organizer.user', 'participationClasses', 'sportType')->withCount('participations')->main()->open()->orderBy('start_date')->get();
+
+        return view('index', compact('events'));
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess }">
+    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'large' : size == 'large' }">
         <select :id="name + '-input'"
                 :name="submitName"
                 @focus="activate"

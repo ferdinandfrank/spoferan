@@ -13,6 +13,7 @@ class CreateUserSettingsTable extends Migration {
      */
     public function up() {
         Schema::create('user_settings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedInteger('user_id')->primary();
             $table->boolean('receive_ads')->default(true);
             $table->boolean('privacy_profile')->default(false);

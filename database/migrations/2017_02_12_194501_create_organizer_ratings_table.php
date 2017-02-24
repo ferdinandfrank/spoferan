@@ -13,6 +13,7 @@ class CreateOrganizerRatingsTable extends Migration {
      */
     public function up() {
         Schema::create('organizer_ratings', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->unsignedInteger('organizer_id');
             $table->unsignedInteger('athlete_id');
             $table->float('rating', 2, 1);

@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue }">
+    <div class="form-group switch-group" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue }">
         <div class="switch" :class="[color ? 'switch-' + color : '', size ? 'switch-' + size : '' ]"
              @click="toggleValue">
             <div class="ios-switch" :class="submitValue ? 'on' : 'off'">

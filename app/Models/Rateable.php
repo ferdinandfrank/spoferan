@@ -22,7 +22,7 @@ trait Rateable {
      * @return Athlete
      */
     public function raters() {
-        return $this->belongsToMany(Athlete::class, $this->getRateableTable())
+        return $this->belongsToMany(Athlete::class, $this->getRateableTable(), $this->getForeignKey(), 'athlete_id')
             ->withPivot('rating', 'description', 'privacy')
             ->withTimestamps();
     }

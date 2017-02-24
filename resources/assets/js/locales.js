@@ -7,7 +7,9 @@ export default {
             "register_as_athlete": "Als Athlet registrieren",
             "register_as_organizer": "Als Veranstalter registrieren",
             "logout": "Abmelden",
-            "confirm_account": "Account bestätigen"
+            "confirm_account": "Account bestätigen",
+            "find_event": "Event finden",
+            "show_event": "Event anzeigen"
         },
         "alert": {
             "error": {
@@ -63,7 +65,8 @@ export default {
         },
         "auth": {
             "failed": "These credentials do not match our records.",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
+            "unconfirmed": "Dein Account wurde noch nicht bestätigt. Wir haben dir nochmals eine E-Mail an {email} gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account zu bestätigen."
         },
         "email": {
             "greeting": "Hallo {name}",
@@ -93,7 +96,7 @@ export default {
             "last_name": "Nachname",
             "display_name": "Anzeigename",
             "birthday": "Geburtstag",
-            "remember_me": "Angemeldet bleiben",
+            "remember": "Angemeldet bleiben",
             "name": "Name",
             "message": "Nachricht",
             "url": "Website URL",
@@ -109,11 +112,25 @@ export default {
             "forgot_my_password": "Passwort vergessen?",
             "not_registered": "Noch keinen Account? Jetzt registrieren!",
             "male": "Männlich",
-            "female": "Weiblich"
+            "female": "Weiblich",
+            "events": "Events",
+            "user_type": {
+                "athlete": "Athlet",
+                "organizer": "Veranstalter",
+                "admin": "Admin"
+            },
+            "clubs": "Clubs",
+            "statistics": "Statistiken",
+            "starting_at": "ab"
         },
         "pagination": {
             "previous": "&laquo; Previous",
             "next": "Next &raquo;"
+        },
+        "param_label": {
+            "by_name": "von {name}",
+            "num_of_participants": "{num} Teilnehmer|{num} Teilnehmer",
+            "date_at_time": "{date} um {time} Uhr"
         },
         "passwords": {
             "password": "Passwords must be at least six characters and match the confirmation.",
@@ -121,6 +138,15 @@ export default {
             "sent": "We have e-mailed your password reset link!",
             "token": "This password reset token is invalid.",
             "user": "We can't find a user with that e-mail address."
+        },
+        "sport_types": {
+            "other": "Unbekannte Sportart",
+            "triathlon": "Triathlon",
+            "marathon": "Marathon",
+            "swimming": "Schwimmen",
+            "inline_skating": "Inline Skating",
+            "nordic_walking": "Nordic Walking",
+            "cycling": "Radfahren"
         },
         "validation": {
             "accepted": "The {attribute} must be accepted.",
