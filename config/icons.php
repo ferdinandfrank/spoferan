@@ -53,5 +53,8 @@ return [
     'club'          => 'fa fa-fw fa-users',
     'participants'  => 'fa fa-fw fa-users',
     'share'         => 'fa fa-fw fa-share',
-    'watchlist'    => 'fa fa-fw fa-thumb-tack'
+    'watchlist'     => 'fa fa-fw fa-thumb-tack',
+    'email'         => 'fa fa-fw fa-envelope',
+    'phone'         => 'fa fa-fw fa-phone',
+    'participate'  => 'fa fa-fw fa-users',
 ];

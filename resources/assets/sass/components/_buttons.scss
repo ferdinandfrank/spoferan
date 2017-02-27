@@ -1,0 +1,51 @@
+/* ==========================================================================
+   Buttons - Bulma Overwrite
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. Share Buttons
+ */
+
+/*********************
+  1. Declarations
+**********************/
+
+
+/*********************
+  2. Share Buttons
+**********************/
+.share-buttons {
+    display: flex;
+    justify-content: center;
+
+    .button {
+        border: none;
+        color: $white;
+
+        &.twitter {
+            background-color: $twitter;
+
+            &:hover {
+                background-color: $twitter-hover !important;
+            }
+        }
+
+        &.facebook {
+            background-color: $facebook;
+
+            &:hover {
+                background-color: $facebook-hover !important;
+            }
+        }
+
+        &.whatsapp {
+            background-color: $whatsapp;
+
+            &:hover {
+                background-color: $whatsapp-hover !important;
+            }
+        }
+    }
+}

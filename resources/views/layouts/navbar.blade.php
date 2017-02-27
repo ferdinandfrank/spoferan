@@ -17,7 +17,7 @@
 
         <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
         <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
-        <span class="nav-toggle">
+        <span class="nav-toggle" v-on:click="toggleNavbar">
             <span></span>
             <span></span>
             <span></span>

@@ -10,6 +10,7 @@
  *  4. Breadcrumb
  *  5. Notification List
  *  6. Info List
+ *  7. Striped List
  */
 
 /*********************
@@ -155,5 +156,23 @@ ul.info-list {
         color: $grey;
         display: flex;
         align-items: center;
+    }
+}
+
+/*********************
+  7. Striped List
+**********************/
+ul.striped-list {
+    li {
+        list-style-type: none;
+        display: block;
+        padding: .5em;
+        background: $hover;
+        margin: 0;
+        text-align: center;
+
+        &:nth-child(2n) {
+            background: $white;
+        }
     }
 }

@@ -48,3 +48,22 @@ function dateDiffForHumans(\Carbon\Carbon $date, $withTime = true) {
 
     return $withTime ? trans('param_label.date_at_time', ['date' => $formattedDate, 'time' => $date->formatLocalized('%H:%M')]) : $formattedDate;
 }
+
+/**
+ * Gets the color class of the specified participation's status.
+ *
+ * @param \App\Models\Participation $participation
+ *
+ * @return string
+ */
+function getParticipationStatusClass(\App\Models\Participation $participation) {
+    $class = '';
+    $status = $participation->status->label;
+    switch ($status) {
+        case 'registered':
+            $class = 'is-success';
+            break;
+    }
+
+    return $class;
+}

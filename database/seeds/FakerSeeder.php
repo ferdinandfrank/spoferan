@@ -123,7 +123,7 @@ class FakerSeeder extends Seeder {
 
         foreach ($eventParts as $eventPart) {
 
-            $this->createRealParticipationClass($eventPart, 'Damen');
+            $this->createRealParticipationClass($eventPart, 'Frauen');
 
             $this->createRealParticipationClass($eventPart, 'Männer');
 

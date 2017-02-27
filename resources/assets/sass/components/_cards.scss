@@ -7,13 +7,14 @@
  *  1. Declarations
  *  2. Cards List
  *  3. Cards
+ *  4. Collapsible Cards
+ *  5. Price Cards
  */
 
 /*********************
   1. Declarations
 **********************/
 $card-hover-transition-duration: .5s;
-
 
 /*********************
   3. Cards
@@ -50,8 +51,8 @@ $card-hover-transition-duration: .5s;
         position: relative;
         align-items: center;
         justify-content: center;
-        background: $dark;
         flex: 1;
+        background: $dark;
         min-height: 200px;
 
         .card-image {
@@ -62,6 +63,8 @@ $card-hover-transition-duration: .5s;
             width: 100%;
             transition: all $card-hover-transition-duration;
             opacity: 0.6;
+            left: 0;
+            top: 0;
         }
 
         .card-header-info {
@@ -73,8 +76,8 @@ $card-hover-transition-duration: .5s;
 
             &.toggle {
                 display: none;
-                border-top: 2px solid white;
-                border-bottom: 2px solid white;
+                border-top: 2px solid $white-smooth;
+                border-bottom: 2px solid $white-smooth;
                 @include animation(fadeInFromNone $card-hover-transition-duration ease-out);
             }
 
@@ -85,6 +88,11 @@ $card-hover-transition-duration: .5s;
             > .title {
                 margin-top: 10px;
                 text-align: center;
+                color: $white-smooth;
+            }
+
+            > .subtitle {
+                color: $secondary;
             }
 
             > i {
@@ -123,7 +131,7 @@ $card-hover-transition-duration: .5s;
             font-size: $font-size-small;
         }
 
-        .content {
+        > .content {
             height: 130px;
 
             .description {
@@ -143,5 +151,108 @@ $card-hover-transition-duration: .5s;
                 font-size: $font-size-x-large;
             }
         }
+    }
+
+    .card-footer {
+        .card-footer-item {
+            &:hover{
+                background: $hover;
+            }
+
+            i:first-child {
+                margin-right: 5px;
+            }
+
+            i:last-child {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+/*********************
+  4. Collapsible Cards
+**********************/
+.card.collapsible {
+
+    &.is-active {
+        .card-header {
+            border-bottom: 1px solid $grey-light;
+        }
+    }
+
+    .card-header {
+        background: transparent;
+        min-height: inherit;
+        padding: 0.75rem;
+
+        .card-header-title {
+            margin-bottom: 0;
+        }
+    }
+
+    .card-toggle {
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-toggle {
+        cursor: pointer;
+
+        &:hover, &:hover + .card-content {
+            background: $hover;
+        }
+    }
+}
+
+/*********************
+  5. Price Cards
+**********************/
+.card.price-card {
+
+    .card-header {
+        flex-direction: row;
+        min-height: 100px;
+        padding: 0;
+
+        > * {
+            padding: 0.75rem;
+        }
+
+        .price {
+            font-size: $font-size-h1;
+            color: $white-smooth;
+            height: 100%;
+            width: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: $primary;
+
+            small {
+                font-size: $font-size;
+
+                &:last-child {
+                    margin-left: 5px;
+                }
+
+                &:first-child {
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .content {
+            margin: 0;
+
+            .title {
+                color: $primary;
+                margin-bottom: 5px;
+                font-size: $font-size-large;
+            }
+        }
+
     }
 }

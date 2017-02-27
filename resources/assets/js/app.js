@@ -42,6 +42,22 @@ require('./vendor/datetimepicker');
 window.perfectScrollbar = require('perfect-scrollbar');
 require('perfect-scrollbar/jquery')($);
 
+
+/***********************************************************
+ Load Gumshoe Scrollspy
+ --------------------------
+
+ ************************************************************/
+window.gumshoe = require('gumshoe');
+
+/***********************************************************
+ Load SmoothScroll
+ --------------------------
+
+ ************************************************************/
+window.smoothScroll = require('smooth-scroll');
+
+
 /***********************************************************
  Load VueJS
  --------------------------

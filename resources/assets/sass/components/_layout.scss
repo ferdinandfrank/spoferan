@@ -8,6 +8,7 @@
  *  2. General
  *  3. Content
  *  4. Navbar
+ *  5. Sections
  */
 
 /*********************
@@ -67,6 +68,27 @@ $navbar-item-font-size: 1rem;
     .nav-left, .nav-right, .nav-center {
         height: 100%;
     }
+    
+
+
+    @media #{$mobile} {
+        .nav-menu {
+            height: auto;
+
+            &:not(.is-active) {
+                display: none;
+
+            }
+
+            ~ .nav-menu {
+                top: 200%;
+            }
+
+            .nav-item {
+                justify-content: center;
+            }
+        }
+    }
 
     .nav-item {
         position: relative;
@@ -84,6 +106,10 @@ $navbar-item-font-size: 1rem;
     }
 
     .nav-toggle {
+        position: absolute;
+        height: $navbar-height;
+        width: $navbar-height;
+        right: 0;
 
         // Hamburger
         span {
@@ -158,5 +184,24 @@ $navbar-item-font-size: 1rem;
             left: -11px;
             top: -10px;
         }
+    }
+}
+
+/*********************
+  5. Sections
+**********************/
+.section {
+    padding: 2rem 1.5rem;
+
+    .heading {
+
+        .subtitle {
+            margin-top: -1.25rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    .content {
+        padding: 0 5px;
     }
 }

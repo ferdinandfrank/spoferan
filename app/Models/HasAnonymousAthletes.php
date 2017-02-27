@@ -34,6 +34,6 @@ trait HasAnonymousAthletes {
             return '<em>' . $this->athlete->getAnonymousName() . '</em>';
         }
 
-        return '<a href="' . $this->athlete->getPath() . '">' . $this->athlete->getFullName() . '</a>';
+        return '<a href="' . $this->athlete->getPath() . '" class="link">' . $this->athlete->getFullName() . '</a>';
     }
 }

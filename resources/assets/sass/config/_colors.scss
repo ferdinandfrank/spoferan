@@ -28,6 +28,7 @@ $grey-medium: #808697 !default;
 $grey-light: #d8d8d8 !default;
 $grey-transparent: #eaeaea !default;
 $light: $grey-transparent !default;
+$hover: rgba(0, 0, 0, 0.04) !default;
 
 $black: #171717 !default;
 $black-smooth: #262626 !default;
@@ -85,7 +86,7 @@ $colors: (white: ($white, $black), black: ($black, $white), light: ($light, $lig
   3. Helper Classes
 **********************/
 @each $name, $pair in $colors {
-    span, p, h1, h2, h3, h4, h5 {
+    span, p, h1, h2, h3, h4, h5, td, th {
         $color: nth($pair, 1);
         &.is-#{$name} {
             color: $color

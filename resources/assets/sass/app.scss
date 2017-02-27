@@ -1,7 +1,6 @@
 /*********************
   Config Files
 **********************/
-@import "config/mixins";
 @import "config/colors";
 @import "config/typography";
 
@@ -31,11 +30,13 @@
   Helper Files
 **********************/
 @import "helper";
+@import "config/mixins";
 
 /*********************
   Vendor Files
 **********************/
 @import "vendor/datetimepicker";
+@import "vendor/animate";
 @import "vendor/select2/select2";
 @import "vendor/font-awesome/font-awesome";
 @import "../vendor/vue-forms/sass/vue-forms";
@@ -50,3 +51,4 @@
 @import "components/media";
 @import "components/cards";
 @import "components/inputs";
+@import "components/buttons";

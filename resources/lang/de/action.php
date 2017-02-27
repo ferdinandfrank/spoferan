@@ -10,7 +10,8 @@ return [
     'confirm_account'       => 'Account bestätigen',
     'find_event'            => 'Event finden',
     'show_event'            => 'Event anzeigen',
-    'participate' => 'Teilnehmen',
-    'share' => 'Teilen',
-    'add_to_watchlist' => 'Merken'
+    'participate'           => 'Teilnehmen',
+    'share'                 => 'Teilen',
+    'add_to_watchlist'      => 'Merken',
+    'show_participants'     => 'Teilnehmer anzeigen'
 ];

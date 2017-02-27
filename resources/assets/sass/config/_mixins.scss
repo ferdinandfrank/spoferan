@@ -1,4 +1,6 @@
 
+$mobile: "screen and (max-width: #{$tablet} - 1px)" !default;
+
 @mixin placeholder-color($color) {
     &::-webkit-input-placeholder {
         color: $color;

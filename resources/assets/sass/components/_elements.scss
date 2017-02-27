@@ -9,6 +9,7 @@
  *  3. Horizontal Rows
  *  4. Levels
  *  5. Calendar Icon
+ *  6. Menues
  */
 
 /*********************
@@ -44,6 +45,17 @@ hr.light {
 .level {
     .level-item {
 
+        .heading {
+            font-size: $font-size-small;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .title {
+            font-size: $font-size;
+            color: $secondary !important;
+        }
+
         img {
             max-height: 40px;
         }
@@ -59,11 +71,11 @@ time.calendar {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    width: 45px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background-color: #fff;
     border-radius: 0.6em;
-    box-shadow: 0 1px 0 #bdbdbd, 0 2px 0 #fff, 0 3px 0 #bdbdbd, 0 4px 0 #fff, 0 5px 0 #bdbdbd, 0 0 0 1px #bdbdbd;
+    border: 1px solid $border;
     overflow: hidden;
 
     .month {
@@ -90,5 +102,32 @@ time.calendar {
         font-style: normal;
         color: #fff;
         background-color: $secondary;
+    }
+}
+
+/*********************
+  6. Menues (Bulma Overwrites)
+**********************/
+.menu {
+    .menu-label {
+        color: $grey;
+
+        a {
+            color: $grey;
+        }
+
+        a.is-active, a:hover {
+            color: $link-color;
+        }
+    }
+
+    .menu-list {
+        a:hover:not(.is-active) {
+            background: $hover;
+        }
+
+        ul {
+            list-style-type: none;
+        }
     }
 }

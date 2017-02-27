@@ -41,6 +41,18 @@ class EventController extends Controller {
     }
 
     /**
+     * Displays the specified child event.
+     *
+     * @param Event $event
+     * @param Event $child
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showChild(Event $event, Event $child) {
+        return redirect()->action('EventController@show', ['event' => $child]);
+    }
+
+    /**
      * Shows the form for creating a new event.
      *
      * @return \Illuminate\View\View

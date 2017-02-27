@@ -16,6 +16,12 @@ Vue.http.interceptors.push((request, next) => {
 import dropdown from "./components/Dropdown.vue";
 Vue.component('dropdown', dropdown);
 
+import collapsibleCard from "./components/CollapsibleCard.vue";
+Vue.component('collapsible-card', collapsibleCard);
+
+import scrollspyList from "./components/ScrollspyList.vue";
+Vue.component('scrollspy-list', scrollspyList);
+
 window.VueModel = Vue.extend({
 
     data() {
@@ -40,6 +46,10 @@ window.VueModel = Vue.extend({
                 });
             }
         },
+
+        toggleNavbar: function () {
+            $('.navbar .nav-menu').toggleClass('is-active');
+        }
     }
 });
 

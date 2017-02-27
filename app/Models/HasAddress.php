@@ -20,6 +20,6 @@ trait HasAddress {
      * @return string
      */
     public function getFullAddress() {
-        return $this->street . ', ' . $this->postcode . ' ' . $this->city . ', ' . $this->country;
+        return $this->street . ', ' . $this->postcode . ' ' . $this->city . ', ' . trans('countries.' . $this->country);
     }
 }
