@@ -136,16 +136,26 @@ class VisitClass extends BaseModel {
         return $this->event->isCreator($user);
     }
 
+    /**
+     * Check if the specified user or the currently logged user can visit at this class.
+     *
+     * @param User|null $user
+     *
+     * @return bool
+     */
+    public function canVisit(User $user = null) {
+        return $this->getVisitRestriction($user)['error'] == false;
+    }
 
     /**
-     * Checks if an registration as a visitor in the visit class is possible.
-     * TODO: Extract to request validation class
+     * Gets the visit restriction message for the specified user or the currently logged user, if he cannot
+     * visit at this class.
      *
      * @param User|null $user
      *
      * @return array
      */
-    public function isVisitPossible(User $user = null) {
+    public function getVisitRestriction(User $user = null) {
 
         if (empty($user)) {
             $user = Auth::user();
@@ -153,8 +163,8 @@ class VisitClass extends BaseModel {
 
         $result = ['error' => true, 'msg' => null];
 
-        if (empty($user) || !$user->isType(\Config::get('user_type.athlete'))) {
-            $result['msg'] = trans('validation.event.restr_registered');
+        if (empty($user) || !$user->isType(config('starmee.user_type.athlete'))) {
+            $result['msg'] = trans('validation.event.visit.restr_registered');
 
         } elseif ($this->isVisitor($user->athlete)) {
             $result['msg'] = trans('validation.event.visit.already_registered');
@@ -165,8 +175,6 @@ class VisitClass extends BaseModel {
         } elseif ($this->isCreator($user)) {
             $result['msg'] = trans('validation.event.visit.restr_creator');
 
-        } elseif ($this->status->label == 'register_paused') {
-            $result['msg'] = trans('validation.event.participate.restr_registration_paused');
         } else {
             $result['error'] = false;
         }

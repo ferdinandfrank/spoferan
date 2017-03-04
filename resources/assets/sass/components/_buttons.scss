@@ -6,6 +6,7 @@
  *
  *  1. Declarations
  *  2. Share Buttons
+ *  3. Message Buttons
  */
 
 /*********************
@@ -48,4 +49,12 @@
             }
         }
     }
+}
+
+/*********************
+  3. Message Buttons
+**********************/
+.message-button {
+    white-space: normal;
+    height: auto;
 }

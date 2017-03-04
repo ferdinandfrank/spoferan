@@ -10,6 +10,7 @@
  *  4. Levels
  *  5. Calendar Icon
  *  6. Menues
+ *  7. Wizard
  */
 
 /*********************
@@ -53,7 +54,7 @@ hr.light {
 
         .title {
             font-size: $font-size;
-            color: $secondary !important;
+            color: $primary !important;
         }
 
         img {
@@ -129,5 +130,89 @@ time.calendar {
         ul {
             list-style-type: none;
         }
+    }
+}
+
+/*********************
+  7. Wizard
+**********************/
+.wizard {
+
+    .navigation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .navigation-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            .navigation-item-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                i {
+                    font-size: $font-size-x-large;
+                }
+
+                .title {
+                    margin-bottom: 0;
+                }
+
+                .subtitle {
+                    margin-top: 0;
+                }
+            }
+
+            &.selected {
+                .navigation-item-content {
+                    * {
+                        color: $success;
+                    }
+                }
+            }
+
+            &.disabled {
+                cursor: not-allowed;
+
+                .navigation-item-content {
+                    * {
+                        color: $disabled;
+                    }
+                }
+            }
+
+            &.active {
+
+                .navigation-item-content {
+                    * {
+                        color: $primary;
+                    }
+                }
+            }
+
+            &:not(.disabled) {
+                &:hover {
+                    .title {
+                        color: $secondary;
+                    }
+                }
+            }
+
+            &:not(:last-of-type):after {
+                font-family: 'FontAwesome';
+                content: "\f054";
+                margin: 0 20px;
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-around;
     }
 }

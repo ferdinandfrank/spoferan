@@ -9,26 +9,26 @@ use Auth;
 /**
  * App\Models\ParticipationClass
  *
- * @property int $id
- * @property int $event_id
- * @property string $title
- * @property string $description
- * @property float $entry_fee
- * @property bool $privacy
- * @property \Carbon\Carbon $start_date
- * @property \Carbon\Carbon $end_date
- * @property \Carbon\Carbon $register_date
- * @property \Carbon\Carbon $unregister_date
- * @property int $restr_limit
- * @property \Carbon\Carbon $restr_birth_date_min
- * @property \Carbon\Carbon $restr_birth_date_max
- * @property string $restr_gender
- * @property string $restr_country
- * @property string $restr_city
- * @property int $restr_postcode
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property-read \App\Models\Event $event
+ * @property int                                                                       $id
+ * @property int                                                                       $event_id
+ * @property string                                                                    $title
+ * @property string                                                                    $description
+ * @property float                                                                     $entry_fee
+ * @property bool                                                                      $privacy
+ * @property \Carbon\Carbon                                                            $start_date
+ * @property \Carbon\Carbon                                                            $end_date
+ * @property \Carbon\Carbon                                                            $register_date
+ * @property \Carbon\Carbon                                                            $unregister_date
+ * @property int                                                                       $restr_limit
+ * @property \Carbon\Carbon                                                            $restr_birth_date_min
+ * @property \Carbon\Carbon                                                            $restr_birth_date_max
+ * @property string                                                                    $restr_gender
+ * @property string                                                                    $restr_country
+ * @property string                                                                    $restr_city
+ * @property int                                                                       $restr_postcode
+ * @property \Carbon\Carbon                                                            $created_at
+ * @property \Carbon\Carbon                                                            $updated_at
+ * @property-read \App\Models\Event                                                    $event
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereDescription($value)
@@ -132,7 +132,6 @@ class ParticipationClass extends BaseModel {
 
     /**
      * Gets the event of the participation class.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -142,7 +141,6 @@ class ParticipationClass extends BaseModel {
 
     /**
      * Gets the participations of the participation class.
-
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -154,6 +152,7 @@ class ParticipationClass extends BaseModel {
      * Checks if an athlete is a participant of the class.
      *
      * @param Athlete $athlete
+     *
      * @return bool
      */
     public function isParticipant(Athlete $athlete) {
@@ -172,24 +171,34 @@ class ParticipationClass extends BaseModel {
     }
 
     /**
-     * Checks if an registration as a participant in the participation class is possible.
+     * Check if the specified user or the currently logged user can participate at this class.
      *
-     * TODO: Extract to request validation class
+     * @param User|null $user
+     *
+     * @return bool
+     */
+    public function canParticipate(User $user = null) {
+        return $this->getParticipationRestriction($user)['error'] == false;
+    }
+
+    /**
+     * Gets the participation restriction message for the specified user or the currently logged user, if he cannot
+     * participate at this class.
      *
      * @param User|null $user
      *
      * @return array
      */
-    public function isParticipationPossible(User $user = null) {
+    public function getParticipationRestriction(User $user = null) {
 
         if (empty($user)) {
             $user = Auth::user();
         }
 
-        $result = array('error' => true, 'msg' => null);
+        $result = ['error' => true, 'msg' => null];
 
-        if (empty($user) || !$user->isType(\Config::get('user_type.athlete'))) {
-            $result['msg'] = trans('validation.event.restr_registered');
+        if (empty($user) || !$user->isType(config('starmee.user_type.athlete'))) {
+            $result['msg'] = trans('validation.event.participate.restr_registered');
 
         } elseif ($this->isParticipant($user->athlete)) {
             $result['msg'] = trans('validation.event.participate.already_registered');
@@ -210,45 +219,18 @@ class ParticipationClass extends BaseModel {
                 $result['msg'] = trans('validation.event.participate.restr_gender_male');
             }
 
-        } elseif (!empty($this->restr_label_id) && !$user->athlete->hasLabel($this->restr_label_id)) {
-            $labelCode = Label::find($this->restr_label_id);
-            $result['msg'] = trans('validation.event.participate.restr_label_id', ['label' => trans('db.label.' . $labelCode)]);
-
-        } elseif (!empty($this->restr_club_id) && Club::find($this->restr_club_id)->isMember($user->id)) {
-            $result['msg'] = trans('validation.event.participate.restr_club_id', ['club' => Club::find($this->restr_club_id)->name]);
-
-        } elseif (!empty($this->restr_country) && $user->hasDefaultAddress()
-                  && $this->restr_country != $user->userSettings->defaultUserAddress->country
+        } elseif (!empty($this->restr_country) && $this->restr_country != $user->country
         ) {
             $result['msg'] = trans('validation.event.participate.restr_country', ['country' => $this->restr_country]);
 
-        } elseif (!empty($this->restr_city) && $user->hasDefaultAddress()
-                  && $this->restr_city != $user->userSettings->defaultUserAddress->city
+        } elseif (!empty($this->restr_city) && !empty($this->restr_postcode) && $this->restr_city != $user->city
+                  && $this->restr_postcode != $user->postcode
         ) {
             $result['msg'] = trans('validation.event.participate.restr_city', ['city' => $this->restr_city]);
-
-        } elseif ($this->multiple_starts == false && $this->event->isParticipant($user->athlete)) {
-            $result['msg'] = trans('validation.event.participate.multiple_starts_this');
-
-        } elseif ($this->event->participationClasses()->whereMultipleStarts(false)->whereHas(
-                'participations', function($query) use ($user) {
-                $query->where('athlete_id', $user->id);
-            }
-            )->count() > 0
-        ) {
-            $result['msg'] = trans('validation.event.participate.multiple_starts_other');
-
-        } elseif (!empty($this->club_participants_limit) &&
-                  $this->restr_club_id != null &&
-                  $this->participations()->where('club_id', $this->restr_club_id)->count() >= $this->club_participants_limit
-        ) {
-            $result['msg'] = trans('validation.event.participate.club_participants_limit');
 
         } elseif ($this->isCreator($user)) {
             $result['msg'] = trans('validation.event.participate.restr_creator');
 
-        } elseif ($this->status->label == 'register_paused') {
-            $result['msg'] = trans('validation.event.participate.restr_registration_paused');
         } else {
             $result['error'] = false;
         }
@@ -260,6 +242,7 @@ class ParticipationClass extends BaseModel {
      * Determine if the given attribute may be mass assigned.
      *
      * @param  string $key
+     *
      * @return bool
      */
     public function isFillable($key) {

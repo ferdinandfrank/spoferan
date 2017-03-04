@@ -38,6 +38,7 @@ namespace App\Models;
 class CheckPoint extends BaseModel {
 
     use HasResourceRoutes;
+    use HasAddress;
 
     /**
      * The table associated with the model.
@@ -80,6 +81,15 @@ class CheckPoint extends BaseModel {
      */
     public function event() {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * Gets the latitude and longitude coordinates of the checkpoint as json.
+     *
+     * @return string
+     */
+    public function getLatLng() {
+        return "{lat: $this->latitude, lng: $this->longitude}";
     }
 
     /**

@@ -210,14 +210,14 @@ class FakerSeeder extends Seeder {
         $register_date = Carbon\Carbon::instance($start_date)->subMonths(rand(12, 1));
         $unregister_date = Carbon\Carbon::instance($start_date)->subDays(rand(2, 27));
 
-        $restr_birth_date_min = null;
-        $restr_birth_date_max = $start_date->subYears(18);
+        $restr_birth_date_min = $event->start_date->subYears(18);
+        $restr_birth_date_max = null;
         if ($title == 'Jungs' || $title == 'Mädchen' || $title == 'Jugend') {
-            $restr_birth_date_min = $start_date->subYears(18);
-            $restr_birth_date_max = $start_date->subYears(12);
+            $restr_birth_date_max = $event->start_date->subYears(18);
+            $restr_birth_date_min = $event->start_date->subYears(12);
         } elseif ($title == 'Kinder') {
-            $restr_birth_date_min = $start_date->subYears(12);
-            $restr_birth_date_max = $start_date->subYears(6);
+            $restr_birth_date_max = $event->start_date->subYears(12);
+            $restr_birth_date_min = $event->start_date->subYears(6);
         }
 
         $gender = null;

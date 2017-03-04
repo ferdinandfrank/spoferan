@@ -18,13 +18,13 @@ class MandatorySeeder extends Seeder {
      */
     public function run() {
         DB::table('sport_types')->insert([
-            ['label' => 'other', 'icon' => asset('images/icons/sport_type_other.png')],
-            ['label' => 'triathlon', 'icon' => asset('images/icons/sport_type_triathlon.png')],
-            ['label' => 'marathon', 'icon' => asset('images/icons/sport_type_marathon.png')],
-            ['label' => 'swimming', 'icon' => asset('images/icons/sport_type_swimming.png')],
-            ['label' => 'inline_skating', 'icon' => asset('images/icons/sport_type_inline_skating.png')],
-            ['label' => 'nordic_walking', 'icon' => asset('images/icons/sport_type_nordic_walking.png')],
-            ['label' => 'cycling', 'icon' => asset('images/icons/sport_type_cycling.png')]
+            ['label' => 'other', 'icon' => 'images/icons/sport_type_other.png'],
+            ['label' => 'triathlon', 'icon' => 'images/icons/sport_type_triathlon.png'],
+            ['label' => 'marathon', 'icon' => 'images/icons/sport_type_marathon.png'],
+            ['label' => 'swimming', 'icon' => 'images/icons/sport_type_swimming.png'],
+            ['label' => 'inline_skating', 'icon' => 'images/icons/sport_type_inline_skating.png'],
+            ['label' => 'nordic_walking', 'icon' => 'images/icons/sport_type_nordic_walking.png'],
+            ['label' => 'cycling', 'icon' => 'images/icons/sport_type_cycling.png']
         ]);
 
         DB::table('participation_states')->insert([

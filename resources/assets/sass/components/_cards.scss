@@ -249,8 +249,11 @@ $card-hover-transition-duration: .5s;
 
             .title {
                 color: $primary;
-                margin-bottom: 5px;
                 font-size: $font-size-large;
+            }
+
+            .subtitle {
+                margin-bottom: 0.3rem;
             }
         }
 

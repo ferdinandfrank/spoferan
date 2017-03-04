@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="nav-item">
-                    <dropdown activate="#user-menu" alignment="none" class="button is-large user-button">
+                    <dropdown activate="#user-menu" class="button is-large user-button">
                         <div class="avatar x-small"
                              style="background-image: url({{ $loggedUser->avatar }})"></div>
                         <div class="profile-info"><span class="name">{{ $loggedUser->getDisplayName() }}</span><span

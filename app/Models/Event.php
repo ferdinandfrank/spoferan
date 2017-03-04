@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -215,12 +216,80 @@ class Event extends SlugModel {
     }
 
     /**
-     * Gets the track points of the event.
+     * Gets the check points of the event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function checkPoints() {
         return $this->hasMany(CheckPoint::class);
+    }
+
+    /**
+     * Gets the start point of the event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function startCheckPoint() {
+        $startPoint = $this->hasOne(CheckPoint::class)->wherePosition(1);
+
+        if (empty($startPoint->getResults()) && count($this->checkPoints)) {
+            $startPoint = $this->hasOne(CheckPoint::class);
+        }
+
+        return $startPoint;
+    }
+
+    /**
+     * Gets the check points of the event which isn't the first or the last one.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function middleCheckPoints() {
+        return $this->hasMany(CheckPoint::class)->whereNotIn('position', [$this->startCheckPoint->position, $this->finishCheckPoint->position]);
+    }
+
+    /**
+     * Gets the finish point of the event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function finishCheckPoint() {
+        return $this->hasOne(CheckPoint::class)->orderBy('position', 'desc')->limit(1);
+    }
+
+    /**
+     * Check if the specified user or the currently logged user can participate in one of the event's participation classes.
+     *
+     * @param User|null $user
+     *
+     * @return bool
+     */
+    public function canParticipate(User $user = null) {
+        return $this->getParticipationRestriction($user)['error'] == false;
+    }
+
+    /**
+     * Checks if the specified user or the registered user can participate in one of the event's participation classes.
+     *
+     * @param User|null $user
+     *
+     * @return array
+     */
+    public function getParticipationRestriction(User $user = null) {
+        if (empty($user)) {
+            $user = Auth::user();
+        }
+
+        $result = ['error' => true, 'msg' => null];
+
+        if (empty($user) || !$user->isType(config('starmee.user_type.athlete'))) {
+            $result['msg'] = trans('validation.event.restr_registered');
+
+        } else {
+            $result['error'] = false;
+        }
+
+        return $result;
     }
 
     /**

@@ -58,6 +58,8 @@ window.gumshoe = require('gumshoe');
 window.smoothScroll = require('smooth-scroll');
 
 
+window.theiaStickySidebar = require('theia-sticky-sidebar');
+
 /***********************************************************
  Load VueJS
  --------------------------

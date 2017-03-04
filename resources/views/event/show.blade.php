@@ -2,59 +2,18 @@
 
 @section('content')
     <div class="container">
-        <ul class="breadcrumb">
-            <li>
-                <icon icon="{{ config('icons.dashboard') }}"></icon>
-            </li>
-            <li>Events</li>
-        </ul>
+        @component('components.breadcrumb')
+            <li><a href="#">{{ trans('label.events') }}</a></li>
+            @if($event->isChild())
+                <li><a href="{{ $event->parentEvent->getPath() }}">{{ $event->parentEvent->title }}</a></li>
+            @endif
+            <li><a href="#">{{ $event->title }}</a></li>
+        @endcomponent
         <div class="card">
-            <div id="overview" class="card-header">
-                <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
-                <div class="card-header-info">
-                    <icon icon="{{ config('icons.event') }}"></icon>
-                    <h1 class="title">{{ $event->title }}</h1>
-                    @if($event->isChild())
-                        <a class="subtitle link" href="{{ $event->parentEvent->getPath() }}">{{ trans('param_label.child_event_of_event', ['event' => $event->parentEvent->title]) }}</a>
-                    @endif
-                </div>
-            </div>
+            @include('event.header')
 
             <div class="card-content">
-                <nav class="level">
-                    <div class="level-item has-text-centered">
-                        <div>
-                            <img class="avatar auto" src="{{ $event->organizer->user->avatar }}" alt="{{ $event->organizer->getDisplayName() }}" >
-                            <p class="heading">{{ trans('label.user_type.organizer') }}</p>
-                            <p class="title">{{ $event->organizer->getDisplayName() }}</p>
-                        </div>
-                    </div>
-                    <div class="level-item has-text-centered">
-                        <div>
-                            <img src="{{ $event->sportType->icon }}" alt="{{ trans('sport_types.' . $event->sportType->label) }}" >
-                            <p class="heading">{{ trans('label.sport_type') }}</p>
-                            <p class="title">{{ trans('sport_types.' . $event->sportType->label) }}</p>
-                        </div>
-                    </div>
-                    <div class="level-item has-text-centered">
-                        <div>
-                            <time datetime="{{ $event->start_date->toDateTimeString() }}" class="calendar margin-auto">
-                                <span class="year">{{ $event->start_date->year }}</span>
-                                <span class="day">{{ $event->start_date->day }}</span>
-                                <span class="month">{{ $event->start_date->formatLocalized('%b') }}</span>
-                            </time>
-                            <p class="heading">{{ trans('label.event_start_date') }}</p>
-                            <p class="title">{{ dateDiffForHumans($event->start_date) }}</p>
-                        </div>
-                    </div>
-                    <div class="level-item has-text-centered">
-                        <div>
-                            <img src="{{ getCountryFlag($event->country) }}" alt="{{ trans('countries.' . $event->country) }}" >
-                            <p class="heading">{{ trans('label.event_location') }}</p>
-                            <p class="title">{{ $event->getFullAddress() }}</p>
-                        </div>
-                    </div>
-                </nav>
+                @include('event.info_level')
                 <div class="columns">
                     <div class="column is-9">
                         <section id="description" class="section">
@@ -73,6 +32,7 @@
                         <section id="time_and_location" class="section">
                             <div class="heading">
                                 <h2 class="title">{{ trans('label.time_and_location') }}</h2>
+                                <p class="subtitle">Klicke auf eine Markierung in der Karte, um mehr Infos zu erhalten.</p>
                             </div>
                             <div class="content">
                                 <div id="map" style="height: 500px"></div>
@@ -88,7 +48,7 @@
                             <div class="content">
                                 <div class="columns is-multiline">
                                     @foreach($event->childEvents as $childEvent)
-                                        <div class="column">
+                                        <div id="{{ $childEvent->getRouteKey() }}" class="column">
                                             @include('event.preview', ['event' => $childEvent])
                                         </div>
                                     @endforeach
@@ -106,17 +66,34 @@
                                 <div class="content">
                                     <div class="columns is-multiline">
                                         @foreach($event->participationClasses as $participationClass)
-                                            <div class="column is-12">
+                                            <div id="participation_class_{{ $participationClass->getRouteKey() }}" class="column is-12">
                                                 @include('participation_class.preview')
                                             </div>
                                         @endforeach
                                     </div>
-
                                 </div>
                             </section>
                         @endif
 
-                        <section class="section">
+                        @if(count($event->visitClasses))
+                            <section id="visit_classes" class="section">
+                                <div class="heading">
+                                    <h2 class="title">{{ trans('label.visit_classes') }}</h2>
+                                    <p class="subtitle">Für dieses Event gibt es mehrere Besucherpakete zur Auswahl. Klicke auf eine der folgenden Karten, um mehr über dieses Besucherpaket zu erfahren.</p>
+                                </div>
+                                <div class="content">
+                                    <div class="columns is-multiline">
+                                        @foreach($event->visitClasses as $visitClass)
+                                            <div id="visit_class_{{ $visitClass->getRouteKey() }}" class="column is-12">
+                                                @include('visit_class.preview')
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </section>
+                        @endif
+
+                        <section id="participants" class="section">
                             <div class="heading">
                                 <h2 class="title">{{ trans('label.participants') }}</h2>
                                 @if(count($event->childEvents))
@@ -137,7 +114,7 @@
                             </div>
                         </section>
 
-                        <section class="section">
+                        <section id="about_the_organizer" class="section">
                             <div class="heading">
                                 <h2 class="title">{{ trans('label.about_the_organizer') }}</h2>
                             </div>
@@ -146,7 +123,7 @@
                                     <div class="column is-2">
                                         <img src="{{ $event->organizer->user->avatar }}" class="avatar" >
                                     </div>
-                                    <div class="column">
+                                    <div class="column flex-column-center">
                                         <h4>{{ $event->organizer->getDisplayName() }}</h4>
                                         <p>{{ $event->organizer->description }}</p>
                                     </div>
@@ -155,26 +132,37 @@
                         </section>
 
                     </div>
-                    <div class="column">
-                        <div id="sidebar">
+                    <div id="sidebar" class="column">
+                        <div class="theiaStickySidebar">
                         <div class="columns is-multiline">
                             <div class="column is-12">
-                                <a class="button is-large is-success responsive">
-                                <span class="icon is-small">
-                                  <icon icon="{{ config('icons.participate') }}"></icon>
-                                </span>
+                                @if($event->canParticipate())
+                                <a href="{{ $event->isChild() ? route('participation.create', ['event' => $event->parentEvent]) : route('participation.create', ['event' => $event]) }}" class="button is-large is-success responsive">
+                                    <span class="icon is-small">
+                                        <icon icon="{{ config('icons.buy') }}"></icon>
+                                    </span>
                                     <span>{{ trans('action.participate') }}</span>
                                 </a>
+                                @else
+                                    <a href="{{ route('login') }}" class="button is-large is-success responsive">
+                                        <span class="icon is-small">
+                                            <icon icon="{{ config('icons.user') }}"></icon>
+                                        </span>
+                                        <span>{{ trans('action.login') }}</span>
+                                    </a>
+                                @endif
                             </div>
+                            @if(Auth::check())
                             <div class="column is-6">
                                 <a class="button responsive">
                                 <span class="icon is-small">
                                   <icon icon="{{ config('icons.watchlist') }}"></icon>
                                 </span>
-                                    <span>{{ trans('action.add_to_watchlist') }}</span>
+                                <span>{{ trans('action.add_to_watchlist') }}</span>
                                 </a>
                             </div>
-                            <div class="column is-6 share-buttons">
+                            @endif
+                            <div class="column share-buttons">
                                 <a class="button responsive facebook">
                                     <span class="icon is-small">
                                       <icon icon="{{ config('icons.facebook') }}"></icon>
@@ -192,52 +180,29 @@
                             <li class="menu-label"><a href="#child_events">{{ trans('label.child_events') }}</a></li>
                             <ul class="menu-list">
                                 @foreach($event->childEvents as $childEvent)
-                                <li><a>{{ $childEvent->title }}</a></li>
+                                <li><a href="#{{ $childEvent->getRouteKey() }}">{{ $childEvent->title }}</a></li>
                                 @endforeach
                             </ul>
                             @endif
                             @if(count($event->participationClasses))
-                                <li class="menu-label"><a href="#">{{ trans('label.participation_classes') }}</a></li>
+                                <li class="menu-label"><a href="#participation_classes">{{ trans('label.participation_classes') }}</a></li>
                                 <ul class="menu-list">
                                     @foreach($event->participationClasses as $participationClass)
-                                        <li><a>{{ $participationClass->title }}</a></li>
+                                        <li><a href="#participation_class_{{ $participationClass->getRouteKey() }}">{{ $participationClass->title }}</a></li>
                                     @endforeach
                                 </ul>
                             @endif
                             @if(count($event->visitClasses))
-                                <li class="menu-label"><a href="#">{{ trans('label.visit_classes') }}</a></li>
+                                <li class="menu-label"><a href="#visit_classes">{{ trans('label.visit_classes') }}</a></li>
                                 <ul class="menu-list">
                                     @foreach($event->visitClasses as $visitClass)
-                                        <li><a>{{ $visitClass->title }}</a></li>
+                                        <li><a href="#visit_class_{{ $visitClass->getRouteKey() }}">{{ $visitClass->title }}</a></li>
                                     @endforeach
                                 </ul>
                             @endif
-                            <li class="menu-label"><a href="#">{{ trans('label.about_the_organizer') }}</a></li>
-                            <li class="menu-label"><a href="#">{{ trans('label.participants') }}</a></li>
-                            <li class="menu-label"><a href="#">{{ trans('label.ratings') }}</a></li>
-                            <li class="menu-label">
-                                Administration </li>
-                            <ul class="menu-list">
-                                <li><a>Team Settings</a></li>
-                                <li>
-                                    <a class="is-active">Manage Your Team</a>
-                                    <ul>
-                                        <li><a>Members</a></li>
-                                        <li><a>Plugins</a></li>
-                                        <li><a>Add a member</a></li>
-                                    </ul>
-                                </li>
-                                <li><a>Invitations</a></li>
-                                <li><a>Cloud Storage Environment Settings</a></li>
-                                <li><a>Authentication</a></li>
-                            </ul>
-                            <li class="menu-label">
-                                Transactions </li>
-                            <ul class="menu-list">
-                                <li><a>Payments</a></li>
-                                <li><a>Transfers</a></li>
-                                <li><a>Balance</a></li>
-                            </ul>
+                            <li class="menu-label"><a href="#participants">{{ trans('label.participants') }}</a></li>
+                            <li class="menu-label"><a href="#about_the_organizer">{{ trans('label.about_the_organizer') }}</a></li>
+                            <li class="menu-label"><a href="#ratings">{{ trans('label.ratings') }}</a></li>
                         </scrollspy-list>
                         <hr>
                         <h4 class="title">{{ trans('label.contact') }}</h4>
@@ -256,23 +221,90 @@
 @endsection
 
 @push('js')
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('google.api_key_browser') }}"></script>
+<script src="{{ asset('js/geocode.js') }}"></script>
 <script>
     $(document).ready(function () {
         new VueModel({
-            el: '#app'
+            el: '#app',
+            mounted() {
+
+                @if(count($event->checkPoints))
+                    var start = {{ $event->startCheckPoint->getLatLng() }};
+                    var finish = {{ $event->finishCheckPoint->getLatLng() }};
+
+                    var map = initMap('map', start);
+
+                    calculateAndDisplayRoute(initMapDirectionsService(), initMapDirectionsRenderer(map), <?php echo $event->startCheckPoint ?>, <?php echo $event->finishCheckPoint ?>, <?php echo $event->middleCheckPoints ?>);
+
+                    if (start.lat == finish.lat && start.lng == finish.lng) {
+                        var startfinishInfo = '<div id="content">'+
+                            '<h2 class="title">{{ trans('label.start_point') }}/{{ trans('label.end_point') }}</h2>'+
+                            '<p class="subtitle">{{ $event->startCheckPoint->getFullAddress() }}</p>' +
+                            '<h4>{{ trans('label.start_info') }}</h4>' +
+                            '<p>{{ $event->startCheckPoint->description }}</p>' +
+                            '<h4>{{ trans('label.finish_info') }}</h4>' +
+                            '<p>{{ $event->finishCheckPoint->description }}</p>' +
+                            '</div>';
+
+                        setMarker(map, start, "{{ trans('label.start_point') }}/{{ trans('label.end_point') }}", "{{ asset('images/icons/startfinish.png') }}", startfinishInfo);
+                    } else {
+                        var startInfo = '<div id="content">'+
+                            '<h2 class="title">{{ $event->startCheckPoint->title }}</h2>'+
+                            '<p class="subtitle">{{ $event->startCheckPoint->getFullAddress() }}</p>' +
+                            '<p>{{ $event->startCheckPoint->description }}</p>' +
+                            '</div>';
+                        setMarker(map, start, "{{ trans('label.start_point') }}", "{{ asset('images/icons/start.png') }}", startInfo);
+
+                        var finishInfo = '<div id="content">'+
+                            '<h2 class="title">{{ $event->finishCheckPoint->title }}</h2>'+
+                            '<p class="subtitle">{{ $event->finishCheckPoint->getFullAddress() }}</p>' +
+                            '<p>{{ $event->finishCheckPoint->description }}</p>' +
+                            '</div>';
+                        setMarker(map, finish, "{{ trans('label.end_point') }}", "{{ asset('images/icons/finish.png') }}", finishInfo);
+                    }
+
+                    @foreach($event->middleCheckPoints as $checkPoint)
+                        var checkPointInfo = '<div id="content">'+
+                                '<h2 class="title">{{ $checkPoint->title }}</h2>'+
+                                '<p class="subtitle">{{ $checkPoint->getFullAddress() }}</p>' +
+                                '<p>{{ $checkPoint->description }}</p>' +
+                                '</div>';
+                        setMarker(map, {{ $checkPoint->getLatLng() }}, "{{ trans('label.check_point') }}", "{{ asset('images/icons/checkpoint.png') }}", checkPointInfo);
+                    @endforeach
+
+                    geocode({address: "{{ $event->getFullAddress() }}"}, function (result) {
+                        var meeting = {lat: result.geometry.location.lat(), lng: result.geometry.location.lng()};
+                        setMeetingPointMarker(map, meeting);
+                    });
+                @else
+                    geocode({address: "{{ $event->getFullAddress() }}"}, function (result) {
+                        var start = {lat: result.geometry.location.lat(), lng: result.geometry.location.lng()};
+                        var map = initMap('map', start);
+                        setMeetingPointMarker(map, start);
+                    });
+                @endif
+            }
+        });
+
+        $('#sidebar').theiaStickySidebar({
+            // Settings
+            additionalMarginTop: 100
         });
     });
-</script>
-<script>
-    var map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-        });
-    }
 
+    function setMeetingPointMarker(map, latlng) {
+        var meetingInfo = '<div id="content">'+
+            '<h2 class="title">{{ trans('label.meeting_point') }}</h2>'+
+            '<p class="subtitle">{{ $event->getFullAddress() }}</p>' +
+            '<p>{{ trans('descriptions.event.map.meeting') }}</p>' +
+            '<ul class="info-list">' +
+            '<li><b>{{ trans('label.time') }}:</b>&nbsp;{{ dateDiffForHumans($event->start_date) }}</li>' +
+            '</ul>' +
+            '</div>';
+        setMarker(map, latlng, "{{ trans('label.meeting_point') }}", "{{ asset('images/icons/meeting.png') }}", meetingInfo);
+    }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDm4OjsZfncEnSFopTI5-DoPlk5uvPh3F4&callback=initMap"
-        async defer></script>
+
+
 @endpush

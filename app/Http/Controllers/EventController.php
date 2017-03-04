@@ -35,6 +35,10 @@ class EventController extends Controller {
      */
     public function show(Event $event) {
 
+        if ($event->isChild()) {
+            return redirect()->action('EventController@showChild', ['event' => $event->parentEvent, 'child' => $event]);
+        }
+
         $event->load('organizer.user', 'participationClasses', 'sportType', 'participations', 'visits');
 
         return view('event.show', compact('event'));
@@ -49,7 +53,9 @@ class EventController extends Controller {
      * @return \Illuminate\View\View
      */
     public function showChild(Event $event, Event $child) {
-        return redirect()->action('EventController@show', ['event' => $child]);
+        $child->load('organizer.user', 'participationClasses', 'sportType', 'participations', 'visits');
+
+        return view('event.show', ['event' => $child]);
     }
 
     /**

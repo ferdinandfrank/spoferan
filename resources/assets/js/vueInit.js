@@ -22,6 +22,9 @@ Vue.component('collapsible-card', collapsibleCard);
 import scrollspyList from "./components/ScrollspyList.vue";
 Vue.component('scrollspy-list', scrollspyList);
 
+import wizard from "./components/Wizard.vue";
+Vue.component('wizard', wizard);
+
 window.VueModel = Vue.extend({
 
     data() {

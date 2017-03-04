@@ -57,4 +57,5 @@ return [
     'email'         => 'fa fa-fw fa-envelope',
     'phone'         => 'fa fa-fw fa-phone',
     'participate'  => 'fa fa-fw fa-users',
+    'buy' => 'fa fa-fw fa-shopping-cart'
 ];

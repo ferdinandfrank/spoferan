@@ -18,8 +18,8 @@
 **********************/
 $breadcrumb-home-size: $font-size-large;
 $breadcrumb-separator-size: $font-size-small;
-$breadcrumb-separator-margin: 0 10px;
-$breadcrumb-size: $font-size-small;
+$breadcrumb-separator-margin: 0 5px;
+$breadcrumb-size: $font-size;
 
 $list-icon-margin: 5px;
 
@@ -52,6 +52,10 @@ ul {
         display: inline-block;
         font-weight: 300;
 
+        a:hover {
+            color: $link;
+        }
+
         &:after {
             content: '/';
             display: inline-block;
@@ -81,6 +85,7 @@ ul {
         font-size: $breadcrumb-size;
         line-height: $breadcrumb-home-size + px;
         vertical-align: middle;
+        color: $text;
     }
 }
 

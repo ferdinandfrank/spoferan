@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
             <div class="card-header-info toggle">
-                <h1 class="title">{{ trans('action.show_event') }}</h1>
+                <h1 class="title">{{ $hoverText ?? trans('action.show_event') }}</h1>
             </div>
         </div>
         <div class="card-content">
