@@ -53,7 +53,7 @@ class VisitClass extends BaseModel {
     protected $fillable = [
         'title',
         'description',
-        'entry_fee',
+        'price',
         'restr_limit',
         'register_date',
         'unregister_date',
@@ -67,7 +67,7 @@ class VisitClass extends BaseModel {
     protected $guarded_after_finish
         = [
             'title',
-            'entry_fee',
+            'price',
             'register_date',
             'unregister_date',
         ];
@@ -87,6 +87,13 @@ class VisitClass extends BaseModel {
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['entry_fee'];
+
+    /**
      * The parents in the route paths as a string array to build the resource routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
      *
@@ -94,6 +101,15 @@ class VisitClass extends BaseModel {
      */
     protected static function getRouteParents() {
         return ['event'];
+    }
+
+    /**
+     * Gets the amount of the visit class as a decimal amount.
+     *
+     * @return string
+     */
+    public function getEntryFeeAttribute() {
+        return translateCents($this->attributes['price']);
     }
 
     /**

@@ -1,3 +1,4 @@
+@if(count($participations))
 <table class="table is-striped">
     <thead>
         <tr>
@@ -31,3 +32,6 @@
     @endforeach
     </tbody>
 </table>
+@else
+    <p class="muted">{{ trans('info.event.no_participants') }}</p>
+@endif

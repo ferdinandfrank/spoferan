@@ -58,4 +58,11 @@ return [
         ]
     ],
 
+    'participation_payed' => [
+        'post' => [
+            'title'   => 'Erfolgreich angemeldet!',
+            'content' => 'Du hast dich erfolgreich für das Event angemeldet.'
+        ]
+    ],
+
 ];

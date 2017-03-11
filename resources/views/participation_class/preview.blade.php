@@ -11,11 +11,15 @@
         </div>
         <div slot="header" class="action">
             @if($participationClass->canParticipate())
-                <a href="#" class="button is-success">
-                <span class="icon is-small">
+                <a class="button is-success" @if(isset($onClick)) v-on:click.prevent="{{ $onClick }}" @else href="{{
+                    $event->isChild() ?
+                        queryRoute(route('participation.create', ['event' => $event->parentEvent]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()])
+                        : queryRoute(route('participation.create', ['event' => $event]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()]) }}" @endif>
+
+                    <span class="icon is-small">
                     <icon icon="{{ config('icons.buy') }}"></icon>
                 </span>
-                    <span>{{ trans('action.participate') }}</span>
+                    <span>{{ $actionText ?? trans('action.participate') }}</span>
                 </a>
             @else
                 <a href="#" class="button is-success message-button" disabled>

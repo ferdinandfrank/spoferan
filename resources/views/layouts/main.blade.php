@@ -16,9 +16,11 @@
 
 <!-- Scripts -->
     <script>
-        window.Laravel = {
-            csrfToken: '{{ csrf_token() }}'
-        };
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+            'stripeKey' => config('services.stripe.key'),
+            'user' => auth()->user()
+            ]); ?>;
     </script>
 </head>
 <body>

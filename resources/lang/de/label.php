@@ -57,5 +57,6 @@ return [
     'address'                    => 'Adresse',
     'time'                       => 'Uhrzeit',
     'start_info'                 => 'Informationen zum Start',
-    'finish_info'                => 'Informationen zum Ziel'
+    'finish_info'                => 'Informationen zum Ziel',
+    'participation_overview'     => 'Teilnahmeübersicht'
 ];

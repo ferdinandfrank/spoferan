@@ -51,6 +51,7 @@ class Participation extends BaseModel {
         'participation_class_id',
         'description',
         'privacy',
+        'athlete_id',
         'rank',
         'time',
         'starter_number',
@@ -80,6 +81,21 @@ class Participation extends BaseModel {
      */
     public function status() {
         return $this->belongsTo(ParticipationState::class, 'participation_state_id');
+    }
+
+    /**
+     * Generates a participation starter number for the specified participation class.
+     *
+     * @param ParticipationClass $class
+     *
+     * @return int
+     */
+    public static function generateStarterNumber(ParticipationClass $class) {
+        if (count($class->participations)) {
+            return $class->participations->max('starter_number') + 1;
+        }
+
+        return 1;
     }
 
 }

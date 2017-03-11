@@ -17,7 +17,7 @@ class CreateVisitClassesTable extends Migration {
             $table->string('title', config('validation.visit_class.title.max'));
             $table->text('description')->nullable();
             $table->unsignedInteger('restr_limit')->nullable();
-            $table->float('entry_fee', 5, 2);
+            $table->unsignedInteger('price');
             $table->dateTime('register_date');
             $table->dateTime('unregister_date');
             $table->timestamps();

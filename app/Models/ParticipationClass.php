@@ -70,7 +70,7 @@ class ParticipationClass extends BaseModel {
     protected $fillable = [
         'title',
         'description',
-        'entry_fee',
+        'price',
         'club_participants_limit',
         'privacy',
         'multiple_starts',
@@ -97,7 +97,7 @@ class ParticipationClass extends BaseModel {
     protected $guarded_after_finish
         = [
             'title',
-            'entry_fee',
+            'price',
             'start_date',
             'end_date',
             'register_date',
@@ -121,6 +121,13 @@ class ParticipationClass extends BaseModel {
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['entry_fee'];
+
+    /**
      * The parents in the route paths as a string array to build the resource routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
      *
@@ -128,6 +135,15 @@ class ParticipationClass extends BaseModel {
      */
     protected static function getRouteParents() {
         return ['event'];
+    }
+
+    /**
+     * Gets the amount of the participation class as a decimal amount.
+     *
+     * @return string
+     */
+    public function getEntryFeeAttribute() {
+        return translateCents($this->attributes['price']);
     }
 
     /**

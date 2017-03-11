@@ -26,6 +26,23 @@ $card-hover-transition-duration: .5s;
     overflow: hidden;
     border-radius: 2px;
 
+    &.selected {
+        border: 3px solid $success;
+
+        &:after {
+            font-family: "FontAwesome";
+            content: '\f00c';
+            color: $white-smooth;
+            position: absolute;
+            right: -5px;
+            top: -4px;
+            padding: 0 5px;
+            font-size: $font-size-x-large;
+            background: $success;
+            border-radius: 0 0 0 10px;
+        }
+    }
+
     > a {
         display: flex;
         flex-direction: column;
@@ -225,7 +242,7 @@ $card-hover-transition-duration: .5s;
             font-size: $font-size-h1;
             color: $white-smooth;
             height: 100%;
-            width: 20%;
+            min-height: inherit;
             display: flex;
             align-items: center;
             justify-content: center;

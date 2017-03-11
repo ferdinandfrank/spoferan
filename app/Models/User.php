@@ -12,52 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
-/**
- * App\Models\User
- *
- * @property int $id
- * @property string $email
- * @property string $password
- * @property string $avatar
- * @property int $user_type
- * @property string $country
- * @property string $postcode
- * @property string $city
- * @property string $street
- * @property string $phone
- * @property string $confirmation_token
- * @property bool $confirmed
- * @property bool $verified
- * @property string $remember_token
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property string $deleted_at
- * @property-read \App\Models\Admin $admin
- * @property-read \App\Models\Athlete $athlete
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\App\Models\DatabaseNotification[] $notifications
- * @property-read \App\Models\Organizer $organizer
- * @property-read \App\Models\UserSettings $settings
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\App\Models\DatabaseNotification[] $unreadNotifications
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User search($attributes, $appendOrderBy = true, $defaultOperator = 'LIKE')
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereAvatar($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereCity($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereConfirmationToken($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereConfirmed($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereCountry($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User wherePhone($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User wherePostcode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereRememberToken($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereStreet($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUserType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereVerified($value)
- * @mixin \Eloquent
- */
+
 class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable,
@@ -129,6 +84,24 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function settings() {
         return $this->hasOne(UserSettings::class);
+    }
+
+    /**
+     * Get the corresponding payment details of the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function paymentDetails() {
+        return $this->hasOne(PaymentDetails::class);
+    }
+
+    /**
+     * Get the payments the user made.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments() {
+        return $this->hasMany(Payment::class);
     }
 
     /**
@@ -253,5 +226,18 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function hasRecentlyRegistered($hours_ago = 2) {
         return $this->created_at->diffInHours(Carbon::now()) < $hours_ago;
+    }
+
+    /**
+     * Finds an user by its stripe id.
+     *
+     * @param $stripeId
+     *
+     * @return User
+     */
+    public static function findByStripeId($stripeId) {
+        return static::whereHas('paymentDetails', function ($query) use($stripeId) {
+            $query->where('stripe_id', $stripeId);
+        })->first();
     }
 }

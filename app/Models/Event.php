@@ -343,7 +343,7 @@ class Event extends SlugModel {
      */
     public function getLowestPrice() {
 
-        $lowestPrice = $this->participationClasses()->select('entry_fee')->min('entry_fee');
+        $lowestPrice = $this->participationClasses()->select('price')->min('price');
         foreach ($this->childEvents as $childEvent) {
             $lowestChildPrice = $childEvent->getLowestPrice();
             $lowestPrice = $lowestPrice && $lowestPrice < $lowestChildPrice ? $lowestPrice : $lowestChildPrice;

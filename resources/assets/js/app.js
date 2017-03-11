@@ -69,6 +69,7 @@ window.theiaStickySidebar = require('theia-sticky-sidebar');
  ************************************************************/
 require('./vueInit');
 
+require('./helper');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('events/{event}', 'Api\EventController@show')->name('api.event.show');
+Route::get('participation-classes/{participationClass}', 'Api\ParticipationClassController@show')->name('api.participation_class.show');

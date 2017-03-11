@@ -18,7 +18,7 @@ class CreateParticipationClassesTable extends Migration {
             $table->unsignedInteger('event_id');
             $table->string('title', config('validation.participation_class.title.max'));
             $table->text('description')->nullable();
-            $table->float('entry_fee', 5, 2);
+            $table->unsignedInteger('price');
             $table->boolean('privacy')->default(false);
             $table->dateTime('start_date');
             $table->dateTime('end_date');

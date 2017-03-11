@@ -25,6 +25,9 @@ Vue.component('scrollspy-list', scrollspyList);
 import wizard from "./components/Wizard.vue";
 Vue.component('wizard', wizard);
 
+import stripeForm from "./components/StripeForm.vue";
+Vue.component('stripe-form', stripeForm);
+
 window.VueModel = Vue.extend({
 
     data() {
@@ -52,6 +55,11 @@ window.VueModel = Vue.extend({
 
         toggleNavbar: function () {
             $('.navbar .nav-menu').toggleClass('is-active');
+        },
+        
+        emit: function () {
+            let argsArray = Array.prototype.slice.call(arguments);
+            window.eventHub.$emit.apply(window.eventHub, argsArray);
         }
     }
 });

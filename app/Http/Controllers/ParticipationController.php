@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Participation;
 use App\Http\Requests\ParticipationCreateRequest;
+use App\Models\ParticipationClass;
+use App\Models\ParticipationState;
+use DB;
+use Stripe\Charge;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 /**
  * ParticipationController
@@ -54,7 +60,12 @@ class ParticipationController extends Controller {
             return redirect()->route('login');
         }
 
-        return view('participation.create', compact('event'));
+        $event->load('sportType');
+
+        $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')));
+        $selectedParticipationClass = ParticipationClass::find(request()->input(config('query.participation_class')));
+
+        return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass'));
     }
 
     /**
@@ -79,6 +90,7 @@ class ParticipationController extends Controller {
      * stores the data in the database.
      *
      * @param  ParticipationCreateRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(ParticipationCreateRequest $request) {
@@ -86,7 +98,46 @@ class ParticipationController extends Controller {
             abort(403);
         }
 
-        $participation = Participation::create($request->all());
+        $participationClass = ParticipationClass::find($request->get('participation_class_id'));
+
+        try {
+            $participation = DB::transaction(function () use ($participationClass, $request) {
+                $participation = Participation::create([
+                    'participation_class_id' => $participationClass->getKey(),
+                    'athlete_id' => \Auth::id(),
+                    'participation_state_id' => ParticipationState::whereLabel('registered')->first()->id,
+                    'privacy' => 0,
+                    'starter_number' => Participation::generateStarterNumber($participationClass)
+                ]);
+                if (empty(\Auth::user()->paymentDetails)) {
+                    $customer = Customer::create([
+                        'email'  => $request->get('stripeEmail'),
+                        'source' => $request->get('stripeToken')
+                    ]);
+
+                    $customerId = $customer->id;
+
+                    \Auth::user()->paymentDetails()->create([
+                        'stripe_id' => $customerId
+                    ]);
+                } else {
+                    $customerId = \Auth::user()->paymentDetails->stripe_id;
+                }
+
+                Charge::create([
+                    'customer'    => $customerId,
+                    'amount'      => $participationClass->price,
+                    "description" => "Charge for participation '".$participation->getKey()."' in event '". $participationClass->event->title ."' at class '". $participationClass->title ."'.",
+                    "metadata"    => ["participation_id" => $participation->getKey()],
+                    'currency'    => 'eur'
+                ]);
+
+                return $participation;
+            });
+
+        } catch (\Exception $exception) {
+            return response()->json(['msg' => $exception->getMessage()], 422);
+        }
 
         return response()->json($participation, empty($participation) ? 500 : 200);
     }
@@ -95,7 +146,7 @@ class ParticipationController extends Controller {
      * Updates the specified participation with the specified request data in the database.
      *
      * @param ParticipationCreateRequest $request
-     * @param Participation $participation
+     * @param Participation              $participation
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -114,7 +165,7 @@ class ParticipationController extends Controller {
     /**
      * Removes the specified participation from the database.
      *
-     * @param  \App\Models\Participation  $participation
+     * @param  \App\Models\Participation $participation
      *
      * @return \Illuminate\Http\JsonResponse
      */

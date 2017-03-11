@@ -18,6 +18,7 @@ class CreateVisitsTable extends Migration {
             $table->unsignedInteger('athlete_id');
             $table->unsignedInteger('visit_class_id');
             $table->boolean('privacy')->default(false);
+            $table->string('payment_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

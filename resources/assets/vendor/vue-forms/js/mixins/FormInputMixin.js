@@ -11,7 +11,6 @@ module.exports = {
         // The predefined value of the input.
         // See data: 'submitValue'
         value: {
-            type: String,
             default: ''
         },
 

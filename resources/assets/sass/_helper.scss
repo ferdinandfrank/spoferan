@@ -14,6 +14,10 @@ $orientations: (
     user-select: none;
 }
 
+.color-inherit {
+    color: inherit !important;
+}
+
 /*********************
   Align, Displays & Text Orientation
 **********************/
@@ -110,6 +114,11 @@ $orientations: (
 .flex-start {
     display: flex !important;
     justify-content: flex-start !important;
+}
+
+.flex-end {
+    display: flex !important;
+    justify-content: flex-end !important;
 }
 
 .flex-center {

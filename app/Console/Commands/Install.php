@@ -297,9 +297,9 @@ class Install extends Command {
         $this->savePageInfo('description', $this->settings['description']);
         $this->savePageInfo('description_short', $this->settings['description_short']);
         $this->savePageInfo('seo_keywords', $this->settings['seo_keywords']);
-        $this->savePageInfo('logo', $this->settings['logo'] ?? asset('images/logo.png'));
-        $this->savePageInfo('background', $this->settings['background'] ?? asset('images/background.jpg'));
-        $this->savePageInfo('favicon', $this->settings['favicon'] ?? asset('images/favicon.png'));
+        $this->savePageInfo('logo', $this->settings['logo'] ?? '/images/logo.png');
+        $this->savePageInfo('background', $this->settings['background'] ?? '/images/background.jpg');
+        $this->savePageInfo('favicon', $this->settings['favicon'] ?? '/images/favicon.png');
         $this->savePageInfo('imprint', $this->settings['imprint']);
         $this->savePageInfo('facebook', $this->settings['facebook']);
         $this->savePageInfo('twitter', $this->settings['twitter']);

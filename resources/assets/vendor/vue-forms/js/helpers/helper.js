@@ -61,7 +61,7 @@ window.sendRequest = function (url, method = 'get', data = null, successCallback
  */
 window.appendData = function (wrapper, data) {
     $(wrapper).append(data);
-    new Vue({
+    new VueModel({
         el: wrapper
     });
 };
@@ -74,8 +74,21 @@ window.appendData = function (wrapper, data) {
  */
 window.prependData = function (wrapper, data) {
     $(wrapper).prepend(data);
-    new Vue({
+    new VueModel({
         el: wrapper
+    });
+};
+
+/**
+ * Replaces the content of an element with new data.
+ *
+ * @param element
+ * @param data
+ */
+window.replaceContent = function (element, data) {
+    $(element).html(data);
+    new VueModel({
+        el: element
     });
 };
 
@@ -87,7 +100,7 @@ window.prependData = function (wrapper, data) {
  */
 window.replaceData = function (element, data) {
     $(element).replaceWith(data);
-    new Vue({
+    new VueModel({
         el: element
     });
 };

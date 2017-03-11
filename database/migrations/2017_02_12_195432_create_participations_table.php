@@ -20,6 +20,7 @@ class CreateParticipationsTable extends Migration {
             $table->unsignedInteger('athlete_id');
             $table->unsignedInteger('participation_state_id')->default(1);
             $table->boolean('privacy')->default(false);
+            $table->string('payment_id')->nullable();
             $table->unsignedInteger('rank')->nullable();
             $table->time('time')->nullable();
             $table->text('description')->nullable();

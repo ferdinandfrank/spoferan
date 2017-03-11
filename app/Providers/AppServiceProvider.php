@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Console\Commands\PolicyMakeCommand;
 use Illuminate\Support\ServiceProvider;
+use Stripe\Stripe;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-
+        Stripe::setApiKey(config('services.stripe.secret'));
     }
 
     /**

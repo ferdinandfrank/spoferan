@@ -67,3 +67,39 @@ function getParticipationStatusClass(\App\Models\Participation $participation) {
 
     return $class;
 }
+
+/**
+ * Translate an amount of cents to a full decimal amount.
+ *
+ * @param $centsAmount
+ *
+ * @return string
+ */
+function translateCents($centsAmount) {
+    $amount = 0;
+    $centsAmount = strval($centsAmount);
+    if (strlen($centsAmount) >= 3) {
+        $amount = substr($centsAmount, 0, -2);
+    }
+
+    return $amount . ',' . substr($centsAmount, -2);
+}
+
+/**
+ * Appends the specified query params to the specified route.
+ *
+ * @param       $route
+ * @param array $queryParams
+ *
+ * @return string
+ */
+function queryRoute($route, array $queryParams) {
+    $numOfParams = 0;
+    foreach ($queryParams as $key => $value) {
+        $prefix = $numOfParams == 0 ? '?' : '&';
+        $route .= $prefix . $key . "=" . $value;
+        $numOfParams++;
+    }
+
+    return $route;
+}

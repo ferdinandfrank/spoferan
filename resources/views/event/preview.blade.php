@@ -1,5 +1,5 @@
-<div class="card">
-    <a href="{{ $event->getPath() }}">
+<div class="card {{ $class ?? '' }}">
+    <a @if(isset($onClick)) v-on:click.prevent="{{ $onClick }}" @else href="{{ $link ?? $event->getPath() }}" @endif>
         <div class="card-header">
             <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
             <div class="card-header-info toggle">
@@ -44,7 +44,7 @@
                 </small>
                 <div>
                     <span>{{ trans('label.starting_at') }}</span>
-                    <span class="price">{{ $event->getLowestPrice() }} €</span>
+                    <span class="price">{{ translateCents($event->getLowestPrice()) }} €</span>
                 </div>
             </div>
         </div>

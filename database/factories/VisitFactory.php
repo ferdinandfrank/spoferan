@@ -29,7 +29,7 @@ $factory->define(App\Models\VisitClass::class, function (Faker\Generator $faker)
         'event_id' => $event->id,
         'title' => $title,
         'description' => "Das $title Zuschauer Paket. In diesem Paket sind die folgenden Leistungen enthalten: " . $faker->text(),
-        'entry_fee' => $faker->randomFloat(2, 5, 999),
+        'price' => rand(1000, 20000),
         'restr_limit' => 100,
         'register_date' => $register_date,
         'unregister_date' => $unregister_date,

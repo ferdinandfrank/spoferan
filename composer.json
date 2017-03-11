@@ -26,6 +26,7 @@
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "~2.1.0",
         "martinlindhe/laravel-vue-i18n-generator": "^0.1.10",
+        "stripe/stripe-php": "^4.4",
         "talvbansal/media-manager": "^2.0"
     },
     "require-dev": {

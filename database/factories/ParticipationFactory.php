@@ -51,7 +51,7 @@ $factory->define(App\Models\ParticipationClass::class, function (Faker\Generator
         'event_id' => $event->id,
         'title' => $title,
         'description' => "Die Teilnahmeklasse für $title. Hier dürfen ausschließlich $title teilnehmen, um einen fairen Wettkampf zu garantieren. Bitte beachte zudem die weiteren Teilnahmebeschränkungen.",
-        'entry_fee' => $faker->randomFloat(2, 5, 999),
+        'price' => rand(1000, 20000),
         'start_date' => $start_date,
         'end_date' => $end_date,
         'register_date' => $register_date,

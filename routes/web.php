@@ -30,5 +30,10 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::resource('users', 'UserController');
 Route::resource('events', 'EventController');
 Route::get('events/{event}/participate', 'ParticipationController@create')->name('participation.create');
+Route::resource('events/{event}/participation-classes', 'ParticipationClassController');
 Route::get('events/{event}/{child}', 'EventController@showChild')->name('events.children.show');
 Route::resource('athletes', 'AthleteController');
+
+Route::resource('participations', 'ParticipationController');
+
+Route::post('webhook/stripe', 'WebhooksController@handle');
