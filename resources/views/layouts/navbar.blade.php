@@ -4,7 +4,7 @@
             <a href="{{ route('index') }}" class="nav-item is-tab @if (isRoute('index')) is-active @endif">
                 {{ trans('label.home') }}
             </a>
-            <a class="nav-item is-tab @if (isRoute('events.index', true)) is-active @endif">
+            <a href="{{ route('events.index') }}" class="nav-item is-tab @if (isRoute('events.index', true)) is-active @endif">
                 {{ trans('label.events') }}
             </a>
         </div>

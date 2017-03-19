@@ -5,8 +5,8 @@
         <div class="tile is-ancestor">
             <div class="tile is-parent is-6">
                 <div class="card tile is-child">
-                    <a href="#">
-                        <div class="card-header">
+                    <a href="{{ route('events.index') }}">
+                        <div class="card-header card-header-image">
                             <div class="card-image" style="background-image: url({{ asset('images/events.jpg') }})"></div>
                             <div class="card-header-info">
                                 <icon icon="{{ config('icons.event') }}"></icon>
@@ -19,9 +19,9 @@
             <div class="tile is-vertical">
                 <div class="tile">
                     <div class="tile is-parent">
-                        <div class="card tile is-child">
-                            <a href="{{ route('login') }}">
-                                <div class="card-header">
+                        <div class="card tile is-child disabled">
+                            <a>
+                                <div class="card-header card-header-image">
                                     <div class="card-image"
                                          style="background-image: url({{ asset('images/statistics.jpg') }})"></div>
                                     <div class="card-header-info">
@@ -36,7 +36,7 @@
                         @if($loggedUser)
                             <div class="card tile is-child">
                                 <a href="#">
-                                    <div class="card-header">
+                                    <div class="card-header card-header-image">
                                         <div class="card-image"
                                              style="background-image: url({{ $loggedUser->avatar }})"></div>
                                         <div class="card-header-info">
@@ -49,7 +49,7 @@
                         @else
                             <div class="card tile is-child">
                                 <a href="{{ route('login') }}">
-                                    <div class="card-header">
+                                    <div class="card-header card-header-image">
                                         <div class="card-image"
                                              style="background-image: url({{ asset('images/login.jpg') }})"></div>
                                         <div class="card-header-info">
@@ -63,9 +63,9 @@
                     </div>
                 </div>
                 <div class="tile is-parent">
-                    <div class="card tile is-child">
-                        <a href="#">
-                            <div class="card-header">
+                    <div class="card tile is-child disabled">
+                        <a >
+                            <div class="card-header card-header-image">
                                 <div class="card-image" style="background-image: url({{ asset('images/club.jpg') }})"></div>
                                 <div class="card-header-info">
                                     <icon icon="{{ config('icons.club') }}"></icon>
@@ -80,13 +80,20 @@
 
         <hr>
 
-        <div class="columns is-multiline">
-            @foreach($events as $event)
-                <div class="column is-4">
-                    @include('event.preview')
-                </div>
-            @endforeach
-        </div>
+        <section class="section">
+            <div class="heading">
+                <h2 class="title">{{ trans('label.event_recommendations') }}</h2>
+                <p class="subtitle">{{ trans('descriptions.event.recommendations') }}</p>
+            </div>
+            <div class="content">
+
+                <slider>
+                    @foreach($events as $event)
+                        @include('event.preview')
+                    @endforeach
+                </slider>
+            </div>
+        </section>
 
     </div>
 @endsection

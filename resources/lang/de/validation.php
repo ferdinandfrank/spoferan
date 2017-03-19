@@ -116,30 +116,34 @@ return [
 
     'attributes' => [],
 
+    'auth' => [
+        'failed' => 'Deine E-Mail-Adresse oder dein Passwort ist inkorrekt.',
+    ],
+
     'event' => [
-        'title' => [
+        'title'             => [
             'required' => 'Gebe deinem Event einen Namen.'
         ],
         'description_short' => [
             'required' => 'Gebe eine Kurzbeschreibung für dein Event ein.'
         ],
-        'description' => [
+        'description'       => [
             'required' => 'Gebe eine Beschreibung für dein Event ein.'
         ],
-        'sport_type_id' => [
+        'sport_type_id'     => [
             'required' => 'Wähle die Sportart deines Events aus.'
         ],
-        'email' => [
+        'email'             => [
             'required_without' => 'Bitte gebe entweder eine Email-Adresse oder eine Telefonnummer an.'
         ],
-        'phone' => [
+        'phone'             => [
             'required_without' => 'Bitte gebe entweder eine Email-Adresse oder eine Telefonnummer an.'
         ],
-        'start_date' => [
+        'start_date'        => [
             'required' => 'Gebe an, wann das Event beginnen soll.',
-            'after' => 'Das Event darf frühestens morgen beginnen.'
+            'after'    => 'Das Event darf frühestens morgen beginnen.'
         ],
-        'end_date' => [
+        'end_date'          => [
             'required' => 'Gebe an, wann das Event enden soll.'
         ],
 
@@ -147,28 +151,28 @@ return [
 
         'participate' => [
             'restr_registration_paused' => 'Sorry, die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.',
-            'restr_limit' => 'Sorry, diese Teilnahmeklasse ist bereits voll.',
-            'restr_birth_date_min' => 'Sorry, für diese Event Kategorie bist du zu jung.',
-            'restr_birth_date_max' => 'Sorry, für diese Event Kategorie bist du zu alt.',
-            'restr_gender_female' => 'Sorry, nur Frauen dürfen an dieser Kategorie teilnehmen.',
-            'restr_gender_male' => 'Sorry, nur Männer dürfen an dieser Kategorie teilnehmen.',
-            'restr_label_id' => 'Sorry, für diese Event Kategorie brauchst du das Label :label.',
-            'restr_club_id' => 'Sorry, für diese Event Kategorie musst du Mitglied in dem Club :club sein.',
-            'restr_country' => 'Sorry, für diese Event Kategorie musst du aus :country kommen.',
-            'restr_city' => 'Sorry, für diese Event Kategorie musst du aus der Stadt :country kommen.',
-            'multiple_starts_this' => 'Sorry, um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Kategorie starten.',
-            'multiple_starts_other' => 'Sorry, du bist bereits in einer Kategorie angemeldet, die einen weiteren Start in dieser Kategorie nicht erlaubt.',
-            'club_participants_limit' => 'Sorry, es ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.',
-            'restr_creator' => 'Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber daran teilnehmen.',
-            'already_registered' => 'Du bist für das Event in dieser Kategorie bereits registriert.',
-            'restr_registered' => 'Melde dich an, um in dieser Klasse teilzunehmen.',
+            'restr_limit'               => 'Sorry, diese Teilnahmeklasse ist bereits voll.',
+            'restr_birth_date_min'      => 'Sorry, für diese Event Kategorie bist du zu jung.',
+            'restr_birth_date_max'      => 'Sorry, für diese Event Kategorie bist du zu alt.',
+            'restr_gender_female'       => 'Sorry, nur Frauen dürfen an dieser Kategorie teilnehmen.',
+            'restr_gender_male'         => 'Sorry, nur Männer dürfen an dieser Kategorie teilnehmen.',
+            'restr_label_id'            => 'Sorry, für diese Event Kategorie brauchst du das Label :label.',
+            'restr_club_id'             => 'Sorry, für diese Event Kategorie musst du Mitglied in dem Club :club sein.',
+            'restr_country'             => 'Sorry, für diese Event Kategorie musst du aus :country kommen.',
+            'restr_city'                => 'Sorry, für diese Event Kategorie musst du aus der Stadt :country kommen.',
+            'multiple_starts_this'      => 'Sorry, um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Kategorie starten.',
+            'multiple_starts_other'     => 'Sorry, du bist bereits in einer Kategorie angemeldet, die einen weiteren Start in dieser Kategorie nicht erlaubt.',
+            'club_participants_limit'   => 'Sorry, es ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.',
+            'restr_creator'             => 'Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber daran teilnehmen.',
+            'already_registered'        => 'Du bist für das Event in dieser Kategorie bereits registriert.',
+            'restr_registered'          => 'Melde dich an, um in dieser Klasse teilzunehmen.',
         ],
-        'visit' => [
+        'visit'       => [
             'restr_registration_paused' => 'Sorry, die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.',
-            'restr_limit' => 'Sorry, die Tickets für diese Besucherklasse sind ausverkauft.',
-            'restr_creator' => 'Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber ein Zuschauerticket erwerben.',
-            'already_registered' => 'Du hast dich bereits erfolgreich als Zuschauer in dieser Kategorie angemeldet.',
-            'restr_registered' => 'Melde dich an, um Tickets kaufen zu können.',
+            'restr_limit'               => 'Sorry, die Tickets für diese Besucherklasse sind ausverkauft.',
+            'restr_creator'             => 'Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber ein Zuschauerticket erwerben.',
+            'already_registered'        => 'Du hast dich bereits erfolgreich als Zuschauer in dieser Kategorie angemeldet.',
+            'restr_registered'          => 'Melde dich an, um Tickets kaufen zu können.',
         ]
     ],
 

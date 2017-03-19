@@ -84,20 +84,18 @@
                                     <h2>€ @{{ selectedParticipationClass.entry_fee }}</h2>
                                 </div>
                                 <div class="center m-t-50">
-                                    <stripe-form ref="stripe"
-                                                 action="/participations"
-                                                 method="POST"
+                                    <stripe-form ref="stripe" action="/participations" method="POST"
                                                  :direct-submit="{{ empty(Auth::user()->paymentDetails) ? 'false' : 'true' }}"
-                                                 alert-key="participation_payed"
-                                                 redirect="{{ $event->getPath() }}"
-                                    >
+                                                 alert-key="participation_payed" redirect="{{ $event->getPath() }}">
                                         <hidden-input name="participation_class_id"
                                                       v-model="selectedParticipationClass.id"></hidden-input>
                                         <button type="submit" class="button is-success is-medium">
+                                                <span>
                                                 <span class="icon is-small">
-                                                    <icon icon="{{ config('icons.buy') }}"></icon>
+                                                    <icon icon="{{ config('icons.check') }}"></icon>
                                                 </span>
-                                            <span>Teilnahme jetzt bestätigen & bezahlen</span>
+                                                <span>Teilnahme jetzt bestätigen & bezahlen</span>
+                                                    </span>
                                         </button>
                                     </stripe-form>
 

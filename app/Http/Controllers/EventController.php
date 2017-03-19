@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Http\Requests\EventCreateRequest;
+use Illuminate\Http\Request;
 
 /**
  * EventController
@@ -20,10 +21,18 @@ class EventController extends Controller {
     /**
      * Displays a listing of all the events.
      *
+     * @param Request $request
+     *
      * @return \Illuminate\View\View
      */
-    public function index() {
-        return view('event.index');
+    public function index(Request $request) {
+        $events = Event::search($request->all())->published()->main()->latest()->get();
+
+        if ($request->ajax()) {
+            return view('event.preview_list', compact('events'));
+        }
+
+        return view('event.index', compact('events'));
     }
 
     /**

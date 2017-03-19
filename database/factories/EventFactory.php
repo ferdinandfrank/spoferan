@@ -12,6 +12,8 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
 
     $title = $faker->domainWord . ' ' . $end_date->year;
 
+    $states = ["DE-BY", "DE-BW", "DE-BE"];
+
     return [
         'organizer_id' => $organizer->user_id,
         'parent_event_id' => null,
@@ -25,6 +27,7 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
         'start_date' => $start_date,
         'end_date' => $end_date,
         'country' => $faker->countryCode,
+        'state' => $states[array_rand($states)],
         'postcode' => $faker->postcode,
         'city' => $faker->city,
         'street' => $faker->streetAddress,

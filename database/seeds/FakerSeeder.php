@@ -99,7 +99,9 @@ class FakerSeeder extends Seeder {
         }
     }
 
-    private function createFullRealEvent(\App\Models\Organizer $organizer, \Carbon\Carbon $date, $title = 'Landkreislauf Starnberg') {
+    private function createFullRealEvent(
+        \App\Models\Organizer $organizer, \Carbon\Carbon $date, $title = 'Landkreislauf Starnberg'
+    ) {
         $title = $title . ' ' . $date->year;
         $date->setTime(8, 0);
 
@@ -111,6 +113,7 @@ class FakerSeeder extends Seeder {
             'sport_type_id'     => 3,
             'start_date'        => $date->toDateTimeString(),
             'end_date'          => $date->addHours(12)->toDateTimeString(),
+            'state'             => 'DE-BY',
             'country'           => 'DE',
             'postcode'          => '82229',
             'city'              => 'Seefeld',
@@ -249,7 +252,8 @@ class FakerSeeder extends Seeder {
         return factory(App\Models\VisitClass::class)->create([
             'event_id'        => $event->id,
             'title'           => $title,
-            'description'     => "Das $title Zuschauer Paket. In diesem Paket sind die folgenden Leistungen enthalten: " . $this->faker->text(),
+            'description'     => "Das $title Zuschauer Paket. In diesem Paket sind die folgenden Leistungen enthalten: "
+                                 . $this->faker->text(),
             'register_date'   => $register_date,
             'unregister_date' => $unregister_date
         ]);

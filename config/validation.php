@@ -90,6 +90,9 @@ return [
         'country'           => [
             'max' => 3
         ],
+        'state'             => [
+            'max' => 10
+        ],
         'postcode'          => [
             'max' => 10
         ],
@@ -99,19 +102,19 @@ return [
     ],
 
     'check_point' => [
-        'title' => [
+        'title'    => [
             'max' => 250
         ],
-        'street'            => [
+        'street'   => [
             'max' => 250
         ],
-        'country'           => [
+        'country'  => [
             'max' => 3
         ],
-        'postcode'          => [
+        'postcode' => [
             'max' => 10
         ],
-        'city'              => [
+        'city'     => [
             'max' => 250
         ],
     ],
@@ -130,6 +133,9 @@ return [
 
     'sport_type' => [
         'label' => [
+            'max' => 250
+        ],
+        'slug' => [
             'max' => 250
         ]
     ],

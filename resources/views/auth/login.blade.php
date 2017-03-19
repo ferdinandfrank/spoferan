@@ -4,6 +4,7 @@
     <div class="full-height">
         <div class="central-form card">
             <h1 class="center">{{ trans('action.login') }}</h1>
+            <hr class="light">
             <ajax-form stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false" class="card-content" redirect="{{ route('index') }}">
                 <form-input size="large" type="email" name="email" :required="true"></form-input>
                 <form-input size="large" type="password" name="password" :required="true"></form-input>

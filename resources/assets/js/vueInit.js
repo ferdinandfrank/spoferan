@@ -28,6 +28,9 @@ Vue.component('wizard', wizard);
 import stripeForm from "./components/StripeForm.vue";
 Vue.component('stripe-form', stripeForm);
 
+import slider from './components/Slider.vue';
+Vue.component('slider', slider);
+
 window.VueModel = Vue.extend({
 
     data() {

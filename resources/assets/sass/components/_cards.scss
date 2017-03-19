@@ -43,6 +43,23 @@ $card-hover-transition-duration: .5s;
         }
     }
 
+    &.disabled {
+        opacity: 0.4;
+
+        a {
+            cursor: not-allowed;
+
+            &:hover {
+                .card-header {
+                    & > .card-image {
+                        transform: none;
+                        opacity: 0.6;
+                    }
+                }
+            }
+        }
+    }
+
     > a {
         display: flex;
         flex-direction: column;
@@ -69,8 +86,11 @@ $card-hover-transition-duration: .5s;
         align-items: center;
         justify-content: center;
         flex: 1;
-        background: $dark;
-        min-height: 200px;
+
+        &.card-header-image {
+            background: $dark;
+            min-height: 200px;
+        }
 
         .card-image {
             background-position: 50%;
@@ -166,6 +186,16 @@ $card-hover-transition-duration: .5s;
             .price {
                 color: $dark;
                 font-size: $font-size-x-large;
+            }
+        }
+
+        .media-content {
+            min-width: 0;
+
+            .title {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }

@@ -11,6 +11,7 @@
  *  5. Calendar Icon
  *  6. Menues
  *  7. Wizard
+ *  8. Slider
  */
 
 /*********************
@@ -23,11 +24,11 @@
 **********************/
 .central-form {
     background: $white;
-    padding: 15px 70px 35px 70px;
+    padding: 20px;
     border-radius: 5px;
-    max-width: 400px;
+    max-width: 600px;
     width: 100%;
-    margin: 0 auto;
+    margin: 5% auto;
 }
 
 /*********************
@@ -215,5 +216,35 @@ time.calendar {
     .actions {
         display: flex;
         justify-content: space-around;
+    }
+}
+
+/*********************
+  8. Slider
+**********************/
+.slider {
+    display: flex;
+
+    .action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-size-x-large;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.6);
+        margin: 0.75rem;
+        cursor: pointer;
+
+        &:hover {
+            background: $white;
+        }
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
     }
 }

@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SportType whereLabel($value)
  * @mixin \Eloquent
  */
-class SportType extends Model {
+class SportType extends SlugModel {
 
     /**
      * The table associated with the model.
@@ -36,6 +36,15 @@ class SportType extends Model {
         'label',
         'icon'
     ];
+
+    /**
+     * Gets the attribute name of the model, that shall be used for the slug of the model.
+     *
+     * @return string
+     */
+    public function getSlugName() {
+        return 'label';
+    }
 
     /**
      * Indicates if the model should be timestamped.
@@ -72,5 +81,4 @@ class SportType extends Model {
     public function getIconAttribute($value) {
         return $value ?? asset('images/avatar_default.png');
     }
-
 }

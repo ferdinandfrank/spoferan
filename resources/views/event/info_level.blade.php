@@ -26,7 +26,7 @@
     </div>
     <div class="level-item has-text-centered">
         <div>
-            <img src="{{ getCountryFlag($event->country) }}" alt="{{ trans('countries.' . $event->country) }}" >
+            <img src="{{ Country::icon($event->country) }}" alt="{{ trans('countries.' . $event->country) }}" >
             <p class="heading">{{ trans('label.event_location') }}</p>
             <p class="title">{{ $event->getFullAddress() }}</p>
         </div>

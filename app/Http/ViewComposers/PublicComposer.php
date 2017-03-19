@@ -2,6 +2,7 @@
 
 namespace App\Http\ViewComposers;
 
+use Carbon\Carbon;
 use Illuminate\View\View;
 
 /**
@@ -24,5 +25,6 @@ class PublicComposer {
      */
     public function compose(View $view) {
         $view->with('loggedUser', \Auth::user());
+        $view->with('now', Carbon::now());
     }
 }

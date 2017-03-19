@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed'      => 'These credentials do not match our records.',
+
     'throttle'    => 'Too many login attempts. Please try again in :seconds seconds.',
     'unconfirmed' => 'Dein Account wurde noch nicht bestätigt. Wir haben dir nochmals eine E-Mail an :email gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account zu bestätigen.'
 

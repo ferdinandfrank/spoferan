@@ -1,18 +1,5 @@
 <?php
 
-
-/**
- * Gets the corresponding country flag for the specified country code.
- *
- * @param $countryCode
- *
- * @return string
- */
-function getCountryFlag($countryCode = 'default') {
-    $flagPath = "images/countries/$countryCode.png";
-    return File::exists($flagPath) ? asset($flagPath) : asset("images/countries/default.png");
-}
-
 /**
  * Checks if the current path is the path of the specified key's route.
  *

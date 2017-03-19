@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         @component('components.breadcrumb')
-            <li><a href="#">{{ trans('label.events') }}</a></li>
+            <li><a href="{{ route('events.index') }}">{{ trans('label.events') }}</a></li>
             @if($event->isChild())
                 <li><a href="{{ $event->parentEvent->getPath() }}">{{ $event->parentEvent->title }}</a></li>
             @endif
@@ -103,6 +103,8 @@
                             <div class="content">
                                 @if(count($event->participations))
                                     @include('participation.table', ['participations' => $event->participations])
+                                @elseif(!count($event->childEvents))
+                                    <p class="muted">{{ trans('info.event.no_participants') }}</p>
                                 @endif
 
                                 @foreach($event->childEvents as $childEvent)

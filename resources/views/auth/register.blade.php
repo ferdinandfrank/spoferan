@@ -4,32 +4,51 @@
     <div class="full-height">
         <div class="central-form card">
             <h1 class="center">@{{ actionText }}</h1>
+            <hr class="light">
             <ajax-form action="{{ route('users.store') }}" alert-key="registration" :alert-duration="6000" method="POST"
                        class="card-content"
                        redirect="{{ route('login') }}">
-                <form-input v-if="userType == {{ config('starmee.user_type.athlete') }}" size="large"
-                            name="first_name" :max-length="{{ config('validation.athlete.first_name.max') }}"
-                            :required="true"></form-input>
-                <form-input v-if="userType == {{ config('starmee.user_type.athlete') }}" size="large"
-                            name="last_name" :max-length="{{ config('validation.athlete.last_name.max') }}"
-                            :required="true"></form-input>
-                <form-select v-if="userType == {{ config('starmee.user_type.athlete') }}" size="large" name="gender"
-                             :required="true">
-                    <option value="m">{{ trans('label.male') }}</option>
-                    <option value="w">{{ trans('label.female') }}</option>
-                </form-select>
-                <form-input v-if="userType == {{ config('starmee.user_type.organizer') }}" size="large" name="name"
-                            :max-length="{{ config('validation.organizer.name.max') }}"
-                            :required="true"></form-input>
-                <form-input size="large" type="email" name="email" :required="true"
-                            :max-length="{{ config('validation.user.email.max') }}"></form-input>
-                <form-input size="large" type="password" name="password" :required="true"
-                            :max-length="{{ config('validation.user.password.max') }}"
-                            :min-length="{{ config('validation.user.password.min') }}"></form-input>
-                <form-input size="large" type="password" name="password_confirmation" :confirmed="true"
-                            :required="true"></form-input>
+                <div class="columns is-multiline">
+                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-6">
+                        <form-input size="large"
+                                    name="first_name" :max-length="{{ config('validation.athlete.first_name.max') }}"
+                                    :required="true"></form-input>
+                    </div>
+                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-6">
+                        <form-input size="large"
+                                    name="last_name" :max-length="{{ config('validation.athlete.last_name.max') }}"
+                                    :required="true"></form-input>
+                    </div>
+                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-12">
+                        <form-select size="large" name="gender"
+                                     :required="true">
+                            <option value="m">{{ trans('label.male') }}</option>
+                            <option value="w">{{ trans('label.female') }}</option>
+                        </form-select>
+                    </div>
+                    <div v-if="userType == {{ config('starmee.user_type.organizer') }}" class="column is-12">
+                        <form-input size="large" name="name"
+                                    :max-length="{{ config('validation.organizer.name.max') }}"
+                                    :required="true"></form-input>
+                    </div>
+                    <div class="column is-12">
+                        <form-input size="large" type="email" name="email" :required="true"
+                                    :max-length="{{ config('validation.user.email.max') }}"></form-input>
+                    </div>
+                    <div class="column is-6">
+                        <form-input size="large" type="password" name="password" :required="true"
+                                    :max-length="{{ config('validation.user.password.max') }}"
+                                    :min-length="{{ config('validation.user.password.min') }}"></form-input>
+                    </div>
+                    <div class="column is-6">
+                        <form-input size="large" type="password" name="password_confirmation" :confirmed="true"
+                                    :required="true"></form-input>
+                    </div>
+                    <div class="column is-12 center">
+                        <form-switch class="center" name="user_type" :value="false"></form-switch>
+                    </div>
 
-                <form-switch class="center" name="user_type" :value="false"></form-switch>
+                </div>
 
                 <div class="center">
                     <button type="submit" class="button is-success">{{ trans('action.register') }}</button>

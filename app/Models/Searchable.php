@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-
 /**
  * Searchable
  * -----------------------
@@ -16,20 +14,49 @@ use Illuminate\Database\Eloquent\Builder;
  */
 trait Searchable {
 
-    protected static $queryNamespace = '\\App\\Queries\\';
-
     /**
-     * Scope a query to include events that match the given request inputs.
+     * Scopes a query by a search query to search on specific columns.
      *
-     * @param Builder $query
-     * @param array $attributes
-     * @param bool $appendOrderBy
-     * @param string $defaultOperator
-     * @return Builder
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  string|array                         $searchQuery
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSearch(Builder $query, array $attributes, $appendOrderBy = true, $defaultOperator = 'LIKE') {
-        $queryClass = static::$queryNamespace . class_basename(get_class($this)) . 'Query';
+    public function scopeSearch($query, $searchQuery) {
+        if (property_exists($this, 'searchable') && is_array($this->searchable)) {
 
-        return (new $queryClass($query))->search($attributes, $appendOrderBy, $defaultOperator);
+            if (is_array($searchQuery)) {
+                foreach ($searchQuery as $key => $value) {
+                    if (in_array($key, $this->searchable)) {
+                        $query = $this->searchByType($query, $key, $value);
+                    } elseif ($key == 'search') {
+                        foreach ($this->searchable as $searchable) {
+                            $query = $this->searchByType($query, $searchable, $value);
+                        }
+                    }
+                }
+            } else {
+                foreach ($this->searchable as $searchable) {
+                    $query = $this->searchByType($query, $searchable, $searchQuery);
+                }
+            }
+
+        }
+
+        return $query;
+    }
+
+    private function searchByType($query, $key, $value) {
+        \Log::alert($key . " -< " . gettype($this[$key]));
+        switch (gettype($this[$key])) {
+            case "string":
+                $query->orWhere($key, 'LIKE', "%$value%");
+                break;
+            default:
+                $query->orWhere($key, $value);
+                break;
+        }
+
+        return $query;
     }
 }

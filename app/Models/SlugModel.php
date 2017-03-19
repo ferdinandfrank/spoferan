@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use DB;
+use Illuminate\Http\Request;
 
 /**
  * SlugModel
@@ -84,5 +85,4 @@ abstract class SlugModel extends BaseModel {
 
         return static::where($model->getKeyName(), $key)->orWhere($model->getRouteKeyName(), $key)->first();
     }
-
 }

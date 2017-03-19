@@ -102,7 +102,7 @@ class LoginController extends Controller {
      */
     protected function sendFailedLoginResponse() {
         return response()->json([
-            $this->username() => [trans('auth.failed')]
+            'msg' => [trans('validation.auth.failed')]
         ], 403);
     }
 

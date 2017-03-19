@@ -259,6 +259,8 @@ return [
          * Custom Aliases
          */
         'Settings'     => \App\Models\Settings::class,
+        'Country'     => \App\Models\Country::class,
+        'State'     => \App\Models\State::class
     ],
 
 ];

@@ -1,6 +1,6 @@
 <div class="card {{ $class ?? '' }}">
     <a @if(isset($onClick)) v-on:click.prevent="{{ $onClick }}" @else href="{{ $link ?? $event->getPath() }}" @endif>
-        <div class="card-header">
+        <div class="card-header card-header-image">
             <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
             <div class="card-header-info toggle">
                 <h1 class="title">{{ $hoverText ?? trans('action.show_event') }}</h1>
@@ -9,7 +9,7 @@
         <div class="card-content">
             <div class="media">
                 <div class="media-content">
-                    <p class="title is-4">{{ $event->title }}</p>
+                    <p class="title is-4" title="{{ $event->title }}">{{ $event->title }}</p>
                     <p class="subtitle is-6">{{ trans('param_label.by_name', ['name' => $event->organizer->user->getDisplayName()]) }}</p>
                 </div>
                 <div class="media-right">

@@ -5,17 +5,29 @@
  * Table of Contents:
  *
  *  1. Declarations
- *  2. Share Buttons
- *  3. Message Buttons
+ *  2. General
+ *  3. Share Buttons
+ *  4. Message Buttons
+ *  5. Button Group
  */
 
 /*********************
   1. Declarations
 **********************/
 
+/*********************
+  2. General
+**********************/
+button {
+    *:only-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
 
 /*********************
-  2. Share Buttons
+  3. Share Buttons
 **********************/
 .share-buttons {
     display: flex;
@@ -52,9 +64,21 @@
 }
 
 /*********************
-  3. Message Buttons
+  4. Message Buttons
 **********************/
 .message-button {
     white-space: normal;
     height: auto;
+}
+
+/*********************
+  5. Button Group
+**********************/
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+
+    > * {
+        margin: 0 5px;
+    }
 }

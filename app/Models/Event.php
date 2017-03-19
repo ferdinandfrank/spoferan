@@ -79,6 +79,7 @@ class Event extends SlugModel {
     use HasStorage;
     use HasAddress;
     use Rateable;
+    use Searchable;
 
     /**
      * The table associated with the model.
@@ -108,6 +109,22 @@ class Event extends SlugModel {
         'city',
         'postcode',
         'street'
+    ];
+
+    /**
+     * The attributes that are searchable.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'title',
+        'description_short',
+        'description',
+        'sport_type_id',
+        'country',
+        'city',
+        'postcode',
+        'state'
     ];
 
     /**
@@ -590,6 +607,7 @@ class Event extends SlugModel {
     public function scopeMain($query) {
         return $query->where('parent_event_id', null);
     }
+
 
 }
 

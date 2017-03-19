@@ -14,6 +14,7 @@ class CreateSportTypesTable extends Migration {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('label', config('validation.sport_type.label.max'))->unique();
+            $table->string('slug', config('validation.sport_type.slug.max'))->unique();
             $table->string('icon')->nullable();
         });
     }
