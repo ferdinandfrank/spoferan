@@ -44,7 +44,10 @@ ul {
   4. Breadcrumb
 **********************/
 .breadcrumb {
-    display: inline-block;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
     margin: 0;
     padding: 0;
 

@@ -174,6 +174,17 @@
             select: function (selectedKey, selectedTitle) {
                 let currentStep = this.steps[this.activeStep];
                 currentStep.selectedTitle = selectedTitle;
+
+                // Reset all further steps to prevent backward selections
+                if (currentStep.selectedKey !== selectedKey) {
+                    for (let i = this.activeStep + 1; i < this.steps.length ; i++) {
+                        this.steps[i].disabled = true;
+                        this.steps[i].selected = false;
+                        this.steps[i].selectedTitle = null;
+                        this.steps[i].selectedKey = null;
+                    }
+                }
+
                 currentStep.selectedKey = selectedKey;
                 currentStep.selected = true;
                 this.activeStep++;

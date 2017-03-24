@@ -9,7 +9,7 @@ namespace App\Models;
  * -----------------------
  *
  * @author  Ferdinand Frank
- * @version 0.1
+ * @version 1.0
  * @package App\Models
  */
 trait HasAddress {
@@ -20,6 +20,27 @@ trait HasAddress {
      * @return string
      */
     public function getFullAddress() {
-        return $this->street . ', ' . $this->postcode . ' ' . $this->city . ', ' . trans('countries.' . $this->country);
+        $address = '';
+        if (isset($this->street)) {
+            $address .= $this->street . ', ';
+        }
+
+        if (isset($this->postcode)) {
+            $address .= $this->postcode . ' ';
+        }
+
+        if (isset($this->city)) {
+            $address .= $this->city . ', ';
+        }
+
+//        if (isset($this->state)) {
+//            $address .= $this->state . ', ';
+//        }
+
+        if (isset($this->country)) {
+            $address .= trans('countries.' . $this->country);
+        }
+
+        return $address;
     }
 }

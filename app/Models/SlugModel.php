@@ -74,15 +74,14 @@ abstract class SlugModel extends BaseModel {
     }
 
     /**
-     * Finds a slug model by its primary key or its slug name.
+     * Scopes a query to find a slug model by its primary key or its slug name.
      *
+     * @param $query
      * @param $key
      *
-     * @return SlugModel
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function findByKey($key) {
-        $model = new static();
-
-        return static::where($model->getKeyName(), $key)->orWhere($model->getRouteKeyName(), $key)->first();
+    public function scopeFindByKey($query, $key) {
+        return $query->where($this->getKeyName(), $key)->orWhere($this->getRouteKeyName(), $key);
     }
 }

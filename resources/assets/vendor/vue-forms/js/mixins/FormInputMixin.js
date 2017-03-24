@@ -157,7 +157,11 @@ module.exports = {
             for (let index in this.parents) {
                 let parent = this.parents[index];
                 if (parent.hasOwnProperty("form")) {
-                    parent.form[this.submitName] = val;
+                    if (val == null || val == '') {
+                        delete parent.form[this.submitName];
+                    } else {
+                        parent.form[this.submitName] = val;
+                    }
                 }
             }
 
@@ -290,7 +294,7 @@ module.exports = {
          * Clears the input's value.
          */
         clear: function () {
-            this.submitValue = '';
+            this.submitValue = null;
             this.labelMessage = null;
             this.invalid = false;
             this.valid = !this.required;

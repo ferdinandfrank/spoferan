@@ -18,7 +18,7 @@
                 <section class="section">
                     <h2 class="title">{{ trans('action.participate_as_athlete') }}</h2>
                     <wizard ref="wizard"
-                            :step-props="[@if(isset($selectedEventPart)){selectedTitle: '{{ $selectedEventPart->title}}'}@if(isset($selectedParticipationClass)),{selectedTitle: '{{ $selectedParticipationClass->title}}'}@endif @endif]">
+                            :step-props="[@if($selectedEventPart){selectedTitle: '{{ $selectedEventPart->title}}'}@if($selectedParticipationClass),{selectedTitle: '{{ $selectedParticipationClass->title}}'}@endif @endif]">
                         <section id="{{ config('query.child_event') }}" class="section wizard-section">
                             <div class="heading">
                                 <h2 class="title wizard-title">{{ trans('action.select_event_part') }}</h2>
@@ -148,6 +148,13 @@
                             });
 
                             sendRequest('/api/events/' + lastStep.selectedKey, 'get', null, (response) => {
+
+                                // Remove old selected class from event preview card
+                                $('#' + this.selectedEventPart.slug).children().removeClass('selected');
+
+                                // Add selected class to new selected event preview card
+                                $('#' + response.slug).children().addClass('selected');
+
                                 this.selectedEventPart = response;
                                 this.$refs.stripe.stripeData = {
                                     image: this.selectedEvent.sport_type.icon,
@@ -156,8 +163,15 @@
                                     amount: 0
                                 };
                             });
-                        } else if (lastStep.index == 1 && lastStep.selectedKey != this.selectedParticipationClass.id) {
+                        } else if (lastStep.index == 1 && lastStep.index < step.index && lastStep.selectedKey != this.selectedParticipationClass.id) {
                             sendRequest('/api/participation-classes/' + lastStep.selectedKey, 'get', null, (response) => {
+
+                                // Remove old selected class from participation class preview card
+                                $('#' + this.selectedParticipationClass.id).children().removeClass('selected');
+
+                                // Add selected class to new selected participation class preview card
+                                $('#' + response.id).children().addClass('selected');
+
                                 this.selectedParticipationClass = response;
                                 this.$refs.stripe.stripeData.amount = this.selectedParticipationClass.price;
                                 this.$refs.stripe.stripeData.description = this.selectedEventPart.title ? this.selectedEventPart.title + ": " + this.selectedParticipationClass.title : this.selectedParticipationClass.title;

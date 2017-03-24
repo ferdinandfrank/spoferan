@@ -28,7 +28,7 @@ function isRoute($routeKey, $recursive = false) {
  * @return \Illuminate\Contracts\Translation\Translator|string
  */
 function dateDiffForHumans(\Carbon\Carbon $date, $withTime = true) {
-    $formattedDate = $date->formatLocalized('%d %B %Y');
+    $formattedDate = $date->formatLocalized('%d %b %Y');
     if ($date->isToday() || $date->isTomorrow() || $date->isYesterday()) {
         $formattedDate = $date->diffForHumans();
     }

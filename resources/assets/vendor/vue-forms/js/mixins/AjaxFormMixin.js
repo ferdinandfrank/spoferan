@@ -213,7 +213,7 @@ module.exports = {
 
     mounted: function () {
         this.$nextTick(function () {
-            if (this.button) {
+            if (this.button.length) {
                 this.originalLoadingContent = this.button.html();
             }
 

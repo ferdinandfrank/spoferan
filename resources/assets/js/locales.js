@@ -18,7 +18,9 @@ export default {
             "buy_tickets": "Tickets kaufen",
             "select_event_part": "Eventteil auswählen",
             "select_participation_class": "Teilnahmeklasse auswählen",
-            "search_event": "Event finden"
+            "search_event": "Event finden",
+            "search": "Suchen",
+            "reset": "Zurücksetzen"
         },
         "alert": {
             "error": {
@@ -329,6 +331,22 @@ export default {
             "ZM": "Zambia",
             "ZW": "Zimbabwe"
         },
+        "date": {
+            "month": {
+                "1": "Januar",
+                "2": "Februar",
+                "3": "März",
+                "4": "April",
+                "5": "Mai",
+                "6": "Juni",
+                "7": "Juli",
+                "8": "August",
+                "9": "September",
+                "10": "Oktober",
+                "11": "November",
+                "12": "Dezember"
+            }
+        },
         "descriptions": {
             "event": {
                 "map": {
@@ -361,7 +379,7 @@ export default {
             }
         },
         "input": {
-            "search": "Suche",
+            "search": "Suchbegriff",
             "password": "Passwort",
             "password_confirmation": "Passwort bestätigen",
             "email": "E-Mail-Adresse",
@@ -380,11 +398,21 @@ export default {
             "linkedin": "LinkedIn Name",
             "instagram": "Instagram Name",
             "country": "Land",
+            "city": "Stadt",
+            "postcode": "PLZ",
             "state": "Bundesland",
+            "sport_type": "Sportart",
+            "month": "Monat",
+            "year": "Jahr",
+            "date_interval_start": "Ab dem",
+            "date_interval_end": "Bis zum",
             "user_type": "Als Veranstalter registrieren?",
             "defaults": {
                 "country": "Land wählen",
-                "state": "Bundesland wählen"
+                "state": "Bundesland wählen",
+                "sport_type": "Sportart wählen",
+                "month": "Monat auswählen",
+                "year": "Jahr auswählen"
             }
         },
         "label": {

@@ -7,7 +7,7 @@
         @endcomponent
         <div class="card">
 
-            <div class="card-content">
+            <div class="card-content m-b-40">
                 <section>
                     <div class="heading">
                         <h2 class="title">{{ trans('action.search_event') }}</h2>
@@ -29,22 +29,22 @@
                                                 @endforeach
                                             </form-select>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-select name="month" value="{{ request('month') }}">
-                                                <option value>{{ trans('input.defaults.month') }}</option>
-                                                @foreach(trans('date.month') as $index => $month)
-                                                    <option value="{{ $index }}">{{ $month }}</option>
-                                                @endforeach
-                                            </form-select>
-                                        </div>
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-select name="year" value="{{ request('year') }}">
-                                                <option value>{{ trans('input.defaults.year') }}</option>
-                                                @for($i = -5; $i < 5; $i++)
-                                                    <option value="{{ $now->year + $i }}">{{ $now->year + $i }}</option>
-                                                @endfor
-                                            </form-select>
-                                        </div>
+                                        {{--<div class="column p-t-none p-b-none is-6">--}}
+                                            {{--<form-select name="month" value="{{ request('month') }}">--}}
+                                                {{--<option value>{{ trans('input.defaults.month') }}</option>--}}
+                                                {{--@foreach(trans('date.month') as $index => $month)--}}
+                                                    {{--<option value="{{ $index }}">{{ $month }}</option>--}}
+                                                {{--@endforeach--}}
+                                            {{--</form-select>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="column p-t-none p-b-none is-6">--}}
+                                            {{--<form-select name="year" value="{{ request('year') }}">--}}
+                                                {{--<option value>{{ trans('input.defaults.year') }}</option>--}}
+                                                {{--@for($i = -5; $i < 5; $i++)--}}
+                                                    {{--<option value="{{ $now->year + $i }}">{{ $now->year + $i }}</option>--}}
+                                                {{--@endfor--}}
+                                            {{--</form-select>--}}
+                                        {{--</div>--}}
                                         <div class="column p-t-none p-b-none is-6">
                                             <form-date-input name="date_interval_start"
                                                              value="{{ request('date_interval_start') }}"></form-date-input>
@@ -98,7 +98,6 @@
                     </div>
                 </section>
                 <hr>
-
 
                 @include('event.preview_list')
 

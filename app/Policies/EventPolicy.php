@@ -64,4 +64,28 @@ class EventPolicy {
     public function delete(User $user, Event $event) {
         return true;
     }
+
+    /**
+     * Determines whether the user can participate in the specified event.
+     *
+     * @param  User  $user
+     * @param  Event  $event
+     *
+     * @return boolean
+     */
+    public function participate(User $user, Event $event) {
+        return $user->isType(config('starmee.user_type.athlete'));
+    }
+
+    /**
+     * Determines whether the user can visit the specified event.
+     *
+     * @param  User  $user
+     * @param  Event  $event
+     *
+     * @return boolean
+     */
+    public function visit(User $user, Event $event) {
+        return $user->isType(config('starmee.user_type.athlete'));
+    }
 }

@@ -13,7 +13,6 @@ class AuthServiceProvider extends ServiceProvider {
      */
     protected $policies = [
 		\App\Models\ParticipationClass::class => \App\Policies\ParticipationClassPolicy::class,
-		\App\Models\ParticipationClassController::class => \App\Policies\ParticipationClassControllerPolicy::class,
 		\App\Models\Participation::class => \App\Policies\ParticipationPolicy::class,
 		\App\Models\Athlete::class => \App\Policies\AthletePolicy::class,
 		\App\Models\Event::class => \App\Policies\EventPolicy::class,

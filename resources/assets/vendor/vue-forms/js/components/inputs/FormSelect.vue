@@ -46,6 +46,12 @@
             }
         },
 
+        data: function () {
+            return {
+                input: ''
+            }
+        },
+
         computed: {
             // The name of the input. Will also be the name of the value, when the form gets submitted.
             // Info: This value is based upon the 'name' property.
@@ -73,28 +79,52 @@
         mounted() {
             this.$nextTick(function () {
                 let placeholder = this.showPlaceholder ? this.placeholder : null;
-                let input = $(this.$refs.input);
+                this.input = $(this.$refs.input);
 
-                input.select2({
+                this.input.select2({
                     placeholder: placeholder
                 });
 
                 if (this.value != null) {
-                    input.val(this.value);
+                    this.input.val(this.value);
                 }
 
-                if (!input.val()) {
-                    input.val(input.find('option:first-child').val());
+                if (!this.input.val()) {
+                    this.input.val(this.input.find('option:first-child').val());
                 }
 
-                this.submitValue = input.val();
+                this.submitValue = this.input.val();
 
-                input.trigger('change');
+                this.input.trigger('change');
 
-                input.on("change", () => {
-                    this.submitValue = input.val();
+                this.input.on("change", () => {
+                    this.submitValue = this.input.val();
                 });
             });
         },
+
+        methods: {
+            /**
+             * Resets the input's value.
+             */
+            reset: function () {
+                this.submitValue = this.value;
+                this.input.select2().select2('val',this.value);
+                this.labelMessage = null;
+                this.invalid = false;
+                this.valid = !this.required || this.value;
+            },
+
+            /**
+             * Clears the input's value.
+             */
+            clear: function () {
+                this.submitValue = null;
+                this.input.select2().select2('val',null);
+                this.labelMessage = null;
+                this.invalid = false;
+                this.valid = !this.required;
+            },
+        }
     }
 </script>

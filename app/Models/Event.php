@@ -11,38 +11,38 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Event
  *
- * @property int $id
- * @property int $organizer_id
- * @property int $event_group_id
- * @property int $parent_event_id
- * @property string $title
- * @property string $slug
- * @property string $description_short
- * @property string $description
- * @property string $email
- * @property string $phone
- * @property string $cover
- * @property int $sport_type_id
- * @property bool $published
- * @property \Carbon\Carbon $start_date
- * @property \Carbon\Carbon $end_date
- * @property string $country
- * @property string $postcode
- * @property string $city
- * @property string $street
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property \Carbon\Carbon $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CheckPoint[] $checkPoints
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $childEvents
- * @property-read \App\Models\Organizer $organizer
- * @property-read \App\Models\Event $parentEvent
+ * @property int                                                                            $id
+ * @property int                                                                            $organizer_id
+ * @property int                                                                            $event_group_id
+ * @property int                                                                            $parent_event_id
+ * @property string                                                                         $title
+ * @property string                                                                         $slug
+ * @property string                                                                         $description_short
+ * @property string                                                                         $description
+ * @property string                                                                         $email
+ * @property string                                                                         $phone
+ * @property string                                                                         $cover
+ * @property int                                                                            $sport_type_id
+ * @property bool                                                                           $published
+ * @property \Carbon\Carbon                                                                 $start_date
+ * @property \Carbon\Carbon                                                                 $end_date
+ * @property string                                                                         $country
+ * @property string                                                                         $postcode
+ * @property string                                                                         $city
+ * @property string                                                                         $street
+ * @property \Carbon\Carbon                                                                 $created_at
+ * @property \Carbon\Carbon                                                                 $updated_at
+ * @property \Carbon\Carbon                                                                 $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CheckPoint[]         $checkPoints
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[]              $childEvents
+ * @property-read \App\Models\Organizer                                                     $organizer
+ * @property-read \App\Models\Event                                                         $parentEvent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ParticipationClass[] $participationClasses
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $raters
- * @property-read \App\Models\SportType $sportType
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VisitClass[] $visitClasses
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[]      $participations
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[]            $raters
+ * @property-read \App\Models\SportType                                                     $sportType
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VisitClass[]         $visitClasses
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[]              $visits
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event main()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event open()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Event published()
@@ -112,19 +112,29 @@ class Event extends SlugModel {
     ];
 
     /**
-     * The attributes that are searchable.
+     * The attributes that are searchable as the keys and their search operator
+     * to apply as the value.
+     * Valid values: 'LIKE', '<>', '=', '<', '>', '[relation_name]', '[class_name]'
      *
      * @var array
      */
     public $searchable = [
-        'title',
-        'description_short',
-        'description',
-        'sport_type_id',
-        'country',
-        'city',
-        'postcode',
-        'state'
+        'title' => 'LIKE',
+        'description_short' => 'LIKE',
+        'description' => 'LIKE',
+        'sport_type' => [
+            'sport_type_id' => SportType::class
+        ],
+        'country' => '=',
+        'city' => 'LIKE',
+        'postcode' => '=',
+        'state' => '=',
+        'date_interval_start' => [
+            'start_date' => '>='
+        ],
+        'date_interval_end' => [
+            'start_date' => '<='
+        ],
     ];
 
     /**
@@ -262,7 +272,8 @@ class Event extends SlugModel {
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function middleCheckPoints() {
-        return $this->hasMany(CheckPoint::class)->whereNotIn('position', [$this->startCheckPoint->position, $this->finishCheckPoint->position]);
+        return $this->hasMany(CheckPoint::class)
+                    ->whereNotIn('position', [$this->startCheckPoint->position, $this->finishCheckPoint->position]);
     }
 
     /**
@@ -275,7 +286,8 @@ class Event extends SlugModel {
     }
 
     /**
-     * Check if the specified user or the currently logged user can participate in one of the event's participation classes.
+     * Check if the specified user or the currently logged user can participate in one of the event's participation
+     * classes.
      *
      * @param User|null $user
      *
@@ -375,7 +387,8 @@ class Event extends SlugModel {
      * @return int|mixed
      */
     public function getTotalNumOfParticipants() {
-        $participationsCount = property_exists($this, 'participations_count') ? $this->participations_count : count($this->participations);
+        $participationsCount =
+            property_exists($this, 'participations_count') ? $this->participations_count : count($this->participations);
 
         foreach ($this->childEvents as $childEvent) {
             $participationsCount += $childEvent->getTotalNumOfParticipants();

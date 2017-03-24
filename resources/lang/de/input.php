@@ -20,10 +20,14 @@ return [
     'linkedin'              => 'LinkedIn Name',
     'instagram'             => 'Instagram Name',
     'country'               => 'Land',
+    'city'                  => 'Stadt',
+    'postcode'              => 'PLZ',
     'state'                 => 'Bundesland',
     'sport_type'            => 'Sportart',
     'month'                 => 'Monat',
     'year'                  => 'Jahr',
+    'date_interval_start'   => 'Ab dem',
+    'date_interval_end'     => 'Bis zum',
 
     'user_type' => 'Als Veranstalter registrieren?',
 

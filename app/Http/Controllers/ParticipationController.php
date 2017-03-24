@@ -62,8 +62,9 @@ class ParticipationController extends Controller {
 
         $event->load('sportType');
 
-        $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')));
+        $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')))->first();
         $selectedParticipationClass = ParticipationClass::find(request()->input(config('query.participation_class')));
+        \Log::alert($selectedEventPart);
 
         return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass'));
     }

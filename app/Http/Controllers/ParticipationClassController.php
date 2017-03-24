@@ -19,7 +19,7 @@ use App\Http\Requests\ParticipationClassCreateRequest;
 class ParticipationClassController extends Controller {
 
     /**
-     * Displays a listing of all the participationClasses.
+     * Displays a listing of all the participation classes.
      *
      * @param Event $event
      *

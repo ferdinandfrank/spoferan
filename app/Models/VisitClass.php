@@ -177,13 +177,29 @@ class VisitClass extends BaseModel {
             $user = Auth::user();
         }
 
+        $now = Carbon::now();
         $result = ['error' => true, 'msg' => null];
 
-        if (empty($user) || !$user->isType(config('starmee.user_type.athlete'))) {
+        if (empty($user)) {
             $result['msg'] = trans('validation.event.visit.restr_registered');
+
+        } elseif (!$user->isType(config('starmee.user_type.athlete'))) {
+            $result['msg'] = trans('validation.event.visit.restr_athlete');
 
         } elseif ($this->isVisitor($user->athlete)) {
             $result['msg'] = trans('validation.event.visit.already_registered');
+
+        } elseif ($this->register_date->gt($now)) {
+            $result['msg'] = trans('validation.event.visit.restr_register_date', [
+                'date' => $this->register_date->formatLocalized('%d %B %Y'),
+                'time' => $this->register_date->formatLocalized('%H:%M')
+            ]);
+
+        } elseif ($this->unregister_date->lte($now)) {
+            $result['msg'] = trans('validation.event.visit.restr_unregister_date', [
+                'date' => $this->unregister_date->formatLocalized('%d %B %Y'),
+                'time' => $this->unregister_date->formatLocalized('%H:%M')
+            ]);
 
         } elseif (!empty($this->restr_limit) && $this->restr_limit <= count($this->visitors)) {
             $result['msg'] = trans('validation.event.visit.restr_limit');
@@ -217,4 +233,33 @@ class VisitClass extends BaseModel {
         return parent::isFillable($key);
     }
 
+    /**
+     * Scopes a query to only find visit classes which the specified athlete can visit.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param                                       $athlete
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCanVisit($query, Athlete $athlete = null) {
+        if (!$athlete) {
+            if (!Auth::check() || !Auth::user()->isType(config('starmee.user_type.athlete'))) {
+                return $query;
+            }
+
+            $athlete = Auth::user()->athlete;
+        }
+
+        $now = Carbon::now();
+
+        return $query->whereDate('register_date', '<', $now)
+                     ->whereDate('unregister_date', '>', $now)
+                     ->whereDoesntHave('visits', function ($subQuery) use ($athlete) {
+                         $subQuery->where('athlete_id', $athlete->getKey());
+                     })
+                     ->where(function ($subQuery) {
+                         $subQuery->whereNull('restr_limit')
+                                  ->orWhereRaw('(select count(*) from `visits` where `visit_classes`.`id` = `visits`.`visit_class_id` and `visits`.`deleted_at` is null) < `visit_classes`.`restr_limit`');
+                     });
+    }
 }

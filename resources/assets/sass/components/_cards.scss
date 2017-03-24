@@ -26,6 +26,10 @@ $card-hover-transition-duration: .5s;
     overflow: hidden;
     border-radius: 2px;
 
+    &.suggestion {
+        border: 2px solid $success;
+    }
+
     &.selected {
         border: 3px solid $success;
 
@@ -268,39 +272,43 @@ $card-hover-transition-duration: .5s;
             padding: 0.75rem;
         }
 
-        .price {
-            font-size: $font-size-h1;
-            color: $white-smooth;
-            height: 100%;
-            min-height: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: $primary;
-
-            small {
-                font-size: $font-size;
-
-                &:last-child {
-                    margin-left: 5px;
-                }
-
-                &:first-child {
-                    margin-right: 5px;
-                }
-            }
-        }
-
         .content {
             margin: 0;
 
-            .title {
-                color: $primary;
-                font-size: $font-size-large;
+            .header {
+                display: flex;
+                justify-content: space-between;
+
+                .title {
+                    color: $primary;
+                    font-size: $font-size-x-large - 0.1rem;
+                }
+
+                .subtitle {
+                    margin-bottom: 0.3rem;
+                }
+
+                .price {
+                    font-size: $font-size-x-large;
+                    color: $secondary;
+
+                    small {
+                        font-size: $font-size;
+                    }
+                }
             }
 
-            .subtitle {
-                margin-bottom: 0.3rem;
+            .action {
+                text-align: center;
+                margin: 20px 0 10px;
+            }
+        }
+
+        @media #{$mobile} {
+            flex-direction: column;
+
+            .price {
+                width: 100%;
             }
         }
 

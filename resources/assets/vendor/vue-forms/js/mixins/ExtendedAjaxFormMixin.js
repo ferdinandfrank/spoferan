@@ -3,6 +3,7 @@
  */
 let ajaxFormMixin = require('./AjaxFormMixin');
 let removeElementMixin = require('./RemoveElementMixin');
+let Form = require('./../helpers/Form');
 
 module.exports = {
 
@@ -37,6 +38,19 @@ module.exports = {
         detailRedirect: {
             type: String
         }
+    },
+
+    mounted: function () {
+        this.$nextTick(function () {
+            let resetButton = $(this.$el).find('button[type=reset]');
+            if (resetButton.length) {
+                resetButton.on('click', (event) => {
+                    event.preventDefault();
+                    this.clearInputs();
+                    this.submit();
+                })
+            }
+        })
     },
 
     methods: {
@@ -104,6 +118,7 @@ module.exports = {
          * Clears the values of the child input component's.
          */
         clearInputs: function () {
+            this.form = new Form();
             let children = getListOfChildren(this);
             for (let index in children) {
                 let child = children[index];

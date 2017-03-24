@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * -----------------------
  *
  * @author  Ferdinand Frank
- * @version 0.1
+ * @version 1.0
  * @package App\Models
  */
 abstract class BaseModel extends Model {
@@ -46,5 +46,33 @@ abstract class BaseModel extends Model {
     public function getCleanRouteKeyName() {
         $keyNameParts = explode(".", $this->getRouteKeyName());
         return array_pop($keyNameParts);
+    }
+
+    /**
+     * Scopes a query to find a model by its primary key name.
+     *
+     * @param $query
+     * @param $key
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFindByKey($query, $key) {
+        return $query->where($this->getKeyName(), $key);
+    }
+
+    /**
+     * Scopes a query to only include the model without the specified id.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array|string|int                      $id
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIgnore($query, $id) {
+        if (is_array($id)) {
+            return $query->whereNotIn('id', $id);
+        }
+
+        return $query->where('id', '<>', $id);
     }
 }

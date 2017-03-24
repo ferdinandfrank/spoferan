@@ -45,7 +45,7 @@
             this.$nextTick(function () {
                 $(this.$refs.input).datetimepicker({
                     locale: 'de',
-                    format: 'YYYY-MM-DD',
+                    format: 'DD.MM.YYYY',
                     defaultDate: this.submitValue
                 });
                 $(this.$refs.input).on("dp.change", (moment) => {

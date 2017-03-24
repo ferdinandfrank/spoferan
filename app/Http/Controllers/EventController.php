@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Http\Requests\EventCreateRequest;
+use DB;
 use Illuminate\Http\Request;
+use Log;
 
 /**
  * EventController
@@ -48,9 +50,18 @@ class EventController extends Controller {
             return redirect()->action('EventController@showChild', ['event' => $event->parentEvent, 'child' => $event]);
         }
 
-        $event->load('organizer.user', 'participationClasses', 'sportType', 'participations', 'visits');
+        $event->load('organizer.user', 'sportType', 'participations', 'visits');
 
-        return view('event.show', compact('event'));
+        $goodParticipationClasses =
+            \Gate::allows('participate', $event) ? $event->participationClasses()->canParticipate()->get() : collect();
+        $participationClasses =
+            $event->participationClasses()->ignore($goodParticipationClasses->pluck('id')->toArray())->get();
+
+        $goodVisitClasses = \Gate::allows('visit', $event) ? $event->visitClasses()->canVisit()->get() : collect();
+        $visitClasses = $event->visitClasses()->ignore($goodVisitClasses->pluck('id')->toArray())->get();
+
+        return view('event.show',
+            compact('event', 'goodParticipationClasses', 'participationClasses', 'goodVisitClasses', 'visitClasses'));
     }
 
     /**
@@ -62,9 +73,23 @@ class EventController extends Controller {
      * @return \Illuminate\View\View
      */
     public function showChild(Event $event, Event $child) {
-        $child->load('organizer.user', 'participationClasses', 'sportType', 'participations', 'visits');
+        $child->load('organizer.user', 'sportType', 'participations', 'visits');
 
-        return view('event.show', ['event' => $child]);
+        $goodParticipationClasses =
+            \Gate::allows('participate', $child) ? $child->participationClasses()->canParticipate()->get() : collect();
+        $participationClasses =
+            $child->participationClasses()->ignore($goodParticipationClasses->pluck('id')->toArray())->get();
+
+        $goodVisitClasses = \Gate::allows('visit', $child) ? $child->visitClasses()->canVisit()->get() : collect();
+        $visitClasses = $child->visitClasses()->ignore($goodVisitClasses->pluck('id')->toArray())->get();
+
+        return view('event.show', [
+            'event'                    => $child,
+            'goodParticipationClasses' => $goodParticipationClasses,
+            'participationClasses'     => $participationClasses,
+            'goodVisitClasses'         => $goodVisitClasses,
+            'visitClasses'             => $visitClasses
+        ]);
     }
 
     /**
@@ -105,6 +130,7 @@ class EventController extends Controller {
      * stores the data in the database.
      *
      * @param  EventCreateRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(EventCreateRequest $request) {
@@ -121,7 +147,7 @@ class EventController extends Controller {
      * Updates the specified event with the specified request data in the database.
      *
      * @param EventCreateRequest $request
-     * @param Event $event
+     * @param Event              $event
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -140,7 +166,7 @@ class EventController extends Controller {
     /**
      * Removes the specified event from the database.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Event $event
      *
      * @return \Illuminate\Http\JsonResponse
      */
