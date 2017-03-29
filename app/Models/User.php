@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\AthleteCreated;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Authenticatable;
@@ -21,6 +22,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         HasResourceRoutes,
         Searchable,
         SoftDeletes,
+        HasAddress,
         Notifiable;
 
     /**
@@ -110,11 +112,11 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @return string
      */
     public function getDisplayName() {
-        if ($this->isType(config('starmee.user_type.athlete'))) {
+        if (count($this->athlete)) {
             return $this->athlete->getDisplayName();
-        } else if ($this->isType(config('starmee.user_type.organizer'))) {
+        } else if (count($this->organizer)) {
             return $this->organizer->getDisplayName();
-        } else if ($this->isType(config('starmee.user_type.admin'))) {
+        } else if (count($this->admin)) {
             return $this->admin->getDisplayName();
         }
 
@@ -141,7 +143,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function isType($type) {
         if (is_string($type)) {
-            return $this->user_type == config('starmee.user_type.' . $type);
+            return $this->user_type == config('spoferan.user_type.' . $type);
         }
 
         return $this->user_type == $type;
@@ -153,9 +155,9 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @return UserModel
      */
     public function getType() {
-        if ($this->isType(config('starmee.user_type.organizer'))) {
+        if ($this->isType(config('spoferan.user_type.organizer'))) {
             return $this->organizer;
-        } elseif ($this->isType(config('starmee.user_type.admin'))) {
+        } elseif ($this->isType(config('spoferan.user_type.admin'))) {
             return $this->admin;
         }
 
@@ -163,19 +165,19 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Gets the type of this user as a string (defined in @link config('starmee.user_type'))
+     * Gets the type of this user as a string (defined in @link config('spoferan.user_type'))
      *
      * @return string
      */
     public function getTypeAsString() {
-        $type = config('starmee.user_type.athlete');
-        if ($this->isType(config('starmee.user_type.organizer'))) {
-            $type = config('starmee.user_type.organizer');
-        } elseif ($this->isType(config('starmee.user_type.admin'))) {
-            $type = config('starmee.user_type.admin');
+        $type = config('spoferan.user_type.athlete');
+        if ($this->isType(config('spoferan.user_type.organizer'))) {
+            $type = config('spoferan.user_type.organizer');
+        } elseif ($this->isType(config('spoferan.user_type.admin'))) {
+            $type = config('spoferan.user_type.admin');
         }
 
-        return trans('label.user_type.' . array_search($type, config('starmee.user_type')));
+        return trans('label.user_type.' . array_search($type, config('spoferan.user_type')));
     }
 
     /**

@@ -34,7 +34,7 @@
                     </div>
                     <div class="tile is-parent is-vertical">
                         @if($loggedUser)
-                            <div class="card tile is-child">
+                            <div class="card tile is-child disabled">
                                 <a href="#">
                                     <div class="card-header card-header-image">
                                         <div class="card-image"

@@ -183,7 +183,7 @@ class VisitClass extends BaseModel {
         if (empty($user)) {
             $result['msg'] = trans('validation.event.visit.restr_registered');
 
-        } elseif (!$user->isType(config('starmee.user_type.athlete'))) {
+        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
             $result['msg'] = trans('validation.event.visit.restr_athlete');
 
         } elseif ($this->isVisitor($user->athlete)) {
@@ -243,7 +243,7 @@ class VisitClass extends BaseModel {
      */
     public function scopeCanVisit($query, Athlete $athlete = null) {
         if (!$athlete) {
-            if (!Auth::check() || !Auth::user()->isType(config('starmee.user_type.athlete'))) {
+            if (!Auth::check() || !Auth::user()->isType(config('spoferan.user_type.athlete'))) {
                 return $query;
             }
 

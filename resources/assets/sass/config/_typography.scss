@@ -153,8 +153,13 @@ a, a:hover {
     color: $link-color;
 }
 
-a.link:hover {
-    text-decoration: underline;
+.link {
+    cursor: pointer;
+    color: $link-color;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 h1 a,

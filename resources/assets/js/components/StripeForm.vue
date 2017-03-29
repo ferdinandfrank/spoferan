@@ -69,7 +69,7 @@
                         name: this.stripeData.name,
                         description: this.stripeData.description,
                         image: this.stripeData.image,
-                        zipCode: true,
+                        zipCode: false,
                         amount: this.stripeData.amount
                     });
                 } else {

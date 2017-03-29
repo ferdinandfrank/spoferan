@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Stripe\Customer;
+
 class PaymentDetails extends BaseModel {
 
     /**
@@ -42,5 +44,27 @@ class PaymentDetails extends BaseModel {
      */
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Gets the registered card for the stripe user.
+     *
+     * @return array|\Stripe\StripeObject
+     */
+    public function getCards() {
+        return Customer::retrieve($this->stripe_id)->sources->all([
+            "object" => "card"
+        ]);
+    }
+
+    /**
+     * Gets the registered bank accounts for the stripe user.
+     *
+     * @return array|\Stripe\StripeObject
+     */
+    public function getBankAccounts() {
+        return Customer::retrieve($this->stripe_id)->sources->all([
+            "object" => "bank_account"
+        ]);
     }
 }

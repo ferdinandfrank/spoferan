@@ -29,7 +29,24 @@ return [
     'date_interval_start'   => 'Ab dem',
     'date_interval_end'     => 'Bis zum',
 
+    'credit_card' => [
+        'number'    => 'Kartennummer',
+        'name'      => 'Karteninhaber',
+        'exp_month' => 'Ablaufmonat',
+        'exp_year'  => 'Ablaufjahr',
+        'cvc'       => 'Kartenprüfnummer',
+    ],
+
+    'bank_account' => [
+        'iban'      => 'IBAN',
+        'name' => 'Kontoinhaber',
+    ],
+
     'user_type' => 'Als Veranstalter registrieren?',
+
+    'participation' => [
+        'privacy' => 'Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar.'
+    ],
 
     'defaults' => [
         'country'    => 'Land wählen',
@@ -37,5 +54,6 @@ return [
         'sport_type' => 'Sportart wählen',
         'month'      => 'Monat auswählen',
         'year'       => 'Jahr auswählen'
-    ]
+    ],
+
 ];

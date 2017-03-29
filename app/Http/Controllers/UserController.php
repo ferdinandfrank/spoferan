@@ -78,7 +78,7 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(UserCreateRequest $request) {#
+    public function store(UserCreateRequest $request) {
         $user = DB::transaction(function () use ($request) {
             $user = new User($request->all());
             $user->confirmation_token = bin2hex(random_bytes(10));
@@ -87,7 +87,7 @@ class UserController extends Controller {
             $user->save();
             if ($user) {
                 $userType = null;
-                if ($user->isType(config('starmee.user_type.athlete'))) {
+                if ($user->isType(config('spoferan.user_type.athlete'))) {
                     $userType = $user->athlete()->create($request->all());
                 } else {
                     $userType = $user->organizer()->create($request->all());

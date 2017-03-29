@@ -10,7 +10,7 @@ $factory->define(App\Models\Participation::class, function (Faker\Generator $fak
     return [
         'participation_class_id' => $participationClass->id,
         'athlete_id' => $athlete->user_id,
-        'starter_number' => rand(1, 9999),
+        'starter_number' => $athlete->starter_number,
         'privacy' => false,
         'rank' => null,
         'time' => null,

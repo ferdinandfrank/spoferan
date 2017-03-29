@@ -31,14 +31,9 @@ class ParticipationCreateRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'participation_class_id' => '',
-			'description' => '',
-			'privacy' => '',
-			'rank' => '',
-			'time' => '',
-			'starter_number' => '',
-			'participation_state_id' => '',
-			
+            'participation_class_id' => 'required|exists:participation_classes,id',
+            'source'                 => 'required',
+            'privacy'                => 'boolean'
         ];
     }
 }

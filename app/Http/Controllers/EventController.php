@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Http\Requests\EventCreateRequest;
-use DB;
 use Illuminate\Http\Request;
-use Log;
 
 /**
  * EventController
@@ -60,8 +58,11 @@ class EventController extends Controller {
         $goodVisitClasses = \Gate::allows('visit', $event) ? $event->visitClasses()->canVisit()->get() : collect();
         $visitClasses = $event->visitClasses()->ignore($goodVisitClasses->pluck('id')->toArray())->get();
 
+        $participationRestriction = $event->getParticipationRestriction();
+
         return view('event.show',
-            compact('event', 'goodParticipationClasses', 'participationClasses', 'goodVisitClasses', 'visitClasses'));
+            compact('event', 'goodParticipationClasses', 'participationClasses', 'goodVisitClasses', 'visitClasses',
+                'participationRestriction'));
     }
 
     /**
@@ -83,12 +84,15 @@ class EventController extends Controller {
         $goodVisitClasses = \Gate::allows('visit', $child) ? $child->visitClasses()->canVisit()->get() : collect();
         $visitClasses = $child->visitClasses()->ignore($goodVisitClasses->pluck('id')->toArray())->get();
 
+        $participationRestriction = $child->getParticipationRestriction();
+
         return view('event.show', [
             'event'                    => $child,
             'goodParticipationClasses' => $goodParticipationClasses,
             'participationClasses'     => $participationClasses,
             'goodVisitClasses'         => $goodVisitClasses,
-            'visitClasses'             => $visitClasses
+            'visitClasses'             => $visitClasses,
+            'participationRestriction' => $participationRestriction
         ]);
     }
 

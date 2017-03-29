@@ -24,7 +24,7 @@ $factory->define(App\Models\Athlete::class, function (Faker\Generator $faker) {
 
     return [
         'user_id' => function () {
-            return factory(App\Models\User::class)->create(['user_type' => config('starmee.user_type.athlete')])->id;
+            return factory(App\Models\User::class)->create(['user_type' => config('spoferan.user_type.athlete')])->id;
         },
         'first_name' => $faker->firstName($genderName[$rand_gender_id]),
         'last_name' => $faker->lastName,
@@ -37,7 +37,7 @@ $factory->define(App\Models\Athlete::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Organizer::class, function (Faker\Generator $faker) {
     return [
         'user_id' => function () {
-            return factory(App\Models\User::class)->create(['user_type' => config('starmee.user_type.organizer')])->id;
+            return factory(App\Models\User::class)->create(['user_type' => config('spoferan.user_type.organizer')])->id;
         },
         'name' => $faker->company,
         'description' => $faker->text()

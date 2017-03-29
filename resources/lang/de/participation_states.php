@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'registered' => 'Angemeldet'
+    'registered' => 'Angemeldet',
+    'ranked'     => 'Platziert'
 ];

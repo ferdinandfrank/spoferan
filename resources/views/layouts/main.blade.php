@@ -38,7 +38,7 @@
                     &copy; {{ \Carbon\Carbon::now()->year }} <strong>Starmee</strong> by <a href="http://spoferan.com">Spoferan</a>.
                 </p>
                 <p>
-                    <a class="icon" href="#">
+                    <a class="icon" href="https://www.facebook.com/spoferan">
                         <icon icon="{{ config('icons.facebook') }}"></icon>
                     </a>
                 </p>

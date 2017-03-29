@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Events\AthleteCreated;
 
 
 /**
@@ -65,6 +65,35 @@ class Athlete extends UserModel {
      * @var array
      */
     protected $dates = ['birth_date'];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $events = [
+        'created' => AthleteCreated::class,
+    ];
+
+    /**
+     * Listen for create event to save the slug.
+     */
+    protected static function boot() {
+        parent::boot();
+        static::creating(function ($model) {
+            $firstNameChar = substr($model->first_name, 0, 1);
+            $lastNameChar = substr($model->last_name, 0, 1);
+            $birthMonth = $model->birth_date->month;
+            $birthYear = $model->birth_date->format('y');
+            $model->starter_number = $firstNameChar . $lastNameChar . $birthMonth . $birthYear;
+
+            $existingStarterNumbers = Athlete::where('starter_number', $model->starter_number)->count();
+            if ($existingStarterNumbers > 0) {
+                $model->starter_number .= $existingStarterNumbers + 1;
+            }
+        }
+        );
+    }
 
     /**
      * Gets the display name of this user which acts as the username.
@@ -202,7 +231,7 @@ class Athlete extends UserModel {
      * @return string
      */
     public function getAnonymousName() {
-        return $this->first_name . ' ' . substr($this->last_name, 0 , 1) . '.';
+        return substr($this->first_name, 0, 1) . '. ' . substr($this->last_name, 0 , 1) . '.';
     }
 
     /**

@@ -219,7 +219,7 @@ class ParticipationClass extends BaseModel {
         if (empty($user)) {
             $result['msg'] = trans('validation.event.participate.restr_registered');
 
-        } elseif (!$user->isType(config('starmee.user_type.athlete'))) {
+        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
             $result['msg'] = trans('validation.event.participate.restr_athlete');
 
         } elseif ($this->register_date->gt($now)) {
@@ -301,7 +301,7 @@ class ParticipationClass extends BaseModel {
      */
     public function scopeCanParticipate($query, Athlete $athlete = null) {
         if (!$athlete) {
-            if (!Auth::check() || !Auth::user()->isType(config('starmee.user_type.athlete'))) {
+            if (!Auth::check() || !Auth::user()->isType(config('spoferan.user_type.athlete'))) {
                 return $query;
             }
 

@@ -8,6 +8,7 @@ use App\Http\Requests\ParticipationCreateRequest;
 use App\Models\ParticipationClass;
 use App\Models\ParticipationState;
 use DB;
+use Exception;
 use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Stripe;
@@ -64,7 +65,6 @@ class ParticipationController extends Controller {
 
         $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')))->first();
         $selectedParticipationClass = ParticipationClass::find(request()->input(config('query.participation_class')));
-        \Log::alert($selectedEventPart);
 
         return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass'));
     }
@@ -99,36 +99,25 @@ class ParticipationController extends Controller {
             abort(403);
         }
 
-        $participationClass = ParticipationClass::find($request->get('participation_class_id'));
-
         try {
+            $participationClass = ParticipationClass::findOrFail($request->get('participation_class_id'));
             $participation = DB::transaction(function () use ($participationClass, $request) {
                 $participation = Participation::create([
                     'participation_class_id' => $participationClass->getKey(),
-                    'athlete_id' => \Auth::id(),
+                    'athlete_id'             => \Auth::id(),
                     'participation_state_id' => ParticipationState::whereLabel('registered')->first()->id,
-                    'privacy' => 0,
-                    'starter_number' => Participation::generateStarterNumber($participationClass)
+                    'privacy'                => $request->get('privacy', 0),
+                    'starter_number'         => \Auth::user()->athlete->starter_number
                 ]);
-                if (empty(\Auth::user()->paymentDetails)) {
-                    $customer = Customer::create([
-                        'email'  => $request->get('stripeEmail'),
-                        'source' => $request->get('stripeToken')
-                    ]);
-
-                    $customerId = $customer->id;
-
-                    \Auth::user()->paymentDetails()->create([
-                        'stripe_id' => $customerId
-                    ]);
-                } else {
-                    $customerId = \Auth::user()->paymentDetails->stripe_id;
-                }
+                $customerId = \Auth::user()->paymentDetails->stripe_id;
 
                 Charge::create([
                     'customer'    => $customerId,
+                    'source'      => $request->get('source'),
                     'amount'      => $participationClass->price,
-                    "description" => "Charge for participation '".$participation->getKey()."' in event '". $participationClass->event->title ."' at class '". $participationClass->title ."'.",
+                    "description" => "Charge for participation '" . $participation->getKey() . "' in event '"
+                                     . $participationClass->event->title . "' at class '" . $participationClass->title
+                                     . "'.",
                     "metadata"    => ["participation_id" => $participation->getKey()],
                     'currency'    => 'eur'
                 ]);
@@ -136,8 +125,30 @@ class ParticipationController extends Controller {
                 return $participation;
             });
 
-        } catch (\Exception $exception) {
-            return response()->json(['msg' => $exception->getMessage()], 422);
+        } catch (\Stripe\Error\Card $e) {
+            // Since it's a decline, \Stripe\Error\Card will be caught
+            $body = $e->getJsonBody();
+            $err = $body['error'];
+            return response()->json(['msg' => trans('validation.credit_card.' . $err['code'])], 422);
+        } catch (\Stripe\Error\RateLimit $e) {
+            // Too many requests made to the API too quickly
+            return response()->json(['msg' => $e->getMessage()], 422);
+        } catch (\Stripe\Error\InvalidRequest $e) {
+            // Invalid parameters were supplied to Stripe's API
+            return response()->json(['msg' => $e->getMessage()], 422);
+        } catch (\Stripe\Error\Authentication $e) {
+            // Authentication with Stripe's API failed
+            // (maybe you changed API keys recently)
+            return response()->json(['msg' => $e->getMessage()], 500);
+        } catch (\Stripe\Error\ApiConnection $e) {
+            // Network communication with Stripe failed
+            return response()->json(['msg' => $e->getMessage()], 422);
+        } catch (\Stripe\Error\Base $e) {
+            // Display a very generic error to the user, and maybe send
+            // yourself an email
+            return response()->json(['msg' => $e->getMessage()], 422);
+        } catch (Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 422);
         }
 
         return response()->json($participation, empty($participation) ? 500 : 200);

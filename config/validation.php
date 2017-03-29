@@ -41,6 +41,9 @@ return [
         ],
         'slug'       => [
             'max' => 250
+        ],
+        'starter_number' => [
+            'max' => 10
         ]
     ],
 

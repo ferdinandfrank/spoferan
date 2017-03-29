@@ -41,13 +41,13 @@ class UserCreateRequest extends FormRequest {
             'street'     => 'max:' . config('validation.user.street.max'),
             'phone'      => 'max:' . config('validation.user.phone.max'),
             'city'       => 'max:' . config('validation.user.city.max'),
-            'first_name' => 'required_if:user_type,' . config('starmee.user_type.athlete'),
-            'last_name'  => 'required_if:user_type,' . config('starmee.user_type.athlete'),
-            'gender'     => ['required_if:user_type,' . config('starmee.user_type.athlete'), Rule::in(['m', 'w'])],
-            'name'       => 'unique:organizers,name|required_if:user_type,' . config('starmee.user_type.organizer'),
+            'first_name' => 'required_if:user_type,' . config('spoferan.user_type.athlete'),
+            'last_name'  => 'required_if:user_type,' . config('spoferan.user_type.athlete'),
+            'gender'     => ['required_if:user_type,' . config('spoferan.user_type.athlete'), Rule::in(['m', 'w'])],
+            'name'       => 'unique:organizers,name|required_if:user_type,' . config('spoferan.user_type.organizer'),
             'user_type'  => [
                 'required',
-                Rule::in(config('starmee.user_type')),
+                Rule::in(config('spoferan.user_type')),
             ],
         ];
     }

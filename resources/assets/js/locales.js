@@ -20,7 +20,15 @@ export default {
             "select_participation_class": "Teilnahmeklasse auswählen",
             "search_event": "Event finden",
             "search": "Suchen",
-            "reset": "Zurücksetzen"
+            "reset": "Zurücksetzen",
+            "show_results": "Ergebnisse anzeigen",
+            "confirm_and_pay_participation": "Teilnahme bestätigen und bezahlen",
+            "edit": "Bearbeiten",
+            "change": "Ändern",
+            "add_credit_card": "Kreditkarte hinzufügen",
+            "add_bank_account": "Bankkonto hinzufügen",
+            "save": "Speichern",
+            "cancel": "Abbrechen"
         },
         "alert": {
             "error": {
@@ -77,6 +85,18 @@ export default {
                 "post": {
                     "title": "Erfolgreich angemeldet!",
                     "content": "Du hast dich erfolgreich für das Event angemeldet."
+                }
+            },
+            "credit_card": {
+                "post": {
+                    "title": "Kreditkarte hinzugefügt",
+                    "content": "Die Kreditkarte wurde deinem Account erfolgreich hinzugefügt."
+                }
+            },
+            "bank_account": {
+                "post": {
+                    "title": "Bankeinzugskonto hinzugefügt",
+                    "content": "Das Bankeinzugskonto wurde deinem Account erfolgreich hinzugefügt."
                 }
             }
         },
@@ -353,7 +373,13 @@ export default {
                     "meeting": "Hier befindet sich der Treffpunkt für das Event."
                 },
                 "recommendations": "Auf der Suche nach einem Event? Die folgenden Events würden perfekt auf dein Profil passen.",
-                "search": "Gebe in dem Formular deine entsprechenden Suchkriterien ein, um die Events zu filtern."
+                "search": "Gebe in dem Formular deine entsprechenden Suchkriterien ein, um die Events zu filtern.",
+                "time_and_location": "Klicke auf eine Markierung in der Karte, um mehr Infos zu erhalten.",
+                "child_events": "Dieses Event besteht aus mehreren Teilevents. Klicke auf eine der folgenden Karten, um mehr über dieses Teilevent zu erfahren.",
+                "participation_classes": "Dieses Event besteht aus mehreren Teilnahmeklassen. Klicke auf eine der folgenden Karten, um mehr über diese Teilnahmeklasse zu erfahren.",
+                "visit_classes": "Für dieses Event gibt es mehrere Besucherpakete zur Auswahl. Klicke auf eine der folgenden Karten, um mehr über dieses Besucherpaket zu erfahren.",
+                "participants": "Dieses Event besteht aus mehreren Teilevents. Die Teilnehmer sind demnach nach den Teilevents aufgeteilt, für die sie sich registriert haben.",
+                "contact": "Du hast Fragen zu dem Event? Du kannst den Veranstalter gerne jederzeit kontaktieren."
             }
         },
         "email": {
@@ -374,8 +400,14 @@ export default {
             }
         },
         "info": {
+            "payment": {
+                "no_credit_cards": "Bisher hast du noch keine Kreditkarte hinzugefügt, die du als Zahlungsmethode auswählen kannst.",
+                "no_bank_accounts": "Bisher hast du noch kein Bankeinzugskonto hinzugefügt, welches du als Zahlungsmethode auswählen kannst.",
+                "no_payment_method": "Wähle eine Zahlungsmethode aus, oder füge eine neue hinzu, um dich für dieses Event anzumelden."
+            },
             "event": {
-                "no_participants": "Für dieses Event hat sich bisher noch kein Athlet angemeldet."
+                "no_participants": "Für dieses Event hat sich bisher noch kein Athlet angemeldet.",
+                "no_results": "Für deine Suchanfrage wurden leider keine Events gefunden. Versuche es noch einmal mit einer anderen Suchanfrage."
             }
         },
         "input": {
@@ -406,7 +438,21 @@ export default {
             "year": "Jahr",
             "date_interval_start": "Ab dem",
             "date_interval_end": "Bis zum",
+            "credit_card": {
+                "number": "Kartennummer",
+                "name": "Karteninhaber",
+                "exp_month": "Ablaufmonat",
+                "exp_year": "Ablaufjahr",
+                "cvc": "Kartenprüfnummer"
+            },
+            "bank_account": {
+                "iban": "IBAN",
+                "name": "Kontinhaber"
+            },
             "user_type": "Als Veranstalter registrieren?",
+            "participation": {
+                "privacy": "Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar."
+            },
             "defaults": {
                 "country": "Land wählen",
                 "state": "Bundesland wählen",
@@ -450,6 +496,8 @@ export default {
             "starter_number_abbr": "St.Nr.",
             "status": "Status",
             "name": "Name",
+            "rank": "Platzierung",
+            "hint": "Hinweis",
             "registered_at": "Anmeldedatum",
             "contact": "Kontakt",
             "participation_restrictions": "Teilnahmebeschränkungen",
@@ -490,7 +538,8 @@ export default {
             "child_event_of_event": "Teilevent von {event}"
         },
         "participation_states": {
-            "registered": "Angemeldet"
+            "registered": "Angemeldet",
+            "ranked": "Platziert"
         },
         "passwords": {
             "password": "Passwords must be at least six characters and match the confirmation.",
@@ -637,31 +686,57 @@ export default {
                     "required": "Gebe an, wann das Event enden soll."
                 },
                 "restr_registered": "Melde dich an, um an diesem Event teilzunehmen.",
+                "restr_athlete": "Du musst als Athlet angemeldet sein, um an diesem Event teilzunehmen.",
+                "restr_register_date": "Du kannst dich für dieses Event noch nicht anmelden. Weitere Information zum Anmeldestart des Events erhälst du bei den Teilnahmeklassen des Events.",
+                "restr_unregister_date": "Der Anmeldezeitraum dieses Events ist bereits abgelaufen.",
+                "restr_participation_classes": "Du kannst an diesem Event nicht teilnehmen, da keine Teilnahmeklasse existiert, in der du dich anmelden kannst.",
+                "restr_active": "Das Event ist momentan aktiv.",
+                "restr_finished": "Das Event ist bereits vorbei.",
                 "participate": {
-                    "restr_registration_paused": "Sorry, die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.",
-                    "restr_limit": "Sorry, diese Teilnahmeklasse ist bereits voll.",
-                    "restr_birth_date_min": "Sorry, für diese Event Kategorie bist du zu jung.",
-                    "restr_birth_date_max": "Sorry, für diese Event Kategorie bist du zu alt.",
-                    "restr_gender_female": "Sorry, nur Frauen dürfen an dieser Kategorie teilnehmen.",
-                    "restr_gender_male": "Sorry, nur Männer dürfen an dieser Kategorie teilnehmen.",
-                    "restr_label_id": "Sorry, für diese Event Kategorie brauchst du das Label {label}.",
-                    "restr_club_id": "Sorry, für diese Event Kategorie musst du Mitglied in dem Club {club} sein.",
-                    "restr_country": "Sorry, für diese Event Kategorie musst du aus {country} kommen.",
-                    "restr_city": "Sorry, für diese Event Kategorie musst du aus der Stadt {country} kommen.",
-                    "multiple_starts_this": "Sorry, um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Kategorie starten.",
-                    "multiple_starts_other": "Sorry, du bist bereits in einer Kategorie angemeldet, die einen weiteren Start in dieser Kategorie nicht erlaubt.",
-                    "club_participants_limit": "Sorry, es ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.",
+                    "restr_registration_paused": "Die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.",
+                    "restr_limit": "Die Teilnahmeklasse ist bereits voll. Eine Anmeldung ist nicht mehr möglich.",
+                    "restr_birth_date_min": "Für diese Teilnahmeklasse bist du zu jung.",
+                    "restr_birth_date_max": "Für diese Teilnahmeklasse bist du zu alt.",
+                    "restr_gender_female": "Nur Frauen dürfen in dieser Teilnahmeklasse teilnehmen.",
+                    "restr_gender_male": "Nur Männer dürfen in dieser Teilnahmeklasse teilnehmen.",
+                    "restr_label_id": "Für diese Teilnahmeklasse brauchst du das Label {label}.",
+                    "restr_club_id": "Für diese Teilnahmeklasse musst du Mitglied in dem Club {club} sein.",
+                    "restr_country": "Für diese Teilnahmeklasse musst du aus {country} kommen.",
+                    "restr_city": "Für diese Teilnahmeklasse musst du aus der Stadt {country} kommen.",
+                    "multiple_starts_this": "Um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Teilnahmeklasse starten.",
+                    "multiple_starts_other": "Du bist bereits in einer Teilnahmeklasse angemeldet, die einen weiteren Start in dieser Teilnahmeklasse nicht erlaubt.",
+                    "club_participants_limit": "Ees ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.",
                     "restr_creator": "Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber daran teilnehmen.",
-                    "already_registered": "Du bist für das Event in dieser Kategorie bereits registriert.",
-                    "restr_registered": "Melde dich an, um in dieser Klasse teilzunehmen."
+                    "already_registered": "Du bist für das Event in dieser Teilnahmeklasse bereits registriert.",
+                    "restr_registered": "Melde dich an, um in dieser Teilnahmeklasse teilzunehmen.",
+                    "restr_athlete": "Du musst als Athlet angemeldet sein, um in dieser Teilnahmeklasse teilzunehmen.",
+                    "restr_register_date": "Du kannst dich erst ab dem {date} um {time} Uhr in dieser Teilnahmeklasse anmelden.",
+                    "restr_unregister_date": "Du konntest dich nur bis zum {date} um {time} Uhr in dieser Teilnahmeklasse anmelden."
                 },
                 "visit": {
-                    "restr_registration_paused": "Sorry, die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.",
-                    "restr_limit": "Sorry, die Tickets für diese Besucherklasse sind ausverkauft.",
-                    "restr_creator": "Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber ein Zuschauerticket erwerben.",
-                    "already_registered": "Du hast dich bereits erfolgreich als Zuschauer in dieser Kategorie angemeldet.",
-                    "restr_registered": "Melde dich an, um Tickets kaufen zu können."
+                    "restr_registration_paused": "Die Verkaufsphase wurde unterbrochen. Ein Erwerb ist erst wieder möglich, wenn der Veranstalter die Verkaufsphase wieder fortgesetzt hat.",
+                    "restr_limit": "Es wurden bereits alle Tickets für dieses Besucherpaket verkauft.",
+                    "restr_creator": "Du bist der Veranstalter von diesem Event und kannst deshalb dieses Besucherpaket nicht selber erwerben.",
+                    "already_registered": "Du hast dieses Besucherpaket bereits erworben.",
+                    "restr_registered": "Melde dich an, um dieses Besucherpaket zu erwerben.",
+                    "restr_athlete": "Du musst als Athlet angemeldet sein, um dieses Besucherpaket zu erwerben.",
+                    "restr_register_date": "Du kannst dieses Besucherpaket erst ab dem {date} um {time} Uhr erwerben.",
+                    "restr_unregister_date": "Du konntest dieses Besucherpaket nur bis zum {date} um {time} Uhr erwerben."
                 }
+            },
+            "credit_card": {
+                "invalid_number": "Die eingegebene Kartennummer ist ungültig.",
+                "invalid_expiry_month": "Der eingegebene Ablaufmonat ist ungültig.",
+                "invalid_expiry_year": "Der eingegebene Ablaufmonat ist ungültig.",
+                "invalid_cvc": "Die eingegebene Kartenprüfnummer ist ungültig.",
+                "invalid_swipe_data": "Der Swipe Daten der eingegebenen Karte ist ungültig.",
+                "incorrect_number": "Der eingegebene Kartennummer ist inkorrekt.",
+                "expired_card": "Die eingegebene Karte ist bereits abgelaufen.",
+                "incorrect_cvc": "Die eingegebene Kartenprüfnummer ist inkorrekt.",
+                "incorrect_zip": "Der eingegebene Postleitzahl stimmt nicht mit der Karte überein.",
+                "card_declined": "Die eingegebene Karte wurde abgelehnt.",
+                "missing": "Es existiert keine Karte in deinem Profil, mit welcher bezahlt werden kann.",
+                "processing_error": "Ein Fehler ist während der Verarbeitung aufgetreten. Bitte versuche es noch einmal."
             }
         }
     },

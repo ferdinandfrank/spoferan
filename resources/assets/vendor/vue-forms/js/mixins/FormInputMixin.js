@@ -154,16 +154,7 @@ module.exports = {
                 return;
             }
 
-            for (let index in this.parents) {
-                let parent = this.parents[index];
-                if (parent.hasOwnProperty("form")) {
-                    if (val == null || val == '') {
-                        delete parent.form[this.submitName];
-                    } else {
-                        parent.form[this.submitName] = val;
-                    }
-                }
-            }
+            this.setValueOnForm(val);
 
             window.eventHub.$emit(this.name + '-input-changed', val);
 
@@ -181,6 +172,19 @@ module.exports = {
     },
 
     methods: {
+
+        setValueOnForm: function (value) {
+            for (let index in this.parents) {
+                let parent = this.parents[index];
+                if (parent.hasOwnProperty("form")) {
+                    if (value == null || value == '') {
+                        delete parent.form[this.submitName];
+                    } else {
+                        parent.form[this.submitName] = value;
+                    }
+                }
+            }
+        },
 
         /**
          * Activates the inputs editing style.

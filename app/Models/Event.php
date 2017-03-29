@@ -294,7 +294,7 @@ class Event extends SlugModel {
      * @return bool
      */
     public function canParticipate(User $user = null) {
-        return $this->getParticipationRestriction($user)['error'] == false;
+        return empty($this->getParticipationRestriction($user));
     }
 
     /**
@@ -302,21 +302,48 @@ class Event extends SlugModel {
      *
      * @param User|null $user
      *
-     * @return array
+     * @return string
      */
     public function getParticipationRestriction(User $user = null) {
         if (empty($user)) {
             $user = Auth::user();
         }
 
-        $result = ['error' => true, 'msg' => null];
+        $now = Carbon::now();
 
-        if (empty($user) || !$user->isType(config('starmee.user_type.athlete'))) {
-            $result['msg'] = trans('validation.event.restr_registered');
+        $result = null;
 
-        } else {
-            $result['error'] = false;
+        if (empty($user)) {
+            $result = 'restr_registered';
+
+        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
+            $result = 'restr_athlete';
+
+        } elseif ($this->hasFinished()) {
+            $result = 'restr_finished';
+
+        } elseif ($this->isActive()) {
+            $result = 'restr_active';
+
+        } elseif ($this->getRegisterDate()->gt($now)) {
+            $result = 'restr_register_date';
+
+        } elseif ($this->getUnregisterDate()->lte($now)) {
+            $result = 'restr_unregister_date';
+
         }
+//        else {
+//            $events = $this->childEvents;
+//            $events->push($this);
+//            $availableClassCount = 0;
+//            foreach ($events as $event) {
+//                $availableClassCount += $event->participationClasses()->canParticipate($user->athlete)->count();
+//            }
+//
+//            if ($availableClassCount <= 0) {
+//                $result = 'restr_participation_classes';
+//            }
+//        }
 
         return $result;
     }

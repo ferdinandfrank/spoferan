@@ -74,7 +74,7 @@ class EventPolicy {
      * @return boolean
      */
     public function participate(User $user, Event $event) {
-        return $user->isType(config('starmee.user_type.athlete'));
+        return $user->isType(config('spoferan.user_type.athlete'));
     }
 
     /**
@@ -86,6 +86,6 @@ class EventPolicy {
      * @return boolean
      */
     public function visit(User $user, Event $event) {
-        return $user->isType(config('starmee.user_type.athlete'));
+        return $user->isType(config('spoferan.user_type.athlete'));
     }
 }

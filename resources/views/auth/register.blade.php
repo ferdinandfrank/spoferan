@@ -9,24 +9,24 @@
                        class="card-content"
                        redirect="{{ route('login') }}">
                 <div class="columns is-multiline">
-                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-6">
+                    <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-6">
                         <form-input size="large"
                                     name="first_name" :max-length="{{ config('validation.athlete.first_name.max') }}"
                                     :required="true"></form-input>
                     </div>
-                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-6">
+                    <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-6">
                         <form-input size="large"
                                     name="last_name" :max-length="{{ config('validation.athlete.last_name.max') }}"
                                     :required="true"></form-input>
                     </div>
-                    <div v-if="userType == {{ config('starmee.user_type.athlete') }}" class="column is-12">
+                    <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-12">
                         <form-select size="large" name="gender"
                                      :required="true">
                             <option value="m">{{ trans('label.male') }}</option>
                             <option value="w">{{ trans('label.female') }}</option>
                         </form-select>
                     </div>
-                    <div v-if="userType == {{ config('starmee.user_type.organizer') }}" class="column is-12">
+                    <div v-if="userType == {{ config('spoferan.user_type.organizer') }}" class="column is-12">
                         <form-input size="large" name="name"
                                     :max-length="{{ config('validation.organizer.name.max') }}"
                                     :required="true"></form-input>
@@ -75,7 +75,7 @@
             },
             computed: {
                 actionText: function () {
-                    return this.userType == '{{ config('starmee.user_type.organizer') }}' ? '{{ trans('action.register_as_organizer') }}' : '{{ trans('action.register_as_athlete') }}';
+                    return this.userType == '{{ config('spoferan.user_type.organizer') }}' ? '{{ trans('action.register_as_organizer') }}' : '{{ trans('action.register_as_athlete') }}';
                 }
             },
             created: function () {

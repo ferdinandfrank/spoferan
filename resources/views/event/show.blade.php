@@ -114,7 +114,7 @@
                             </div>
                             <div class="content">
                                 @if(count($event->participations))
-                                    @include('participation.table', ['participations' => $event->participations])
+                                    @include('participation.table', ['participations' => $event->participations, 'finished' => $participationRestriction == 'restr_finished'])
                                 @elseif(!count($event->childEvents))
                                     <p class="muted">{{ trans('info.event.no_participants') }}</p>
                                 @endif
@@ -122,7 +122,7 @@
                                 @foreach($event->childEvents as $childEvent)
                                     <h4>{{ trans('label.child_event') }}: {{ $childEvent->title }}</h4>
                                     <div class="m-b-40">
-                                        @include('participation.table', ['participations' => $childEvent->participations])
+                                        @include('participation.table', ['participations' => $childEvent->participations, 'finished' => $participationRestriction == 'restr_finished'])
                                     </div>
                                 @endforeach
                             </div>
@@ -150,21 +150,31 @@
                         <div class="theiaStickySidebar">
                             <div class="columns is-multiline">
                                 <div class="column is-12">
-                                    @if($event->canParticipate())
+                                    @if(empty($participationRestriction))
                                         <a href="{{ $event->isChild() ? route('participation.create', ['event' => $event->parentEvent]) : route('participation.create', ['event' => $event]) }}"
                                            class="button is-large is-success responsive">
-                                    <span class="icon is-small">
-                                        <icon icon="{{ config('icons.buy') }}"></icon>
-                                    </span>
+                                        <span class="icon is-small">
+                                            <icon icon="{{ config('icons.buy') }}"></icon>
+                                        </span>
                                             <span>{{ trans('action.participate') }}</span>
                                         </a>
-                                    @else
+                                    @elseif($participationRestriction == 'restr_registered')
                                         <a href="{{ route('login') }}" class="button is-large is-success responsive">
                                         <span class="icon is-small">
                                             <icon icon="{{ config('icons.user') }}"></icon>
                                         </span>
                                             <span>{{ trans('action.login') }}</span>
                                         </a>
+                                    @else
+                                        <p class="is-warning">{{ trans('label.hint') }}: {{ trans('validation.event.' . $participationRestriction) }}</p>
+                                        @if($participationRestriction == 'restr_finished')
+                                            <a href="#participants" data-scroll class="button is-large is-success responsive">
+                                                <span class="icon is-small">
+                                                    <icon icon="{{ config('icons.statistics') }}"></icon>
+                                                </span>
+                                                <span>{{ trans('action.show_results') }}</span>
+                                            </a>
+                                        @endif
                                     @endif
                                 </div>
                                 @if(Auth::check())

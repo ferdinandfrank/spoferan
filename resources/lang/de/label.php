@@ -35,6 +35,8 @@ return [
     'starter_number_abbr'        => 'St.Nr.',
     'status'                     => 'Status',
     'name'                       => 'Name',
+    'rank'                       => 'Platzierung',
+    'hint'                       => 'Hinweis',
     'registered_at'              => 'Anmeldedatum',
     'contact'                    => 'Kontakt',
     'participation_restrictions' => 'Teilnahmebeschränkungen',
@@ -59,5 +61,5 @@ return [
     'start_info'                 => 'Informationen zum Start',
     'finish_info'                => 'Informationen zum Ziel',
     'participation_overview'     => 'Teilnahmeübersicht',
-    'event_recommendations' => 'Empfehlungen für dein nächstes Event'
+    'event_recommendations'      => 'Empfehlungen für dein nächstes Event'
 ];

@@ -15,7 +15,7 @@ class CreateParticipationsTable extends Migration {
         Schema::create('participations', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('starter_number');
+            $table->string('starter_number', config('validation.athlete.starter_number.max'));
             $table->unsignedInteger('participation_class_id');
             $table->unsignedInteger('athlete_id');
             $table->unsignedInteger('participation_state_id')->default(1);

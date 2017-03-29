@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import dropdownMixin from './DropdownMixin';
+    import dropdownMixin from './mixins/DropdownMixin';
     export default {
         mixins: [dropdownMixin],
     }

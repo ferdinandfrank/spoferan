@@ -3,12 +3,12 @@
 @section('content')
     <div class="container">
         @component('components.breadcrumb')
-        <li><a href="#">{{ trans('label.events') }}</a></li>
-        @if($event->isChild())
-            <li><a href="{{ $event->parentEvent->getPath() }}">{{ $event->parentEvent->title }}</a></li>
-        @endif
-        <li><a href="{{ $event->getPath() }}">{{ $event->title }}</a></li>
-        <li>{{ trans('action.participate') }}</li>
+            <li><a href="#">{{ trans('label.events') }}</a></li>
+            @if($event->isChild())
+                <li><a href="{{ $event->parentEvent->getPath() }}">{{ $event->parentEvent->title }}</a></li>
+            @endif
+            <li><a href="{{ $event->getPath() }}">{{ $event->title }}</a></li>
+            <li>{{ trans('action.participate') }}</li>
         @endcomponent
         <div class="card">
             @include('event.header')
@@ -60,47 +60,120 @@
                         </section>
                         <section id="payment_overview" class="section wizard-section">
                             <div class="heading">
-                                <h2 class="title wizard-title">{{ trans('label.participation_overview') }}</h2>
+                                <h2 class="title wizard-title">{{ trans('action.confirm_and_pay_participation') }}</h2>
                                 <p class="subtitle">Hier findest du eine Übersicht über deine Teilnahme. Bitte
-                                    kontrolliere die Daten und klicke dann auf "Teilnahme jetzt bestätigen &
-                                    bezahlen".</p>
+                                    kontrolliere deine Teilnahmedaten, wähle eine Zahlungsmethode aus und klicke auf
+                                    "{{ trans('action.confirm_and_pay_participation') }}".</p>
                             </div>
                             <div class="content">
-                                <ul class="info-list">
-                                    <li><b>Ausgewähltes Event:</b>&nbsp;<span
-                                                id="selected-event-title">@{{ selectedEvent.title }}</span></li>
-                                    @if(count($event->childEvents))
-                                        <li><b>Ausgewählter Eventteil:</b>&nbsp;<span
-                                                    id="selected-event_part-title">@{{ selectedEventPart.title }}</span>
-                                        </li>
+                                <ajax-form ref="form" action="{{ route('participations.store') }}" method="POST"
+                                           alert-key="participation_payed" redirect="{{ $event->getPath() }}">
+                                    <h4>1. {{ trans('label.participation_overview') }}</h4>
+                                    <div class="columns">
+                                        <div class="column is-6">
+                                            <ul class="info-list">
+                                                <li><b>Ausgewähltes Event:</b>&nbsp;<span
+                                                            id="selected-event-title">@{{ selectedEvent.title }}</span>
+                                                </li>
+                                                @if(count($event->childEvents))
+                                                    <li><b>Ausgewählter Eventteil:</b>&nbsp;<span
+                                                                id="selected-event_part-title">@{{ selectedEventPart.title }}</span>
+                                                        &nbsp;<small v-on:click.prevent="setStep(0)"
+                                                                     class="is-secondary link">{{ trans('action.change') }}</small>
+                                                    </li>
+                                                @endif
+                                                <li><b>Ausgewählte Teilnahmeklasse:</b>&nbsp;<span
+                                                            id="selected-participation_class-title">@{{ selectedParticipationClass.title }}</span>
+                                                    &nbsp;<small v-on:click.prevent="setStep(1)"
+                                                                 class="is-secondary link">{{ trans('action.change') }}</small>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="column is-6">
+                                            <ul class="info-list">
+                                                <li>
+                                                    <b>Teilnehmer:</b>&nbsp;<span>{{ $loggedUser->getDisplayName() }}</span>
+                                                </li>
+                                                <li><b>{{ trans('label.starter_number') }}
+                                                        :</b>&nbsp;<span>{{ $loggedUser->athlete->starter_number }}</span>
+                                                </li>
+                                                <form-checkbox class="m-t-10" lang-key="participation"
+                                                               name="privacy"></form-checkbox>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    @if(count($loggedUser->paymentDetails))
+                                        <h4>2. Zahlungsmethode auswählen</h4>
+                                        <div class="columns">
+                                            <div class="column is-6">
+                                                <h5>Kreditkarten</h5>
+                                                <p class="no-data"
+                                                   v-if="!cards || !cards.length">{{ trans('info.payment.no_credit_cards') }}</p>
+                                                <form-radio v-for="(card, index) in cards" name="source"
+                                                            :value="card.id" :checked="index == 0">
+                                                    <div>
+                                                        <img :src="'/images/icons/credit_cards/' + toSnakeCase(card.brand) + '.png'"
+                                                             width="25"/>
+                                                        <b>@{{ card.brand }}</b>
+                                                        <small>endet auf @{{ card.last4 }}</small>
+                                                    </div>
+                                                    <small class="m-t-2 m-b-2">@{{ card.name }}</small>
+                                                    <small class="muted">gültig bis @{{ card.exp_month }}
+                                                        /@{{ card.exp_year }}</small>
+                                                </form-radio>
+
+                                                <a class="button is-small" v-on:click="showAddCCForm()">
+                                            <span class="icon is-small">
+                                                <icon icon="{{ config('icons.add') }}"></icon>
+                                            </span>
+                                                    <span>{{ trans('action.add_credit_card') }}</span>
+                                                </a>
+                                            </div>
+                                            <div class="column is-6">
+                                                <h5>Bankeinzugskonten</h5>
+                                                <p class="no-data"
+                                                   v-if="!bankAccounts || !bankAccounts.length">{{ trans('info.payment.no_bank_accounts') }}</p>
+                                                <form-radio v-for="(bankAccount, index) in bankAccounts" name="source"
+                                                            :value="bankAccount.id" :checked="index == 0">
+                                                    <div>
+                                                        <b>Bankeinzugskonto</b>
+                                                        <small>endet auf @{{ bankAccount.last4 }}</small>
+                                                    </div>
+                                                    <small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>
+                                                </form-radio>
+
+                                                <a class="button is-small" v-on:click="showAddBAForm()">
+                                            <span class="icon is-small">
+                                                <icon icon="{{ config('icons.add') }}"></icon>
+                                            </span>
+                                                    <span>{{ trans('action.add_bank_account') }}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <hr>
                                     @endif
-                                    <li><b>Ausgewählte Teilnahmeklasse:</b>&nbsp;<span
-                                                id="selected-participation_class-title">@{{ selectedParticipationClass.title }}</span>
-                                    </li>
-                                </ul>
-                                <hr>
-                                <div class="flex-end">
-                                    <p>Gesamtpreis inkl. Mwst.</p>
-                                    <h2>€ @{{ selectedParticipationClass.entry_fee }}</h2>
-                                </div>
-                                <div class="center m-t-50">
-                                    <stripe-form ref="stripe" action="/participations" method="POST"
-                                                 :direct-submit="{{ empty(Auth::user()->paymentDetails) ? 'false' : 'true' }}"
-                                                 alert-key="participation_payed" redirect="{{ $event->getPath() }}">
+                                    <div class="flex-end">
+                                        <p>Gesamtpreis inkl. Mwst.</p>
+                                        <h2>€ @{{ selectedParticipationClass.entry_fee }}</h2>
+                                    </div>
+                                    <div class="center m-t-50">
                                         <hidden-input name="participation_class_id"
                                                       v-model="selectedParticipationClass.id"></hidden-input>
-                                        <button type="submit" class="button is-success is-medium">
+                                        <button type="submit" class="button is-success is-medium" :disabled="!valid">
                                                 <span>
                                                 <span class="icon is-small">
                                                     <icon icon="{{ config('icons.check') }}"></icon>
                                                 </span>
-                                                <span>Teilnahme jetzt bestätigen & bezahlen</span>
-                                                    </span>
+                                                <span>{{ trans('action.confirm_and_pay_participation') }}</span>
+                                                </span>
                                         </button>
-                                    </stripe-form>
-
-                                </div>
-
+                                        <p class="no-data is-warning"
+                                           v-if="!valid">{{ trans('info.payment.no_payment_method') }}</p>
+                                    </div>
+                                </ajax-form>
                             </div>
                         </section>
                     </wizard>
@@ -108,6 +181,79 @@
             </div>
         </div>
     </div>
+
+    <modal-form ref="addCCForm" action="{{ route('users.payment_details.store', $loggedUser->getKey()) }}"
+                :labels="{save: '{{ trans('action.add_credit_card') }}'}" title="{{ trans('action.add_credit_card') }}"
+                alert-key="credit_card" callback-name="addCreditCardResponse" :reset="true" method="POST">
+        <p>Spoferan akzeptiert die folgenden Kreditkarten:<br/>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/visa.png') }}" width="40"/>
+                <span class="tooltip-text">Visa</span>
+            </span>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/mastercard.png') }}" width="40"/>
+                <span class="tooltip-text">MasterCard</span>
+            </span>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/jcb.png') }}" width="40"/>
+                <span class="tooltip-text">JCB</span>
+            </span>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/discover.png') }}" width="40"/>
+                <span class="tooltip-text">Discover</span>
+            </span>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/diners.png') }}" width="40"/>
+                <span class="tooltip-text">Diners</span>
+            </span>
+            <span class="tooltip tooltip-bottom">
+                <img src="{{ asset('images/icons/credit_cards/american_express.png') }}" width="40"/>
+                <span class="tooltip-text">AmericanExpress</span>
+            </span>
+        </p>
+        <hr/>
+        <div class="columns is-multiline">
+            <hidden-input name="type" value="card"></hidden-input>
+            <div class="column is-6">
+                <form-input lang-key="credit_card" name="number" :required="true"></form-input>
+            </div>
+            <div class="column is-6">
+                <form-input lang-key="credit_card" name="name" :required="true"></form-input>
+            </div>
+            <div class="column is-4">
+                <form-select lang-key="credit_card" name="exp_month" :required="true">
+                    @for($i = 1; $i < 13; $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </form-select>
+            </div>
+            <div class="column is-4">
+                <form-select lang-key="credit_card" name="exp_year" :required="true">
+                    @for($i = $now->year; $i < $now->year + 10; $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </form-select>
+            </div>
+            <div class="column is-4">
+                <form-input lang-key="credit_card" type="number" name="cvc" :required="true"></form-input>
+            </div>
+        </div>
+    </modal-form>
+
+    <modal-form ref="addBAForm" action="{{ route('users.payment_details.store', $loggedUser->getKey()) }}"
+                :labels="{save: '{{ trans('action.add_bank_account') }}'}"
+                title="{{ trans('action.add_bank_account') }}" alert-key="bank_account"
+                callback-name="addBankAccountResponse" :reset="true" method="POST">
+        <div class="columns is-multiline">
+            <hidden-input name="type" value="sepa_debit"></hidden-input>
+            <div class="column is-6">
+                <form-input lang-key="bank_account" name="iban" :required="true"></form-input>
+            </div>
+            <div class="column is-6">
+                <form-input lang-key="bank_account" name="name" :required="true"></form-input>
+            </div>
+        </div>
+    </modal-form>
 
 @endsection
 
@@ -120,24 +266,40 @@
 
             data() {
                 return {
+                    form: null,
+                    valid: false,
                     wizard: null,
-                    stripe: null,
                     selectedEvent: <?php echo $event; ?>,
                     selectedEventPart: <?php echo $selectedEventPart ?? '{}'; ?>,
                     selectedParticipationClass: <?php echo $selectedParticipationClass ?? '{}'; ?>,
+                    cards: <?php echo json_encode($loggedUser->paymentDetails->getCards()['data']); ?>,
+                    bankAccounts: <?php echo json_encode($loggedUser->paymentDetails->getBankAccounts()['data']); ?>
                 }
             },
 
             mounted: function () {
                 this.$nextTick(function () {
                     this.wizard = this.$refs.wizard;
+                    this.form = this.$refs.form;
+                    this.valid = !!this.form.form.source;
 
-                    this.$refs.stripe.stripeData = {
-                        image: this.selectedEvent.sport_type.icon,
-                        name: this.selectedEvent.title,
-                        description: this.selectedEventPart.title ? this.selectedEventPart.title + ": " + this.selectedParticipationClass.title : this.selectedParticipationClass.title,
-                        amount: this.selectedParticipationClass.price
-                    };
+                    window.eventHub.$on('addCreditCardResponse', (success, response) => {
+                        if (success) {
+                            this.$refs.addCCForm.hide();
+                            this.cards.push(response);
+                        }
+                    });
+
+                    window.eventHub.$on('addBankAccountResponse', (success, response) => {
+                        if (success) {
+                            this.$refs.addBAForm.hide();
+                            this.bankAccounts.push(response);
+                        }
+                    });
+
+                    window.eventHub.$on('source-input-changed', (value) => {
+                        this.valid = !!value;
+                    });
 
                     window.eventHub.$on('wizard_step_changed', (step, lastStep) => {
 
@@ -156,12 +318,6 @@
                                 $('#' + response.slug).children().addClass('selected');
 
                                 this.selectedEventPart = response;
-                                this.$refs.stripe.stripeData = {
-                                    image: this.selectedEvent.sport_type.icon,
-                                    name: this.selectedEvent.title,
-                                    description: '',
-                                    amount: 0
-                                };
                             });
                         } else if (lastStep.index == 1 && lastStep.index < step.index && lastStep.selectedKey != this.selectedParticipationClass.id) {
                             sendRequest('/api/participation-classes/' + lastStep.selectedKey, 'get', null, (response) => {
@@ -173,8 +329,6 @@
                                 $('#' + response.id).children().addClass('selected');
 
                                 this.selectedParticipationClass = response;
-                                this.$refs.stripe.stripeData.amount = this.selectedParticipationClass.price;
-                                this.$refs.stripe.stripeData.description = this.selectedEventPart.title ? this.selectedEventPart.title + ": " + this.selectedParticipationClass.title : this.selectedParticipationClass.title;
                             });
                         }
 
@@ -191,6 +345,18 @@
                 select: function (selectedKey, selectedTitle) {
                     this.wizard.select(selectedKey, selectedTitle);
                 },
+                setStep: function (stepIndex) {
+                    this.wizard.setStep(stepIndex);
+                },
+                showAddCCForm: function () {
+                    this.$refs.addCCForm.show();
+                },
+                showAddBAForm: function () {
+                    this.$refs.addBAForm.show();
+                },
+                toSnakeCase: function (string) {
+                    return toSnakeCase(string);
+                }
             }
         });
     });

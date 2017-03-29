@@ -22,6 +22,7 @@ class CreateAthletesTable extends Migration {
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['m', 'w'])->default('m');
             $table->unsignedInteger('sport_type_id')->default('1');
+            $table->string('starter_number', config('validation.athlete.starter_number.max'))->unique();
 
             $table->foreign('user_id')
                   ->references('id')

@@ -35,7 +35,7 @@ trait Searchable {
                     }
                 }
             } else {
-                $query->searchAll($searchQuery);
+                $query->searchAll($searchQuery, 'or');
             }
 
         }
@@ -44,7 +44,8 @@ trait Searchable {
     }
 
     /**
-     * Scopes a query by a search query to search on all searchable columns.
+     * Scopes a query by a search query to search on all searchable columns, that specify an
+     * equal or like comparison.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param  string                               $searchQuery
@@ -54,7 +55,7 @@ trait Searchable {
      */
     public function scopeSearchAll($query, $searchQuery, $boolean = 'and') {
         foreach ($this->searchable as $searchable => $operator) {
-            $query->searchColumn($searchable, $searchQuery, $boolean);
+            $query->searchColumn($searchable, $searchQuery, $boolean, ['LIKE', '=']);
         }
 
         return $query;
@@ -67,10 +68,11 @@ trait Searchable {
      * @param                                       $key
      * @param                                       $value
      * @param string                                $boolean
+     * @param array                                 $columnRestriction
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSearchColumn($query, $key, $value, $boolean = 'and') {
+    public function scopeSearchColumn($query, $key, $value, $boolean = 'and', $columnRestriction = []) {
         $operator = $this->searchable[$key];
 
         if (is_array($operator)) {
@@ -78,25 +80,27 @@ trait Searchable {
             $operator = $operator[$key];
         }
 
-        if ($operator == 'LIKE') {
-            $query->where($key, 'LIKE', "%$value%", $boolean);
-        } elseif (method_exists($this, $operator)) {
-            if ($boolean == 'and') {
-                $query->whereHas($operator, function ($subQuery) use ($value) {
-                    $subQuery->findByKey($value);
-                });
+        if (empty($columnRestriction) || in_array($operator, $columnRestriction)) {
+            if ($operator == 'LIKE') {
+                $query->where($key, 'LIKE', "%$value%", $boolean);
+            } elseif (method_exists($this, $operator)) {
+                if ($boolean == 'and') {
+                    $query->whereHas($operator, function ($subQuery) use ($value) {
+                        $subQuery->findByKey($value);
+                    });
+                } else {
+                    $query->orWhereHas($operator, function ($subQuery) use ($value) {
+                        $subQuery->findByKey($value);
+                    });
+                }
+            } elseif (class_exists($operator)) {
+                $slugModel = (new $operator())::findByKey($value)->first();
+                if ($slugModel) {
+                    $query->where($key, '=', $slugModel->getKey(), $boolean);
+                }
             } else {
-                $query->orWhereHas($operator, function ($subQuery) use ($value) {
-                    $subQuery->findByKey($value);
-                });
+                $query->where($key, $operator, $value, $boolean);
             }
-        } elseif (class_exists($operator)) {
-            $slugModel = (new $operator())::findByKey($value)->first();
-            if ($slugModel) {
-                $query->where($key, '=', $slugModel->getKey(), $boolean);
-            }
-        } else {
-            $query->where($key, $operator, $value, $boolean);
         }
 
         return $query;

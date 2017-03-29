@@ -147,7 +147,13 @@ return [
             'required' => 'Gebe an, wann das Event enden soll.'
         ],
 
-        'restr_registered' => 'Melde dich an, um an diesem Event teilzunehmen.',
+        'restr_registered'            => 'Melde dich an, um an diesem Event teilzunehmen.',
+        'restr_athlete'               => 'Du musst als Athlet angemeldet sein, um an diesem Event teilzunehmen.',
+        'restr_register_date'         => 'Du kannst dich für dieses Event noch nicht anmelden. Weitere Information zum Anmeldestart des Events erhälst du bei den Teilnahmeklassen des Events.',
+        'restr_unregister_date'       => 'Der Anmeldezeitraum dieses Events ist bereits abgelaufen.',
+        'restr_participation_classes' => 'Du kannst an diesem Event nicht teilnehmen, da keine Teilnahmeklasse existiert, in der du dich anmelden kannst.',
+        'restr_active'                => 'Das Event ist momentan aktiv.',
+        'restr_finished'              => 'Das Event ist bereits vorbei.',
 
         'participate' => [
             'restr_registration_paused' => 'Die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.',
@@ -171,15 +177,30 @@ return [
             'restr_unregister_date'     => 'Du konntest dich nur bis zum :date um :time Uhr in dieser Teilnahmeklasse anmelden.'
         ],
         'visit'       => [
-            'restr_registration_paused' => 'Die Registrierungsphase wurde unterbrochen. Eine Anmeldung ist erst wieder möglich, wenn der Veranstalter die Registrierungsphase wieder fortgesetzt hat.',
-            'restr_limit'               => 'Die Tickets für diese Besucherklasse sind bereits ausverkauft.',
-            'restr_creator'             => 'Du bist der Veranstalter von diesem Event und kannst deshalb nicht selber ein Zuschauerticket erwerben.',
-            'already_registered'        => 'Du hast dich bereits erfolgreich als Zuschauer in dieser Besucherklasse angemeldet.',
-            'restr_registered'          => 'Melde dich an, um für diese Besucherklasse Tickets kaufen zu können.',
-            'restr_athlete'             => 'Du musst als Athlet angemeldet sein, um für diese Besucherklasse Tickets kaufen zu können.',
-            'restr_register_date'       => 'Du kannst erst ab dem :date um :time Uhr in dieser Besucherklasse Tickets erwerben.',
-            'restr_unregister_date'     => 'Du konntest nur bis zum :date um :time Uhr in dieser Besucherklasse Tickets erwerben.'
+            'restr_registration_paused' => 'Die Verkaufsphase wurde unterbrochen. Ein Erwerb ist erst wieder möglich, wenn der Veranstalter die Verkaufsphase wieder fortgesetzt hat.',
+            'restr_limit'               => 'Es wurden bereits alle Tickets für dieses Besucherpaket verkauft.',
+            'restr_creator'             => 'Du bist der Veranstalter von diesem Event und kannst deshalb dieses Besucherpaket nicht selber erwerben.',
+            'already_registered'        => 'Du hast dieses Besucherpaket bereits erworben.',
+            'restr_registered'          => 'Melde dich an, um dieses Besucherpaket zu erwerben.',
+            'restr_athlete'             => 'Du musst als Athlet angemeldet sein, um dieses Besucherpaket zu erwerben.',
+            'restr_register_date'       => 'Du kannst dieses Besucherpaket erst ab dem :date um :time Uhr erwerben.',
+            'restr_unregister_date'     => 'Du konntest dieses Besucherpaket nur bis zum :date um :time Uhr erwerben.'
         ]
     ],
+
+    'credit_card' => [
+        'invalid_number'       => 'Die eingegebene Kartennummer ist ungültig.',
+        'invalid_expiry_month' => 'Der eingegebene Ablaufmonat ist ungültig.',
+        'invalid_expiry_year'  => 'Der eingegebene Ablaufmonat ist ungültig.',
+        'invalid_cvc'          => 'Die eingegebene Kartenprüfnummer ist ungültig.',
+        'invalid_swipe_data'   => 'Der Swipe Daten der eingegebenen Karte ist ungültig.',
+        'incorrect_number'     => 'Der eingegebene Kartennummer ist inkorrekt.',
+        'expired_card'         => 'Die eingegebene Karte ist bereits abgelaufen.',
+        'incorrect_cvc'        => 'Die eingegebene Kartenprüfnummer ist inkorrekt.',
+        'incorrect_zip'        => 'Der eingegebene Postleitzahl stimmt nicht mit der Karte überein.',
+        'card_declined'        => 'Die eingegebene Karte wurde abgelehnt.',
+        'missing'              => 'Es existiert keine Karte in deinem Profil, mit welcher bezahlt werden kann.',
+        'processing_error'     => 'Ein Fehler ist während der Verarbeitung aufgetreten. Bitte versuche es noch einmal.'
+    ]
 
 ];

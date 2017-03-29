@@ -11,6 +11,7 @@
  *  5. Checkbox
  *  6. Selects
  *  7. Switch
+ *  8. Radio
  */
 
 /*********************
@@ -666,5 +667,21 @@ select.form-control {
     100% {
         padding-right: 0;
         left: 2px;
+    }
+}
+
+/*********************
+  8. Radio
+**********************/
+.radio-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+
+    label {
+        margin-left: 10px;
+        line-height: 0.9rem;
+        display: flex;
+        flex-direction: column;
     }
 }

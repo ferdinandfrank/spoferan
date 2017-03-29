@@ -29,7 +29,7 @@ class FakerSeeder extends Seeder {
         });
 
         $user = factory(App\Models\User::class)->create([
-            'user_type' => config('starmee.user_type.athlete'),
+            'user_type' => config('spoferan.user_type.athlete'),
             'email'     => 'ferdinand-frank@web.de',
             'password'  => 'password',
             'verified'  => true,
@@ -49,7 +49,7 @@ class FakerSeeder extends Seeder {
 
 
         $organizerUser = factory(App\Models\User::class)->create([
-            'user_type' => config('starmee.user_type.organizer'),
+            'user_type' => config('spoferan.user_type.organizer'),
             'email'     => 'organizer@mail.de',
             'password'  => 'password',
             'verified'  => true
@@ -210,7 +210,7 @@ class FakerSeeder extends Seeder {
         $start_date = $event->start_date;
         $end_date = $event->end_date;
 
-        $register_date = Carbon\Carbon::instance($start_date)->subMonths(rand(12, 1));
+        $register_date = Carbon\Carbon::instance($start_date)->subMonths(rand(1, 11));
         $unregister_date = Carbon\Carbon::instance($start_date)->subDays(rand(2, 27));
 
         $restr_birth_date_min = $event->start_date->subYears(18);

@@ -12,6 +12,7 @@
  *  6. Menues
  *  7. Wizard
  *  8. Slider
+ *  9. Modals
  */
 
 /*********************
@@ -247,4 +248,19 @@ time.calendar {
             margin-right: 0;
         }
     }
+}
+
+/*********************
+  9. Modals
+**********************/
+.modal-card-head, .modal-card-foot {
+    background-color: $grey-transparent;
+}
+
+.modal-card-title {
+    margin-bottom: 0 !important;
+}
+
+.modal-card-foot {
+    justify-content: flex-end;
 }

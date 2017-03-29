@@ -28,6 +28,9 @@ Vue.component('wizard', wizard);
 import stripeForm from "./components/StripeForm.vue";
 Vue.component('stripe-form', stripeForm);
 
+import modalForm from "./components/ModalForm.vue";
+Vue.component('modal-form', modalForm);
+
 import slider from './components/Slider.vue';
 Vue.component('slider', slider);
 

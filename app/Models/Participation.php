@@ -83,20 +83,5 @@ class Participation extends BaseModel {
         return $this->belongsTo(ParticipationState::class, 'participation_state_id');
     }
 
-    /**
-     * Generates a participation starter number for the specified participation class.
-     *
-     * @param ParticipationClass $class
-     *
-     * @return int
-     */
-    public static function generateStarterNumber(ParticipationClass $class) {
-        if (count($class->participations)) {
-            return $class->participations->max('starter_number') + 1;
-        }
-
-        return 1;
-    }
-
 }
 

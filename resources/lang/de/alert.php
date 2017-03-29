@@ -65,4 +65,17 @@ return [
         ]
     ],
 
+    'credit_card' => [
+        'post' => [
+            'title'   => 'Kreditkarte hinzugefügt',
+            'content' => 'Die Kreditkarte wurde deinem Account erfolgreich hinzugefügt.'
+        ]
+    ],
+
+    'bank_account' => [
+        'post' => [
+            'title'   => 'Bankeinzugskonto hinzugefügt',
+            'content' => 'Das Bankeinzugskonto wurde deinem Account erfolgreich hinzugefügt.'
+        ]
+    ],
 ];

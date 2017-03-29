@@ -58,5 +58,8 @@ return [
     'phone'         => 'fa fa-fw fa-phone',
     'participate'   => 'fa fa-fw fa-users',
     'buy'           => 'fa fa-fw fa-shopping-cart',
-    'check'         => 'fa fa-fw fa-check'
+    'check'         => 'fa fa-fw fa-check',
+    'visa'          => 'fa fa-fw fa-cc-visa',
+    'mastercard'    => 'fa fa-fw fa-cc-mastercard',
+    'discover'      => 'fa fa-fw fa-cc-discover'
 ];

@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration {
             $table->string('email', config('validation.user.email.max'))->unique();
             $table->string('password', config('validation.user.password.max'));
             $table->string('avatar')->nullable();
-            $table->unsignedInteger('user_type')->default(config('starmee.user_type.athlete'));
+            $table->unsignedInteger('user_type')->default(config('spoferan.user_type.athlete'));
             $table->string('country', config('validation.user.country.max'))->nullable();
             $table->string('postcode', config('validation.user.postcode.max'))->nullable();
             $table->string('city', config('validation.user.city.max'))->nullable();

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\ConsoleLogger;
 use App\Models\Admin;
+use App\Models\PaymentDetails;
 use App\Models\Settings;
 use App\Models\User;
 use Artisan;
@@ -104,6 +105,7 @@ class Install extends Command {
         if ($this->confirm("Do you wish to setup the page? $extraConfirmInfo")
         ) {
             $this->saveOldData();
+            $this->resetStripeData();
             $this->setupDatabase();
             $this->setupPageInformation();
             $this->setupApplicationKey();
@@ -130,6 +132,13 @@ class Install extends Command {
             if (empty($this->admin)) {
                 $this->admin = User::with('admin')->first();
             }
+        }
+    }
+
+    private function resetStripeData() {
+        foreach (PaymentDetails::all() as $paymentDetails) {
+            $customer = \Stripe\Customer::retrieve($paymentDetails->stripe_id);
+            $customer->delete();
         }
     }
 
@@ -248,7 +257,7 @@ class Install extends Command {
             }
         } while ($invalidPassword);
 
-        $user = $this->createUser($email, $password, \Config::get('starmee.user_type.admin'));
+        $user = $this->createUser($email, $password, config('spoferan.user_type.admin'));
         $admin = $this->createAdmin($user, $firstName, $lastName);
         $this->logger->success("The admin $admin->display_name has been created.");
 

@@ -165,6 +165,15 @@ $orientations: (
     .p#{$key}-none {
         padding#{$orientation}: 0 !important;
     }
+    @for $i from 1 through 4 {
+        .m#{$key}-#{$i} {
+            margin#{$orientation}: 1px * $i !important;
+        }
+
+        .p#{$key}-#{$i} {
+            padding#{$orientation}: 1px * $i !important;
+        }
+    }
     @for $i from 1 through 10 {
         .m#{$key}-#{$i * 5} {
             margin#{$orientation}: 5px * $i !important;
