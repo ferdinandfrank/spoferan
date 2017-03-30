@@ -61,5 +61,14 @@ return [
     'check'         => 'fa fa-fw fa-check',
     'visa'          => 'fa fa-fw fa-cc-visa',
     'mastercard'    => 'fa fa-fw fa-cc-mastercard',
-    'discover'      => 'fa fa-fw fa-cc-discover'
+    'discover'      => 'fa fa-fw fa-cc-discover',
+    'gender'        => 'fa fa-fw fa-venus-mars',
+    'organization'  => 'fa fa-fw fa-sitemap',
+    'calendar'      => 'fa fa-fw fa-calendar',
+    'country'       => 'fa fa-fw fa-globe',
+    'city'          => 'fa fa-fw fa-map-signs',
+    'postcode'      => 'fa fa-fw fa-map-signs',
+    'state'         => 'fa fa-fw fa-map',
+    'sport_type'    => 'fa fa-fw fa-futbol-o',
+    'credit_card'   => 'fa fa-fw fa-credit-card',
 ];

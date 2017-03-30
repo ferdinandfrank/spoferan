@@ -1,39 +1,37 @@
 <template>
-    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'large' : size == 'large' }">
+<div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-icon': icon }">
         <input :id="name + '-input'"
                type="text"
                :name="name"
                v-model="submitValue"
-               class="form-control"
-               :class="icon ? 'has-addon' : ''"
-               :placeholder="showPlaceholder ? placeholder : ''"
+               :placeholder="label"
                :step="step"
                :disabled="disabled"
+               autocompletetype="cc-number"
+               x-autocompletetype="cc-number"
+               autocorrect="off" spellcheck="off" autocapitalize="off"
                ref="input"
                @focus="activate"
-               @blur="deactivate">
+               @blur="deactivate"
+               :title="label">
+
 
         <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
             <icon :icon="icon"></icon>
         </button>
-        <span v-if="icon && !addonSubmit" class="form-group-addon">
-            <icon :icon="icon"></icon>
-        </span>
 
-        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
-            <span>{{ label }}</span>
-            <span v-if="showHelp" class="tooltip">
-                <i @click="openHelp" class="fa fa-fw fa-question help"></i>
-                <span v-if="helpTooltip" class="tooltip-text">{{ helpTooltip }}</span>
-            </span>
-        </label>
+        <div v-if="icon && !addonSubmit" class="icon">
+            <icon :icon="icon"></icon>
+        </div>
+
+        <span class="info" v-if="labelMessage">{{ labelMessage }}</span>
+
         <span class="counter" :class="submitValue.length > maxLength ? 'error' : 'success'" v-if="showMaxLengthCounter">
             {{ submitValue.length + '/' + maxLength }}
         </span>
         <span class="counter" :class="submitValue.length < minLength ? 'error' : 'success'" v-if="showMinLengthCounter">
             {{ submitValue.length + '/' + minLength }}
         </span>
-        <slot></slot>
     </div>
 </template>
 

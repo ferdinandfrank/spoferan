@@ -18,39 +18,22 @@
                             <div class="columns is-multiline">
                                 <div class="column is-6">
                                     <div class="columns is-multiline">
-                                        <div class="column p-t-none p-b-none is-12">
-                                            <form-input name="search" value="{{ request('search') }}"></form-input>
+                                        <div class="column is-12">
+                                            <form-input icon="{{ config('icons.search') }}" name="search" value="{{ request('search') }}"></form-input>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-12">
-                                            <form-select name="sport_type" value="{{ request('sport_type') }}">
-                                                <option value>{{ trans('input.defaults.sport_type') }}</option>
+                                        <div class="column is-12">
+                                            <form-select icon="{{ config('icons.sport_type') }}" name="sport_type" value="{{ request('sport_type') }}">
                                                 @foreach(\App\Models\SportType::all() as $sportType)
                                                     <option value="{{ $sportType->getRouteKey() }}">{{ trans('sport_types.' . $sportType->label) }}</option>
                                                 @endforeach
                                             </form-select>
                                         </div>
-                                        {{--<div class="column p-t-none p-b-none is-6">--}}
-                                            {{--<form-select name="month" value="{{ request('month') }}">--}}
-                                                {{--<option value>{{ trans('input.defaults.month') }}</option>--}}
-                                                {{--@foreach(trans('date.month') as $index => $month)--}}
-                                                    {{--<option value="{{ $index }}">{{ $month }}</option>--}}
-                                                {{--@endforeach--}}
-                                            {{--</form-select>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="column p-t-none p-b-none is-6">--}}
-                                            {{--<form-select name="year" value="{{ request('year') }}">--}}
-                                                {{--<option value>{{ trans('input.defaults.year') }}</option>--}}
-                                                {{--@for($i = -5; $i < 5; $i++)--}}
-                                                    {{--<option value="{{ $now->year + $i }}">{{ $now->year + $i }}</option>--}}
-                                                {{--@endfor--}}
-                                            {{--</form-select>--}}
-                                        {{--</div>--}}
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-date-input name="date_interval_start"
+                                        <div class="column is-6">
+                                            <form-date-input icon="{{ config('icons.calendar') }}" name="date_interval_start"
                                                              value="{{ request('date_interval_start') }}"></form-date-input>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-date-input name="date_interval_end"
+                                        <div class="column is-6">
+                                            <form-date-input icon="{{ config('icons.calendar') }}" name="date_interval_end"
                                                              value="{{ request('date_interval_end') }}"></form-date-input>
                                         </div>
 
@@ -58,26 +41,24 @@
                                 </div>
                                 <div class="column is-6">
                                     <div class="columns is-multiline">
-                                        <div class="column p-t-none p-b-none is-12">
-                                            <form-select name="country" value="{{ request('country') }}">
-                                                <option value>{{ trans('input.defaults.country') }}</option>
+                                        <div class="column is-12">
+                                            <form-select icon="{{ config('icons.country') }}" name="country" value="{{ request('country') }}">
                                                 @foreach(Country::all() as $countryCode)
                                                     <option value="{{ $countryCode }}">{{ trans('countries.' . $countryCode) }}</option>
                                                 @endforeach
                                             </form-select>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-12">
-                                            <form-select name="state" value="{{ request('state') }}">
-                                                <option value>{{ trans('input.defaults.state') }}</option>
+                                        <div class="column is-12">
+                                            <form-select icon="{{ config('icons.state') }}" name="state" value="{{ request('state') }}">
                                                 <option v-for="state in states"
                                                         :value="state.code">@{{ state.name }}</option>
                                             </form-select>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-input name="city" value="{{ request('city') }}"></form-input>
+                                        <div class="column is-6">
+                                            <form-input icon="{{ config('icons.city') }}" name="city" value="{{ request('city') }}"></form-input>
                                         </div>
-                                        <div class="column p-t-none p-b-none is-6">
-                                            <form-input name="postcode" value="{{ request('postcode') }}"></form-input>
+                                        <div class="column is-6">
+                                            <form-input icon="{{ config('icons.postcode') }}" name="postcode" value="{{ request('postcode') }}"></form-input>
                                         </div>
 
                                     </div>

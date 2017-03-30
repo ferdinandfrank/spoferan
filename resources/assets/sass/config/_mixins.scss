@@ -22,7 +22,7 @@ $mobile: "screen and (max-width: #{$tablet} - 1px)" !default;
     user-select: $select;
 }
 
-@mixin box-shadow($shadow) {
+@mixin box-shadow($shadow...) {
     -webkit-box-shadow: $shadow;
     box-shadow: $shadow;
 }
@@ -32,7 +32,7 @@ $mobile: "screen and (max-width: #{$tablet} - 1px)" !default;
     touch-action: $action;
 }
 
-@mixin transition($transition) {
+@mixin transition($transition...) {
     -webkit-transition: $transition;
     -o-transition: $transition;
     -ms-transition: $transition;

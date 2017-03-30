@@ -183,59 +183,57 @@
     </div>
 
     <modal-form ref="addCCForm" action="{{ route('users.payment_details.store', $loggedUser->getKey()) }}"
+                id="addCCForm"
                 :labels="{save: '{{ trans('action.add_credit_card') }}'}" title="{{ trans('action.add_credit_card') }}"
                 alert-key="credit_card" callback-name="addCreditCardResponse" :reset="true" method="POST">
-        <p>Spoferan akzeptiert die folgenden Kreditkarten:<br/>
-            <span class="tooltip tooltip-bottom">
+        <div class="columns">
+            <div class="column">
+                <p>Spoferan akzeptiert die folgenden Kreditkarten:</p>
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/visa.png') }}" width="40"/>
                 <span class="tooltip-text">Visa</span>
             </span>
-            <span class="tooltip tooltip-bottom">
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/mastercard.png') }}" width="40"/>
                 <span class="tooltip-text">MasterCard</span>
             </span>
-            <span class="tooltip tooltip-bottom">
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/jcb.png') }}" width="40"/>
                 <span class="tooltip-text">JCB</span>
             </span>
-            <span class="tooltip tooltip-bottom">
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/discover.png') }}" width="40"/>
                 <span class="tooltip-text">Discover</span>
             </span>
-            <span class="tooltip tooltip-bottom">
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/diners.png') }}" width="40"/>
                 <span class="tooltip-text">Diners</span>
             </span>
-            <span class="tooltip tooltip-bottom">
+                <span class="tooltip tooltip-bottom">
                 <img src="{{ asset('images/icons/credit_cards/american_express.png') }}" width="40"/>
                 <span class="tooltip-text">AmericanExpress</span>
             </span>
-        </p>
+            </div>
+            <div class="column">
+                <p>Deine ausgewählte Karte:</p>
+                <div id="cc-wrapper"></div>
+            </div>
+        </div>
+
         <hr/>
         <div class="columns is-multiline">
             <hidden-input name="type" value="card"></hidden-input>
             <div class="column is-6">
-                <form-input lang-key="credit_card" name="number" :required="true"></form-input>
+                <form-input icon="{{ config('icons.credit_card') }}" lang-key="credit_card" name="number" :required="true"></form-input>
             </div>
             <div class="column is-6">
-                <form-input lang-key="credit_card" name="name" :required="true"></form-input>
+                <form-input icon="{{ config('icons.user') }}" lang-key="credit_card" name="name" :required="true"></form-input>
             </div>
-            <div class="column is-4">
-                <form-select lang-key="credit_card" name="exp_month" :required="true">
-                    @for($i = 1; $i < 13; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </form-select>
+            <div class="column is-6">
+                <form-input icon="{{ config('icons.calendar') }}" lang-key="credit_card" name="expiry" :required="true"></form-input>
             </div>
-            <div class="column is-4">
-                <form-select lang-key="credit_card" name="exp_year" :required="true">
-                    @for($i = $now->year; $i < $now->year + 10; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </form-select>
-            </div>
-            <div class="column is-4">
-                <form-input lang-key="credit_card" type="number" name="cvc" :required="true"></form-input>
+            <div class="column is-6">
+                <form-input icon="{{ config('icons.password') }}" lang-key="credit_card" type="number" name="cvc" :required="true"></form-input>
             </div>
         </div>
     </modal-form>
@@ -336,6 +334,36 @@
 
                     window.eventHub.$on('element_selected', (selectedKey, selectedTitle) => {
                         this.select(selectedKey, selectedTitle);
+                    });
+
+                    var card = new Card({
+                        form: '#addCCForm',
+                        // a selector or DOM element for the container
+                        // where you want the card to appear
+                        container: '#cc-wrapper', // *required*
+
+                        formatting: true, // optional - default true
+
+                        // Strings for translation - optional
+                        messages: {
+                            validDate: 'valid\ndate', // optional - default 'valid\nthru'
+                            monthYear: 'mm/yyyy', // optional - default 'month/year'
+                        },
+
+                        // Default placeholders for rendered fields - optional
+                        placeholders: {
+                            number: '•••• •••• •••• ••••',
+                            name: 'XXX XXX',
+                            expiry: '••/••',
+                            cvc: '•••'
+                        },
+
+                        masks: {
+                            cardNumber: '•' // optional - mask card number
+                        },
+
+                        // if true, will log helpful messages for setting up Card
+                        debug: false // optional - default false
                     });
 
                 })

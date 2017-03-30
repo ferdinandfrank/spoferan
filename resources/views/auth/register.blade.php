@@ -10,38 +10,37 @@
                        redirect="{{ route('login') }}">
                 <div class="columns is-multiline">
                     <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-6">
-                        <form-input size="large"
+                        <form-input icon="{{ config('icons.user') }}"
                                     name="first_name" :max-length="{{ config('validation.athlete.first_name.max') }}"
                                     :required="true"></form-input>
                     </div>
                     <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-6">
-                        <form-input size="large"
-                                    name="last_name" :max-length="{{ config('validation.athlete.last_name.max') }}"
+                        <form-input icon="{{ config('icons.user') }}"
+                                name="last_name" :max-length="{{ config('validation.athlete.last_name.max') }}"
                                     :required="true"></form-input>
                     </div>
                     <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-12">
-                        <form-select size="large" name="gender"
-                                     :required="true">
+                        <form-select icon="{{ config('icons.gender') }}" name="gender" :required="true">
                             <option value="m">{{ trans('label.male') }}</option>
                             <option value="w">{{ trans('label.female') }}</option>
                         </form-select>
                     </div>
                     <div v-if="userType == {{ config('spoferan.user_type.organizer') }}" class="column is-12">
-                        <form-input size="large" name="name"
+                        <form-input icon="{{ config('icons.organization') }}" name="name"
                                     :max-length="{{ config('validation.organizer.name.max') }}"
                                     :required="true"></form-input>
                     </div>
                     <div class="column is-12">
-                        <form-input size="large" type="email" name="email" :required="true"
+                        <form-input icon="{{ config('icons.email') }}" type="email" name="email" :required="true"
                                     :max-length="{{ config('validation.user.email.max') }}"></form-input>
                     </div>
                     <div class="column is-6">
-                        <form-input size="large" type="password" name="password" :required="true"
+                        <form-input icon="{{ config('icons.password') }}" type="password" name="password" :required="true"
                                     :max-length="{{ config('validation.user.password.max') }}"
                                     :min-length="{{ config('validation.user.password.min') }}"></form-input>
                     </div>
                     <div class="column is-6">
-                        <form-input size="large" type="password" name="password_confirmation" :confirmed="true"
+                        <form-input icon="{{ config('icons.password') }}" type="password" name="password_confirmation" :confirmed="true"
                                     :required="true"></form-input>
                     </div>
                     <div class="column is-12 center">

@@ -22,10 +22,10 @@
 $white: #fff !default;
 $white-smooth: #f2f2f2 !default;
 
-$grey: #555 !default;
+$grey: #676767 !default;
 $grey-dark: #1D2127 !default;
-$grey-medium: #808697 !default;
-$grey-light: #d8d8d8 !default;
+$grey-medium: #888 !default;
+$grey-light: #d9d9d9 !default;
 $grey-transparent: #eaeaea !default;
 $light: $grey-transparent !default;
 $hover: rgba(0, 0, 0, 0.04) !default;
@@ -142,9 +142,12 @@ $menu-item-arrow-color: $grey-light;
 /*********************
   6. Inputs
 **********************/
-$input-text-color: $grey;
-$input-border-color: $grey-transparent;
-$input-active-border-color: $secondary;
+$input-text-color: $grey-dark;
+$input-placeholder-color: $grey-medium;
+$input-icon-color: $grey-medium;
+$input-border-color: $grey-light;
+$input-focus-border-color: rgba($secondary, 0.6);
+
 $select-search-choice-background-color: $primary;
 $select-search-choice-text-color: $primary-invert;
 $input-background-color: $white;

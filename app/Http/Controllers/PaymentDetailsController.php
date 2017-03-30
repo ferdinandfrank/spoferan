@@ -48,7 +48,16 @@ class PaymentDetailsController extends Controller {
 
         try {
             if ($type == 'card') {
-                $source = $customer->sources->create(['source' => array_merge($data, ['object' => $type, 'name' => $name])]);
+                $expiry = explode(' / ', $data['expiry']);
+                unset($data['expiry']);
+                $source = $customer->sources->create([
+                    'source' => array_merge($data, [
+                        'object'    => $type,
+                        'name'      => $name,
+                        'exp_month' => $expiry[0],
+                        'exp_year'  => $expiry[1]
+                    ])
+                ]);
             } else {
                 Source::create([
                         "type"     => $type,

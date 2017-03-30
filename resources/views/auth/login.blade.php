@@ -6,8 +6,14 @@
             <h1 class="center">{{ trans('action.login') }}</h1>
             <hr class="light">
             <ajax-form :stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false" class="card-content" redirect="{{ route('index') }}">
-                <form-input size="large" type="email" name="email" :required="true"></form-input>
-                <form-input size="large" type="password" name="password" :required="true"></form-input>
+                <div class="columns is-multiline">
+                    <div class="column is-12">
+                        <form-input icon="{{ config('icons.email') }}" type="email" name="email" :required="true"></form-input>
+                    </div>
+                    <div class="column is-12">
+                        <form-input icon="{{ config('icons.password') }}" type="password" name="password" :required="true"></form-input>
+                    </div>
+                </div>
 
                 <form-checkbox name="remember" :value="true"></form-checkbox>
 

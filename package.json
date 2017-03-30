@@ -19,5 +19,8 @@
     "vue": "^2.1.10",
     "vue-i18n": "^4.7.1",
     "vue-resource": "^1.0.3"
+  },
+  "dependencies": {
+    "card": "^2.2.1"
   }
 }

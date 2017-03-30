@@ -5,7 +5,6 @@ return [
     'password'              => 'Passwort',
     'password_confirmation' => 'Passwort bestätigen',
     'email'                 => 'E-Mail-Adresse',
-    'gender'                => 'Geschlecht',
     'first_name'            => 'Vorname',
     'last_name'             => 'Nachname',
     'display_name'          => 'Anzeigename',
@@ -30,15 +29,14 @@ return [
     'date_interval_end'     => 'Bis zum',
 
     'credit_card' => [
-        'number'    => 'Kartennummer',
-        'name'      => 'Karteninhaber',
-        'exp_month' => 'Ablaufmonat',
-        'exp_year'  => 'Ablaufjahr',
-        'cvc'       => 'Kartenprüfnummer',
+        'number' => 'Kartennummer',
+        'name'   => 'Karteninhaber',
+        'cvc'    => 'Kartenprüfnummer',
+        'expiry' => 'Ablaufdatum',
     ],
 
     'bank_account' => [
-        'iban'      => 'IBAN',
+        'iban' => 'IBAN',
         'name' => 'Kontoinhaber',
     ],
 
@@ -48,12 +46,13 @@ return [
         'privacy' => 'Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar.'
     ],
 
-    'defaults' => [
+    'select' => [
         'country'    => 'Land wählen',
         'state'      => 'Bundesland wählen',
         'sport_type' => 'Sportart wählen',
         'month'      => 'Monat auswählen',
-        'year'       => 'Jahr auswählen'
+        'year'       => 'Jahr auswählen',
+        'gender'     => 'Geschlecht auswählen',
     ],
 
 ];

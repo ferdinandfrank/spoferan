@@ -18,6 +18,13 @@ $.ajaxSetup({
 require('./vendor/jquery-ui.min');
 
 /***********************************************************
+ Load CardJS
+ --------------------------
+
+ ************************************************************/
+window.card = require('card');
+
+/***********************************************************
  Load Moment
  --------------------------
  Moment is a javascript library that we can use to format dates

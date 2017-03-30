@@ -105,9 +105,6 @@ module.exports = {
                 label = titleCase(this.name);
             }
 
-            if (this.required) {
-                label += ' *';
-            }
             return label;
         },
 
@@ -159,7 +156,7 @@ module.exports = {
             window.eventHub.$emit(this.name + '-input-changed', val);
 
             // Only check input if the input wasn't cleared
-            if (val || this.active) {
+            if (val || val === '' || this.active) {
                 this.checkInput();
                 this.validateParentForm();
             }
@@ -177,7 +174,7 @@ module.exports = {
             for (let index in this.parents) {
                 let parent = this.parents[index];
                 if (parent.hasOwnProperty("form")) {
-                    if (value == null || value == '') {
+                    if (value === null || value === '') {
                         delete parent.form[this.submitName];
                     } else {
                         parent.form[this.submitName] = value;
@@ -239,7 +236,7 @@ module.exports = {
          * @returns {boolean}
          */
         checkRequired: function () {
-            if (!this.submitValue && this.required) {
+            if ((!this.submitValue || this.submitValue === '') && this.required) {
                 this.addError(this.requiredMessage);
                 return false;
             }

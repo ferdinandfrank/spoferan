@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'large' : size == 'large' }">
+    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-icon': icon }">
         <select :id="name + '-input'"
                 :name="submitName"
                 @focus="activate"
@@ -7,24 +7,21 @@
                 ref="input"
                 :disabled="disabled"
                 :multiple="multiple"
-                class="form-control">
+                :title="label">
+            <option value>{{ label }}</option>
             <slot></slot>
         </select>
 
         <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
             <icon :icon="icon"></icon>
         </button>
-        <span v-if="icon && !addonSubmit" class="form-group-addon">
-            <icon :icon="icon"></icon>
-        </span>
 
-        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
-            <span>{{ label }}</span>
-            <span v-if="showHelp" class="tooltip">
-                <i @click="openHelp" class="fa fa-fw fa-question help"></i>
-                <span v-if="helpTooltip" class="tooltip-text">{{ helpTooltip }}</span>
-            </span>
-        </label>
+        <div v-if="icon && !addonSubmit" class="icon">
+            <icon :icon="icon"></icon>
+        </div>
+
+        <span class="info" v-if="labelMessage">{{ labelMessage }}</span>
+
     </div>
 </template>
 
@@ -48,7 +45,8 @@
 
         data: function () {
             return {
-                input: ''
+                input: '',
+                hasChanged: false
             }
         },
 
@@ -64,7 +62,7 @@
 
             // States if a success layout shall be shown on the input.
             hasSuccess: function () {
-                if (this.valid && this.submitValue) {
+                if (this.valid && this.submitValue && this.hasChanged) {
                     return typeof this.submitValue === 'string' || typeof this.submitValue === 'number' || this.submitValue.length > 0
                 }
                 return false;
@@ -73,17 +71,30 @@
             // States if an error layout shall be shown on the input.
             hasError: function () {
                 return this.invalid && !this.valid;
-            }
+            },
+
+            // The label text of the input, based upon the property 'name' or the property 'langKey', if it is set.
+            label: function () {
+                let langKey = this.name;
+                if (this.langKey) {
+                    langKey = this.langKey + '.' + this.name;
+                }
+                langKey = 'input.select.' + langKey;
+                let label = this.$t(langKey);
+
+                if (label === langKey) {
+                    label = titleCase(this.name);
+                }
+
+                return label;
+            },
         },
 
         mounted() {
             this.$nextTick(function () {
-                let placeholder = this.showPlaceholder ? this.placeholder : null;
                 this.input = $(this.$refs.input);
 
-                this.input.select2({
-                    placeholder: placeholder
-                });
+                this.input.select2();
 
                 if (this.value != null) {
                     this.input.val(this.value);
@@ -91,6 +102,7 @@
 
                 if (!this.input.val()) {
                     this.input.val(this.input.find('option:first-child').val());
+                    $(this.$el).find('.select2-chosen').addClass('label');
                 }
 
                 this.submitValue = this.input.val();
@@ -99,6 +111,12 @@
 
                 this.input.on("change", () => {
                     this.submitValue = this.input.val();
+                    this.hasChanged = true;
+                    if (this.submitValue === '') {
+                        $(this.$el).find('.select2-chosen').addClass('label');
+                    } else {
+                        $(this.$el).find('.select2-chosen').removeClass('label');
+                    }
                 });
             });
         },

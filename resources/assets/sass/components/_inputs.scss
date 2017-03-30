@@ -5,13 +5,13 @@
  * Table of Contents:
  *
  *  1. Declarations
- *  2. Form Group
- *  3. Inputs
- *  4. Form Group Addon
- *  5. Checkbox
- *  6. Selects
- *  7. Switch
- *  8. Radio
+ *  2. Form Input
+ *  3. Placeholder
+ *  4. Checkbox
+ *  5. Selects
+ *  6. Switch
+ *  7. Radio
+ *  8. DateTimePicker
  */
 
 /*********************
@@ -19,13 +19,13 @@
 **********************/
 $form-group-margin: 15px 0;
 
-$input-height: 30px;
+$input-height: 35px;
+$input-padding-ver: 15px;
+$input-padding-left-icon: 40px;
 $input-border-width: 1px;
-$input-font-size: $font-size-small;
-$input-large-height: 40px;
-$input-large-font-size: $font-size;
+$input-font-size: $font-size;
 $input-counter-font-size: 0.7rem;
-$input-label-font-size: $font-size-small;
+$input-label-font-size: $font-size;
 $input-border-radius: 4px;
 $input-box-shadow: 0px 0px 2px 0px;
 
@@ -38,201 +38,126 @@ $select-search-choice-font-size: $font-size-x-small;
 
 
 /*********************
-  2. Form Group
+  2. Form Input
 **********************/
-.form-group {
+.form-input {
+    display: inline-block;
     position: relative;
-    display: flex;
-    margin: $form-group-margin;
+    width: 100%;
+    @include box-shadow(0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7));
 
-    * {
-        @include transition(border-color ease-in-out .15s);
-        @include transition(box-shadow ease-in-out .15s);
-    }
-
-    &:not(:first-of-type, .switch-group) {
-        margin-top: 25px;
-    }
-
-    &.center {
-        justify-content: center;
-    }
-
-    textarea {
-        min-height: $textarea-min-height;
-        ~ label {
-            top: -25px;
-
-            &:after {
-                bottom: -60px;
-                top: auto;
-            }
-        }
-    }
-
-    label {
-        color: gray;
-        position: absolute;
-        top: -1.4rem;
-        font-size: $input-label-font-size;
-        cursor: text;
-        transition: .2s ease-out;
+    input {
+        border: $input-border-width solid $input-border-color;
+        background: $input-background-color;
+        color: $input-text-color;
+        padding-left: $input-padding-ver;
+        padding-right: $input-padding-ver;
+        border-radius: $input-border-radius;
+        font-size: $input-font-size;
+        height: $input-height;
         width: 100%;
-        left: 0;
+        font-weight: 300;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        box-shadow: none;
+        box-sizing: border-box;
+        @include transition(border-color .15s linear,box-shadow .15s linear);
 
-        &:after {
-            display: block;
-            content: "";
-            position: absolute;
-            top: $input-height * 1.6;
-            opacity: 0;
-            white-space: nowrap;
-            transition: .2s opacity ease-out, .2s color ease-out;
-        }
-
-        .tooltip {
-            float: right;
-        }
-
-        .help {
-            cursor: pointer;
-            font-size: $input-label-font-size + 0.2rem;
-            color: $input-text-color;
-
-            &:hover {
-                color: $input-active-border-color;
-            }
+        &:focus {
+            outline: 0;
+            border-color: $input-focus-border-color;
+            @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(240,130,10,.6));
         }
     }
 
-    &.large {
-        label:after {
-            top: $input-large-height * 1.6;
-        }
+    .info {
+        font-size: $font-size-x-small;
+        position: absolute;
+        top: $input-height + 2px;
+        left: 0;
     }
 
     .counter {
-        position: absolute;
-        right: 0;
-        bottom: -20px;
-        font-size: $input-counter-font-size;
         display: none;
-        color: $success;
+        font-size: $font-size-x-small;
+        position: absolute;
+        top: $input-height + 2px;
+        right: 0;
     }
 
-    &.active {
-        label {
-            color: $info;
-        }
-
-        .counter {
-            display: block;
-        }
-
-        .form-control, .form-group-addon {
-            border-color: $input-active-border-color;
-            @include box-shadow($input-box-shadow $input-active-border-color);
-        }
+    // Only show counter when the input is focused or the input has an error due to the counter
+    input:focus~.counter, .counter.error {
+        display: block;
     }
 
-    &.has-success, &.has-error {
-        label:after {
-            content: attr(data-message);
-            opacity: 1;
-            font-size: $input-label-font-size - 0.1rem;
+    // With icon
+    &.has-icon {
+        input {
+            padding-left: $input-padding-left-icon;
         }
 
-        .counter {
-            display: block;
-        }
-    }
+        .icon {
+            position: absolute;
+            display: flex;
+            width: $input-padding-left-icon * 0.625;
+            height: $input-height * 0.5;
+            left: ($input-padding-left-icon * 0.375) / 2;
+            top: ($input-height * 0.5) / 2;
+            pointer-events: none;
+            color: $input-icon-color;
+            align-items: center;
+            justify-content: center;
 
-    &.has-success {
-        label {
-            color: $success;
-
-            &:after {
-                color: $success;
+            * {
+                font-size: $font-size-large;
             }
         }
-        .form-control, .form-group-addon {
-            border-color: $success;
-            @include box-shadow($input-box-shadow $success);
-        }
     }
 
+    // With error
     &.has-error {
-        label {
+        .info {
             color: $danger;
-
-            &:after {
-                color: $danger;
-            }
         }
-        .form-control, .form-group-addon {
+
+        input {
             border-color: $danger;
-            @include box-shadow($input-box-shadow $danger);
+            @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba($danger,.6));
+        }
+    }
+
+    // With success
+    &.has-success {
+        .info {
+            color: $success;
+        }
+
+        input {
+            border-color: $success;
+            @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba($success,.6));
         }
     }
 }
 
 /*********************
-  3. Inputs
+  3. Placeholder
 **********************/
-.form-control {
-    border: $input-border-width solid $input-border-color;
-    background: $input-background-color;
-    color: $input-text-color;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: $input-border-radius;
-    font-size: $input-font-size;
-    height: $input-height;
-    width: 100%;
-
-    &.has-addon {
-        border-radius: $input-border-radius 0 0 $input-border-radius;
-        border-right: none;
-    }
-
-    &:focus {
-        outline: 0;
-        border-color: $input-active-border-color;
-        @include box-shadow($input-box-shadow $input-active-border-color);
-    }
-
-    &.disabled, &:disabled {
-        background-color: $disabled;
-        color: $disabled-invert;
-        cursor: not-allowed;
-    }
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    $input-placeholder-color;
 }
-
-.large {
-    .form-control {
-        font-size: $input-large-font-size;
-        height: $input-large-height;
-    }
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    $input-placeholder-color;
+    opacity:  1;
 }
-
-
-/*********************
-  4. Form Group Addon
-**********************/
-.form-group-addon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: $input-height;
-    border-radius: 0 $input-border-radius $input-border-radius 0;
-    border: $input-border-width solid $input-border-color;
-    color: $input-text-color;
-    background-color: $input-background-color;
-    border-left: none;
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    $input-placeholder-color;
+    opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    $input-placeholder-color;
 }
 
 /*********************
-  5. Checkbox
+  4. Checkbox
 **********************/
 .checkbox-wrapper {
     position: relative;
@@ -285,17 +210,17 @@ $select-search-choice-font-size: $font-size-x-small;
 }
 
 /*********************
-  6. Selects
+  5. Selects
 **********************/
 select.form-control {
     cursor: pointer;
 }
-.select2-container.form-control {
-    padding: 0 !important;
+.select2-container {
+    @extend input;
     cursor: pointer;
 
     &.select2-container-active {
-        border-color: $input-active-border-color !important;
+        @extend :focus;
     }
 
     &.select2-dropdown-open {
@@ -316,13 +241,18 @@ select.form-control {
         background: transparent !important;
         border-radius: $input-border-radius !important;
         border: none !important;
-        height: inherit;
+        box-shadow: none !important;
+        height: 100%;
         display: flex;
         align-items: center;
+        line-height: inherit;
+        padding: 0;
 
         .select2-arrow {
             background: transparent !important;
             border: none !important;
+            height: 28px;
+            top: inherit;
         }
 
         .select2-search-field input {
@@ -332,8 +262,19 @@ select.form-control {
     }
 }
 
+// Placeholder
+.select2-chosen.label {
+    color: $input-placeholder-color;
+}
+
+.select2-drop-active.has-success {
+    border-color: $success !important;
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba($success,.6));
+}
+
 .select2-drop-active {
-    border-color: $input-active-border-color !important;
+    border-color: $input-focus-border-color !important;
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(240,130,10,.6));
 }
 
 .select2-search-choice {
@@ -361,7 +302,7 @@ select.form-control {
 }
 
 /*********************
-  7. Switch
+  6. Switch
 **********************/
 .switch {
     display: inline-block;
@@ -671,7 +612,7 @@ select.form-control {
 }
 
 /*********************
-  8. Radio
+  7. Radio
 **********************/
 .radio-wrapper {
     display: flex;
@@ -684,4 +625,11 @@ select.form-control {
         display: flex;
         flex-direction: column;
     }
+}
+
+/*********************
+  8. DateTimePicker
+**********************/
+.datetimepicker {
+    cursor: pointer;
 }

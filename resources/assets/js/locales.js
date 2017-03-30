@@ -415,7 +415,6 @@ export default {
             "password": "Passwort",
             "password_confirmation": "Passwort bestätigen",
             "email": "E-Mail-Adresse",
-            "gender": "Geschlecht",
             "first_name": "Vorname",
             "last_name": "Nachname",
             "display_name": "Anzeigename",
@@ -441,24 +440,24 @@ export default {
             "credit_card": {
                 "number": "Kartennummer",
                 "name": "Karteninhaber",
-                "exp_month": "Ablaufmonat",
-                "exp_year": "Ablaufjahr",
-                "cvc": "Kartenprüfnummer"
+                "cvc": "Kartenprüfnummer",
+                "expiry": "Ablaufdatum"
             },
             "bank_account": {
                 "iban": "IBAN",
-                "name": "Kontinhaber"
+                "name": "Kontoinhaber"
             },
             "user_type": "Als Veranstalter registrieren?",
             "participation": {
                 "privacy": "Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar."
             },
-            "defaults": {
+            "select": {
                 "country": "Land wählen",
                 "state": "Bundesland wählen",
                 "sport_type": "Sportart wählen",
                 "month": "Monat auswählen",
-                "year": "Jahr auswählen"
+                "year": "Jahr auswählen",
+                "gender": "Geschlecht auswählen"
             }
         },
         "label": {
