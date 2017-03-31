@@ -3,6 +3,7 @@
 return [
     'profile'                    => 'Profil',
     'forgot_my_password'         => 'Passwort vergessen?',
+    'already_registered'         => 'Bereits registriert? Melde dich jetzt an.',
     'not_registered'             => 'Noch keinen Account? Jetzt registrieren!',
     'male'                       => 'Männlich',
     'female'                     => 'Weiblich',
@@ -12,7 +13,7 @@ return [
         'organizer' => 'Veranstalter',
         'admin'     => 'Admin',
     ],
-    'clubs'                      => 'Clubs',
+    'clubs'                      => 'Vereine',
     'statistics'                 => 'Statistiken',
     'starting_at'                => 'ab',
     'participants'               => 'Teilnehmer',

@@ -106,8 +106,10 @@
                                     <hr>
                                     @if(count($loggedUser->paymentDetails))
                                         <h4>2. Zahlungsmethode auswählen</h4>
+                                        <p class="is-warning">Info: Zur Darstellung des Bezahlprozesses für eine Eventanmeldung dient die Bezahlung mit Kreditkarte.
+                                            Weitere Zahlungsmethoden können im Prototypen aus Sicherheits- und Testgründen nicht vorgeführt werden.</p>
                                         <div class="columns">
-                                            <div class="column is-6">
+                                            <div class="column is-12">
                                                 <h5>Kreditkarten</h5>
                                                 <p class="no-data"
                                                    v-if="!cards || !cards.length">{{ trans('info.payment.no_credit_cards') }}</p>
@@ -131,26 +133,26 @@
                                                     <span>{{ trans('action.add_credit_card') }}</span>
                                                 </a>
                                             </div>
-                                            <div class="column is-6">
-                                                <h5>Bankeinzugskonten</h5>
-                                                <p class="no-data"
-                                                   v-if="!bankAccounts || !bankAccounts.length">{{ trans('info.payment.no_bank_accounts') }}</p>
-                                                <form-radio v-for="(bankAccount, index) in bankAccounts" name="source"
-                                                            :value="bankAccount.id" :checked="index == 0">
-                                                    <div>
-                                                        <b>Bankeinzugskonto</b>
-                                                        <small>endet auf @{{ bankAccount.last4 }}</small>
-                                                    </div>
-                                                    <small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>
-                                                </form-radio>
+                                            {{--<div class="column is-6">--}}
+                                                {{--<h5>Bankeinzugskonten</h5>--}}
+                                                {{--<p class="no-data"--}}
+                                                   {{--v-if="!bankAccounts || !bankAccounts.length">{{ trans('info.payment.no_bank_accounts') }}</p>--}}
+                                                {{--<form-radio v-for="(bankAccount, index) in bankAccounts" name="source"--}}
+                                                            {{--:value="bankAccount.id" :checked="index == 0">--}}
+                                                    {{--<div>--}}
+                                                        {{--<b>Bankeinzugskonto</b>--}}
+                                                        {{--<small>endet auf @{{ bankAccount.last4 }}</small>--}}
+                                                    {{--</div>--}}
+                                                    {{--<small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>--}}
+                                                {{--</form-radio>--}}
 
-                                                <a class="button is-small" disabled>
-                                            <span class="icon is-small">
-                                                <icon icon="{{ config('icons.add') }}"></icon>
-                                            </span>
-                                                    <span>{{ trans('action.add_bank_account') }}</span>
-                                                </a>
-                                            </div>
+                                                {{--<a class="button is-small" disabled>--}}
+                                            {{--<span class="icon is-small">--}}
+                                                {{--<icon icon="{{ config('icons.add') }}"></icon>--}}
+                                            {{--</span>--}}
+                                                    {{--<span>{{ trans('action.add_bank_account') }}</span>--}}
+                                                {{--</a>--}}
+                                            {{--</div>--}}
                                         </div>
 
                                         <hr>

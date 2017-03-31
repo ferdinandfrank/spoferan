@@ -19,7 +19,7 @@
             <div class="tile is-vertical">
                 <div class="tile">
                     <div class="tile is-parent">
-                        <div class="card tile is-child disabled">
+                        <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
                             <a>
                                 <div class="card-header card-header-image">
                                     <div class="card-image"
@@ -34,7 +34,7 @@
                     </div>
                     <div class="tile is-parent is-vertical">
                         @if($loggedUser)
-                            <div class="card tile is-child disabled">
+                            <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
                                 <a href="#">
                                     <div class="card-header card-header-image">
                                         <div class="card-image"
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="tile is-parent">
-                    <div class="card tile is-child disabled">
+                    <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
                         <a >
                             <div class="card-header card-header-image">
                                 <div class="card-image" style="background-image: url({{ asset('images/club.jpg') }})"></div>

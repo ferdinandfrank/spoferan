@@ -331,19 +331,17 @@ class Event extends SlugModel {
         } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
             $result = 'restr_athlete';
 
+        } else {
+
+            $availableClassCount = $this->participationClasses()->canParticipate($user->athlete)->count();;
+            foreach ($this->childEvents as $event) {
+                $availableClassCount += $event->participationClasses()->canParticipate($user->athlete)->count();
+            }
+
+            if ($availableClassCount <= 0) {
+                $result = 'restr_participation_classes';
+            }
         }
-//        else {
-//            $events = $this->childEvents;
-//            $events->push($this);
-//            $availableClassCount = 0;
-//            foreach ($events as $event) {
-//                $availableClassCount += $event->participationClasses()->canParticipate($user->athlete)->count();
-//            }
-//
-//            if ($availableClassCount <= 0) {
-//                $result = 'restr_participation_classes';
-//            }
-//        }
 
         return $result;
     }

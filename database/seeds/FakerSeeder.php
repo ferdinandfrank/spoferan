@@ -30,19 +30,19 @@ class FakerSeeder extends Seeder {
 
         $user = factory(App\Models\User::class)->create([
             'user_type' => config('spoferan.user_type.athlete'),
-            'email'     => 'ferdinand-frank@web.de',
+            'email'     => 'gast@example.de',
             'password'  => 'password',
             'verified'  => true,
             'country'   => 'DE',
             'postcode'  => '94032',
             'city'      => 'Passau',
-            'street'    => 'Spitalhofstraße 77'
+            'street'    => 'Innstraße 42'
         ]);
 
         factory(App\Models\Athlete::class)->create([
             'user_id'    => $user->id,
-            'first_name' => 'Ferdinand',
-            'last_name'  => 'Frank',
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
             'gender'     => 'm',
             'birth_date' => '1994-08-25'
         ]);
@@ -73,7 +73,37 @@ class FakerSeeder extends Seeder {
         $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2016, 10, 14));
         $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2017, 10, 14));
 
-        factory(App\Models\Participation::class, 30)->create();
+        $teamSportOrganizerUser = factory(App\Models\User::class)->create([
+            'user_type' => config('spoferan.user_type.organizer'),
+            'email'     => 'teamsport-organizer@mail.de',
+            'password'  => 'password',
+            'verified'  => true
+        ]);
+
+        $teamSportOrganizer = factory(App\Models\Organizer::class)->create([
+            'user_id' => $teamSportOrganizerUser->id,
+            'name'    => 'Sport Masters',
+        ]);
+
+        $this->createFullRealTeamSportEvent($teamSportOrganizer, \Carbon\Carbon::create(2017, 9, 14), "Basketmasters", [
+            'sport_type_id'     => 8,
+            'state'             => 'DE-BY',
+            'country'           => 'DE',
+            'postcode'          => '94036',
+            'city'              => 'Passau',
+            'street'            => 'Dr.-Emil-Brichta-Straße 11',
+        ]);
+
+        $this->createFullRealTeamSportEvent($teamSportOrganizer, \Carbon\Carbon::create(2017, 9, 21), "Soccermasters", [
+            'sport_type_id'     => 9,
+            'state'             => 'DE-BY',
+            'country'           => 'DE',
+            'postcode'          => '94036',
+            'city'              => 'Passau',
+            'street'            => 'Dr.-Emil-Brichta-Straße 11',
+        ]);
+
+        factory(App\Models\Participation::class, 50)->create();
         factory(App\Models\Visit::class, 30)->create();
 
         $eventPartIds = \App\Models\Event::select('id')->where('end_date', '<', new DateTime('today'))->get();
@@ -97,6 +127,32 @@ class FakerSeeder extends Seeder {
                 }
             }
         }
+    }
+
+    private function createFullRealTeamSportEvent(
+        \App\Models\Organizer $organizer, \Carbon\Carbon $date, $title, $extraData = []
+    ) {
+        $title = $title . ' ' . $date->year;
+        $date->setTime(8, 0);
+
+        $event = factory(App\Models\Event::class)->create(array_merge([
+            'organizer_id'      => $organizer->user_id,
+            'title'             => $title,
+            'start_date'        => $date->toDateTimeString(),
+            'end_date'          => $date->addHours(12)->toDateTimeString(),
+        ], $extraData));
+
+        $this->createRealParticipationClass($event, 'Frauen');
+
+        $this->createRealParticipationClass($event, 'Männer');
+
+        $this->createRealParticipationClass($event, 'Jugend');
+
+        $this->createRealParticipationClass($event, 'Kinder');
+
+        $this->createRealVisitClass($event, 'Standard');
+        $this->createRealVisitClass($event, 'Premium');
+        $this->createRealVisitClass($event, 'VIP');
     }
 
     private function createFullRealEvent(

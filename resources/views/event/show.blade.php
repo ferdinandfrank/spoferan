@@ -49,7 +49,7 @@
                                     <div class="columns is-multiline">
                                         @foreach($event->childEvents as $childEvent)
                                             <div id="{{ $childEvent->getRouteKey() }}" class="column">
-                                                @include('event.preview', ['event' => $childEvent])
+                                                @include('event.preview', ['event' => $childEvent, 'class' => $childEvent->canParticipate() ? 'suggestion' : ''])
                                             </div>
                                         @endforeach
                                     </div>
@@ -178,8 +178,8 @@
                                     @endif
                                 </div>
                                 @if(Auth::check())
-                                    <div class="column is-6">
-                                        <a class="button responsive">
+                                    <div class="column is-6" title="{{ trans('info.not_available_yet') }}">
+                                        <a class="button responsive" disabled >
                                 <span class="icon is-small">
                                   <icon icon="{{ config('icons.watchlist') }}"></icon>
                                 </span>
@@ -187,8 +187,8 @@
                                         </a>
                                     </div>
                                 @endif
-                                <div class="column share-buttons">
-                                    <a class="button responsive facebook">
+                                <div class="column share-buttons" title="{{ trans('info.not_available_yet') }}">
+                                    <a class="button responsive facebook" disabled>
                                     <span class="icon is-small">
                                       <icon icon="{{ config('icons.facebook') }}"></icon>
                                     </span>

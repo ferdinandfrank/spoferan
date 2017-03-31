@@ -7,5 +7,7 @@ return [
     'swimming'       => 'Schwimmen',
     'inline_skating' => 'Inline Skating',
     'nordic_walking' => 'Nordic Walking',
-    'cycling'        => 'Radfahren'
+    'cycling'        => 'Radfahren',
+    'basketball'     => 'Basketball',
+    'soccer'         => 'Fußball'
 ];

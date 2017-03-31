@@ -24,7 +24,9 @@ class MandatorySeeder extends Seeder {
             ['label' => 'swimming', 'slug' => 'swimming', 'icon' => '/images/icons/sport_type_swimming.png'],
             ['label' => 'inline_skating', 'slug' => 'inline-skating', 'icon' => '/images/icons/sport_type_inline_skating.png'],
             ['label' => 'nordic_walking', 'slug' => 'nordic-walking', 'icon' => '/images/icons/sport_type_nordic_walking.png'],
-            ['label' => 'cycling', 'slug' => 'cycling', 'icon' => '/images/icons/sport_type_cycling.png']
+            ['label' => 'cycling', 'slug' => 'cycling', 'icon' => '/images/icons/sport_type_cycling.png'],
+            ['label' => 'basketball', 'slug' => 'basketball', 'icon' => '/images/icons/sport_type_basketball.png'],
+            ['label' => 'soccer', 'slug' => 'soccer', 'icon' => '/images/icons/sport_type_soccer.png']
         ]);
 
         DB::table('participation_states')->insert([

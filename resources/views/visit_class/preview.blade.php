@@ -13,8 +13,8 @@
         <p>{{ $visitClass->description }}</p>
         <div class="action">
             @if($visitClass->canVisit())
-                <div slot="header" class="action">
-                    <a href="#" class="button is-success">
+                <div slot="header" class="action" title="{{ trans('info.not_available_yet') }}">
+                    <a href="#" class="button is-success" disabled>
                 <span class="icon is-small">
                     <icon icon="{{ config('icons.buy') }}"></icon>
                 </span>

@@ -2,7 +2,7 @@
     @if(count($events))
         @foreach($events as $event)
             <div class="column is-4">
-                @include('event.preview')
+                @include('event.preview', ['class' => $event->canParticipate() ? 'suggestion' : ''])
             </div>
         @endforeach
     @else

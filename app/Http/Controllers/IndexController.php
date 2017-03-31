@@ -12,7 +12,9 @@ class IndexController extends Controller {
      * @return \Illuminate\View\View
      */
     public function index() {
-        $events = Event::with('organizer.user', 'participationClasses', 'sportType')->withCount('participations')->main()->open()->orderBy('start_date')->get();
+        $events = Event::with('organizer.user', 'participationClasses', 'sportType')->withCount('participations')->main()->whereHas('participationClasses', function ($query) {
+            $query->canParticipate();
+        })->orderBy('start_date')->get();
 
         return view('index', compact('events'));
     }

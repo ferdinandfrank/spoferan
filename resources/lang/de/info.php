@@ -2,6 +2,8 @@
 
 return [
 
+    'not_available_yet' => 'Diese Funktion ist im Prototypen noch nicht verfügbar',
+
     'payment' => [
         'no_credit_cards'   => 'Bisher hast du noch keine Kreditkarte hinzugefügt, die du als Zahlungsmethode auswählen kannst.',
         'no_bank_accounts'  => 'Ein Bankeinzugskonto kann in diesem Prototypen aus Sicherheitsgründen bisher nicht hinzugefügt werden.',

@@ -53,13 +53,15 @@
                 </div>
 
                 <div class="center">
-                    <button type="submit" class="button is-success">{{ trans('action.register') }}</button>
+                    <p class="is-warning">Die Registrierung ist zur Darstellung des Prototypen deaktiviert.
+                        Um den Prototypen zu testen, navigiere bitte zum <a href="{{ route('login') }}" class="link">Login</a> und melde dich
+                    mit dem verfügbaren Gast-Account durch das bereits ausgefüllte Formular ein.</p>
                 </div>
 
                 <hr class="light">
 
                 <div class="center flex-column">
-                    <a href="{{ route('register') }}" class="link">{{ trans('label.not_registered') }}</a>
+                    <a href="{{ route('login') }}" class="link">{{ trans('label.already_registered') }}</a>
                     <a href="{{ route('password.request') }}" class="link">{{ trans('label.forgot_my_password') }}</a>
                 </div>
             </ajax-form>
