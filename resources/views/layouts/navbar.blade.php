@@ -54,10 +54,10 @@
                         <ul class="list-unstyled">
                             <li class="divider"></li>
                             <li @if (Request::is('user')) class="active" @endif><a
-                                        href="{{ $loggedUser->getEditPath() }}">
+                                        href="#">
                                     <icon icon="{{ config('icons.user') }}"></icon>{{ trans('label.profile') }}</a></li>
                             <li @if (Request::is('admin/profile/*')) class="active" @endif><a
-                                        href="{{ $loggedUser->getEditPath() }}">
+                                        href="#">
                                     <icon icon="{{ config('icons.edit') }}"></icon>{{ trans('action.edit_profile') }}
                                 </a></li>
                             <li id="logout-button">
