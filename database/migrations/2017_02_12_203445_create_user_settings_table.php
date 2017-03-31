@@ -26,16 +26,6 @@ class CreateUserSettingsTable extends Migration {
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });
-
-        DB::unprepared('
-            CREATE TRIGGER INSERT_USER_SETTINGS_ON_USER_INSERT
-            AFTER INSERT ON `users`
-            FOR EACH ROW
-            BEGIN
-                INSERT INTO `user_settings` (`user_id`)
-                VALUES (NEW.`id`);
-            END
-        ');
     }
 
     /**
@@ -44,7 +34,6 @@ class CreateUserSettingsTable extends Migration {
      * @return void
      */
     public function down() {
-        DB::unprepared('DROP TRIGGER `INSERT_USER_SETTINGS_ON_USER_INSERT`');
         Schema::dropIfExists('user_settings');
     }
 }

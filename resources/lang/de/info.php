@@ -3,8 +3,8 @@
 return [
 
     'payment' => [
-        'no_credit_cards' => 'Bisher hast du noch keine Kreditkarte hinzugefügt, die du als Zahlungsmethode auswählen kannst.',
-        'no_bank_accounts' => 'Bisher hast du noch kein Bankeinzugskonto hinzugefügt, welches du als Zahlungsmethode auswählen kannst.',
+        'no_credit_cards'   => 'Bisher hast du noch keine Kreditkarte hinzugefügt, die du als Zahlungsmethode auswählen kannst.',
+        'no_bank_accounts'  => 'Ein Bankeinzugskonto kann in diesem Prototypen aus Sicherheitsgründen bisher nicht hinzugefügt werden.',
         'no_payment_method' => 'Wähle eine Zahlungsmethode aus, oder füge eine neue hinzu, um dich für dieses Event anzumelden.'
     ],
 

@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration {
         Schema::create('settings', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id')->unsigned();
-            $table->string('key', 50)->index();
+            $table->string('key', config('validation.settings.key.max'))->index();
             $table->text('value')->nullable();
         });
     }

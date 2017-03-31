@@ -21,7 +21,7 @@ $form-group-margin: 15px 0;
 
 $input-height: 35px;
 $input-padding-ver: 15px;
-$input-padding-left-icon: 40px;
+$input-padding-ver-addon: 40px;
 $input-border-width: 1px;
 $input-font-size: $font-size;
 $input-counter-font-size: 0.7rem;
@@ -89,18 +89,47 @@ $select-search-choice-font-size: $font-size-x-small;
         display: block;
     }
 
-    // With icon
-    &.has-icon {
+    // With addon left
+    &.has-addon-left {
         input {
-            padding-left: $input-padding-left-icon;
+            padding-left: $input-padding-ver-addon;
         }
 
         .icon {
+            left: ($input-padding-ver-addon * 0.375) / 2;
+        }
+    }
+
+    // With addon right
+    &.has-addon-right {
+        input {
+            padding-right: $input-padding-ver-addon;
+        }
+
+        .help {
+            right: ($input-padding-ver-addon * 0.375) / 2;
+        }
+    }
+
+    // With addon
+    &.has-addon-left, &.has-addon-right {
+        .help {
+            cursor: pointer;
+
+            .tooltip {
+                width: inherit;
+                height: inherit;
+                display: inherit;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .icon, .help {
             position: absolute;
             display: flex;
-            width: $input-padding-left-icon * 0.625;
+            width: $input-padding-ver-addon * 0.625;
             height: $input-height * 0.5;
-            left: ($input-padding-left-icon * 0.375) / 2;
             top: ($input-height * 0.5) / 2;
             pointer-events: none;
             color: $input-icon-color;

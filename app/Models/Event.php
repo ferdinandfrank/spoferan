@@ -313,13 +313,7 @@ class Event extends SlugModel {
 
         $result = null;
 
-        if (empty($user)) {
-            $result = 'restr_registered';
-
-        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
-            $result = 'restr_athlete';
-
-        } elseif ($this->hasFinished()) {
+        if ($this->hasFinished()) {
             $result = 'restr_finished';
 
         } elseif ($this->isActive()) {
@@ -330,6 +324,12 @@ class Event extends SlugModel {
 
         } elseif ($this->getUnregisterDate()->lte($now)) {
             $result = 'restr_unregister_date';
+
+        } elseif (empty($user)) {
+            $result = 'restr_registered';
+
+        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
+            $result = 'restr_athlete';
 
         }
 //        else {

@@ -86,7 +86,7 @@ $colors: (white: ($white, $black), black: ($black, $white), light: ($light, $lig
   3. Helper Classes
 **********************/
 @each $name, $pair in $colors {
-    span, small, a:not(.button), p, h1, h2, h3, h4, h5, td, th {
+    span, small, a:not(.button), p, h1, h2, h3, h4, h5, td, th, li {
         $color: nth($pair, 1);
         &.is-#{$name} {
             color: $color !important;

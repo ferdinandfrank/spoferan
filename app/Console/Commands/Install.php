@@ -10,6 +10,7 @@ use App\Models\User;
 use Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
+use Schema;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -101,7 +102,9 @@ class Install extends Command {
 
         $this->logger->comment('Welcome to the page installation! You\'ll be up and running in no time...');
 
-        $extraConfirmInfo = $this->keepOldData ? "You've set the option to keep the old data, so your old data from the database will be kept if it exists." : "If it was already setup all of your database tables will be reset.";
+        $extraConfirmInfo = $this->keepOldData
+            ? "You've set the option to keep the old data, so your old data from the database will be kept if it exists."
+            : "If it was already setup all of your database tables will be reset.";
         if ($this->confirm("Do you wish to setup the page? $extraConfirmInfo")
         ) {
             $this->saveOldData();
@@ -122,23 +125,31 @@ class Install extends Command {
         if ($this->keepOldData) {
 
             // Save settings
-            foreach ($this->settings as $settingName => $settingValue) {
-                if (empty($settingValue)) {
-                    $this->settings[$settingName] = Settings::getByName($settingName);
+            if (Schema::hasTable('settings')) {
+                foreach ($this->settings as $settingName => $settingValue) {
+                    if (empty($settingValue)) {
+                        $this->settings[$settingName] = Settings::getByName($settingName);
+                    }
                 }
             }
 
             // Save the admin
-            if (empty($this->admin)) {
-                $this->admin = User::with('admin')->first();
+            if (Schema::hasTable('admins')) {
+                if (empty($this->admin)) {
+                    $this->admin = User::with('admin')->first();
+                }
             }
         }
     }
 
     private function resetStripeData() {
-        foreach (PaymentDetails::all() as $paymentDetails) {
-            $customer = \Stripe\Customer::retrieve($paymentDetails->stripe_id);
-            $customer->delete();
+        if (Schema::hasTable('payment_details')) {
+            foreach (PaymentDetails::all() as $paymentDetails) {
+                $customer = \Stripe\Customer::retrieve($paymentDetails->stripe_id);
+                if ($customer->email) {
+                    $customer->delete();
+                }
+            }
         }
     }
 
@@ -174,7 +185,8 @@ class Install extends Command {
         $this->savePageInfo('subtitle', $pageSubtitle);
 
         // Page Contact email address
-        $pageEmail = $this->settings['email'] ?? $this->ask('Step 4/4: The contact email address to use for the contact form', false);
+        $pageEmail = $this->settings['email'] ??
+                     $this->ask('Step 4/4: The contact email address to use for the contact form', false);
         $technicalEmail = $this->settings['email_technical'] ?? $pageEmail;
         $this->savePageInfo('email', $pageEmail);
         $this->savePageInfo('email_technical', $technicalEmail);

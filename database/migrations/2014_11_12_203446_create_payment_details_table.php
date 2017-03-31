@@ -25,16 +25,6 @@ class CreatePaymentDetailsTable extends Migration {
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });
-
-        DB::unprepared('
-            CREATE TRIGGER INSERT_PAYMENT_DETAILS_ON_USER_INSERT
-            AFTER INSERT ON `users`
-            FOR EACH ROW
-            BEGIN
-                INSERT INTO `payment_details` (`user_id`)
-                VALUES (NEW.`id`);
-            END
-        ');
     }
 
     /**
@@ -43,7 +33,6 @@ class CreatePaymentDetailsTable extends Migration {
      * @return void
      */
     public function down() {
-        DB::unprepared('DROP TRIGGER `INSERT_PAYMENT_DETAILS_ON_USER_INSERT`');
         Schema::dropIfExists('payment_details');
     }
 }

@@ -25,6 +25,9 @@
                             <option value="w">{{ trans('label.female') }}</option>
                         </form-select>
                     </div>
+                    <div v-if="userType == {{ config('spoferan.user_type.athlete') }}" class="column is-12">
+                        <form-date-input icon="{{ config('icons.birthday') }}" name="birth_date" :required="true"></form-date-input>
+                    </div>
                     <div v-if="userType == {{ config('spoferan.user_type.organizer') }}" class="column is-12">
                         <form-input icon="{{ config('icons.organization') }}" name="name"
                                     :max-length="{{ config('validation.organizer.name.max') }}"

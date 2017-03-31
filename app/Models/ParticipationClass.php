@@ -216,13 +216,7 @@ class ParticipationClass extends BaseModel {
         $now = Carbon::now();
         $result = ['error' => true, 'msg' => null];
 
-        if (empty($user)) {
-            $result['msg'] = trans('validation.event.participate.restr_registered');
-
-        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
-            $result['msg'] = trans('validation.event.participate.restr_athlete');
-
-        } elseif ($this->register_date->gt($now)) {
+        if ($this->register_date->gt($now)) {
             $result['msg'] = trans('validation.event.participate.restr_register_date', [
                 'date' => $this->register_date->formatLocalized('%d %B %Y'),
                 'time' => $this->register_date->formatLocalized('%H:%M')
@@ -233,6 +227,12 @@ class ParticipationClass extends BaseModel {
                 'date' => $this->unregister_date->formatLocalized('%d %B %Y'),
                 'time' => $this->unregister_date->formatLocalized('%H:%M')
             ]);
+
+        } elseif (empty($user)) {
+            $result['msg'] = trans('validation.event.participate.restr_registered');
+
+        } elseif (!$user->isType(config('spoferan.user_type.athlete'))) {
+            $result['msg'] = trans('validation.event.participate.restr_athlete');
 
         } elseif ($this->isParticipant($user->athlete)) {
             $result['msg'] = trans('validation.event.participate.already_registered');

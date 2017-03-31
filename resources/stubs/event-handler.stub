@@ -6,26 +6,24 @@ use DummyFullEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DummyClass
-{
+class DummyClass {
+
     /**
-     * Create the event handler.
+     * Creates the event handler.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         //
     }
 
     /**
-     * Handle the event.
+     * Handles the event.
      *
      * @param  DummyEvent  $event
      * @return void
      */
-    public function handle(DummyEvent $event)
-    {
+    public function handle(DummyEvent $event) {
         //
     }
 }

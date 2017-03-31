@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\AthleteCreated;
+use App\Events\UserCreated;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Authenticatable;
@@ -50,6 +51,15 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $events = [
+        'created' => UserCreated::class,
     ];
 
     /**

@@ -144,7 +144,7 @@
                                                     <small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>
                                                 </form-radio>
 
-                                                <a class="button is-small" v-on:click="showAddBAForm()">
+                                                <a class="button is-small" disabled>
                                             <span class="icon is-small">
                                                 <icon icon="{{ config('icons.add') }}"></icon>
                                             </span>
@@ -235,6 +235,12 @@
             <div class="column is-6">
                 <form-input icon="{{ config('icons.password') }}" lang-key="credit_card" type="number" name="cvc" :required="true"></form-input>
             </div>
+            <p class="is-warning">Info: Zum Testen des Prototypen kann eine Kreditkarte mit den folgenden Test-Kartennummern und beliebigen weiteren Daten erstellt werden:</p>
+            <ul class="info-list">
+                <li><b>Visa:</b>&nbsp;4242 4242 4242 4242</li>
+                <li><b>Mastercard:</b>&nbsp;5555 5555 5555 4444</li>
+                <li><b>American Express:</b>&nbsp;3782 822463 10005</li>
+            </ul>
         </div>
     </modal-form>
 

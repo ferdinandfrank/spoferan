@@ -71,4 +71,5 @@ return [
     'state'         => 'fa fa-fw fa-map',
     'sport_type'    => 'fa fa-fw fa-futbol-o',
     'credit_card'   => 'fa fa-fw fa-credit-card',
+    'birthday'      => 'fa fa-fw fa-birthday-cake',
 ];

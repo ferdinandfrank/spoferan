@@ -3,7 +3,7 @@
 return [
     'user' => [
         'email'              => [
-            'max' => 250
+            'max' => 190
         ],
         'password'           => [
             'max' => 250,
@@ -25,22 +25,22 @@ return [
             'max' => 250
         ],
         'confirmation_token' => [
-            'max' => 250
+            'max' => 190
         ]
     ],
 
     'athlete' => [
         'title'      => [
-            'max' => 250
+            'max' => 10
         ],
         'first_name' => [
-            'max' => 250
+            'max' => 80
         ],
         'last_name'  => [
-            'max' => 250
+            'max' => 100
         ],
         'slug'       => [
-            'max' => 250
+            'max' => 190
         ],
         'starter_number' => [
             'max' => 10
@@ -49,31 +49,31 @@ return [
 
     'organizer' => [
         'name' => [
-            'max' => 250
+            'max' => 150
         ],
         'slug' => [
-            'max' => 250
+            'max' => 190
         ]
     ],
 
     'admin' => [
         'display_name' => [
-            'max' => 250
+            'max' => 185
         ],
         'first_name'   => [
-            'max' => 250
+            'max' => 80
         ],
         'last_name'    => [
-            'max' => 250
+            'max' => 100
         ],
         'slug'         => [
-            'max' => 250
+            'max' => 190
         ]
     ],
 
     'event' => [
         'title'             => [
-            'max' => 250
+            'max' => 150
         ],
         'description_short' => [
             'max' => 250
@@ -85,7 +85,7 @@ return [
             'max' => 250
         ],
         'slug'              => [
-            'max' => 250
+            'max' => 190
         ],
         'street'            => [
             'max' => 250
@@ -124,28 +124,34 @@ return [
 
     'participation_class' => [
         'title' => [
-            'max' => 250
+            'max' => 150
         ]
     ],
 
     'visit_class' => [
         'title' => [
-            'max' => 250
+            'max' => 150
         ]
     ],
 
     'sport_type' => [
         'label' => [
-            'max' => 250
+            'max' => 190
         ],
         'slug' => [
-            'max' => 250
+            'max' => 190
         ]
     ],
 
     'participation_state' => [
         'label' => [
-            'max' => 250
+            'max' => 190
+        ]
+    ],
+
+    'settings' => [
+        'key' => [
+            'max' => 50
         ]
     ]
 ];

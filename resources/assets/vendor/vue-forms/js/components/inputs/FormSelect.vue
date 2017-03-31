@@ -1,5 +1,5 @@
 <template>
-    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-icon': icon }">
+    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': icon, 'has-addon-right': showHelp }">
         <select :id="name + '-input'"
                 :name="submitName"
                 @focus="activate"
@@ -18,6 +18,14 @@
 
         <div v-if="icon && !addonSubmit" class="icon">
             <icon :icon="icon"></icon>
+        </div>
+
+        <div v-if="showHelp" class="help">
+            <div v-if="helpTooltip" class="tooltip tooltip-left">
+                <icon icon="fa fa-fw fa-question"></icon>
+                <span class="tooltip-text">{{ helpTooltip }}</span>
+            </div>
+            <icon v-if="helpPath" @click="openHelp()" icon="fa fa-fw fa-question"></icon>
         </div>
 
         <span class="info" v-if="labelMessage">{{ labelMessage }}</span>

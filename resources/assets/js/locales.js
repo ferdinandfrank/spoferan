@@ -418,7 +418,7 @@ export default {
             "first_name": "Vorname",
             "last_name": "Nachname",
             "display_name": "Anzeigename",
-            "birthday": "Geburtstag",
+            "birth_date": "Geburtstag",
             "remember": "Angemeldet bleiben",
             "name": "Name",
             "message": "Nachricht",

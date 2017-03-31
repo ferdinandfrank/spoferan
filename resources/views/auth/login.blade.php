@@ -8,10 +8,10 @@
             <ajax-form :stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false" class="card-content" redirect="{{ route('index') }}">
                 <div class="columns is-multiline">
                     <div class="column is-12">
-                        <form-input icon="{{ config('icons.email') }}" type="email" name="email" :required="true"></form-input>
+                        <form-input icon="{{ config('icons.email') }}" value="gast@example.de" type="email" name="email" :required="true"></form-input>
                     </div>
                     <div class="column is-12">
-                        <form-input icon="{{ config('icons.password') }}" type="password" name="password" :required="true"></form-input>
+                        <form-input icon="{{ config('icons.password') }}" value="password" type="password" name="password" :required="true"></form-input>
                     </div>
                 </div>
 
