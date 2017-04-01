@@ -19,6 +19,7 @@
                     <h2 class="title">{{ trans('action.participate_as_athlete') }}</h2>
                     <wizard ref="wizard"
                             :step-props="[@if($selectedEventPart){selectedTitle: '{{ $selectedEventPart->title}}'}@if($selectedParticipationClass),{selectedTitle: '{{ $selectedParticipationClass->title}}'}@endif @endif]">
+                        @if(count($event->childEvents))
                         <section id="{{ config('query.child_event') }}" class="section wizard-section">
                             <div class="heading">
                                 <h2 class="title wizard-title">{{ trans('action.select_event_part') }}</h2>
@@ -43,6 +44,7 @@
                                 </div>
                             </div>
                         </section>
+                        @endif
                         <section id="{{ config('query.participation_class') }}" class="section wizard-section">
                             <div class="heading">
                                 <h2 class="title wizard-title">{{ trans('action.select_participation_class') }}</h2>
@@ -84,7 +86,7 @@
                                                 @endif
                                                 <li><b>Ausgewählte Teilnahmeklasse:</b>&nbsp;<span
                                                             id="selected-participation_class-title">@{{ selectedParticipationClass.title }}</span>
-                                                    &nbsp;<small v-on:click.prevent="setStep(1)"
+                                                    &nbsp;<small v-on:click.prevent="@if(count($event->childEvents))setStep(1)@else setStep(0) @endif"
                                                                  class="is-secondary link">{{ trans('action.change') }}</small>
                                                 </li>
                                             </ul>
@@ -310,6 +312,7 @@
                     window.eventHub.$on('wizard_step_changed', (step, lastStep) => {
 
                         // Event Part selected
+                        @if(count($event->childEvents))
                         if (lastStep.index == 0 && lastStep.selectedKey != this.selectedEventPart.slug) {
                             sendRequest('/events/' + lastStep.selectedKey + '/participation-classes', 'get', null, function (response) {
                                 replaceContent('#participation_classes_list', response);
@@ -337,6 +340,21 @@
                                 this.selectedParticipationClass = response;
                             });
                         }
+                        @else
+                        if (lastStep.index == 0 && lastStep.selectedKey != this.selectedParticipationClass.id) {
+                            sendRequest('/api/participation-classes/' + lastStep.selectedKey, 'get', null, (response) => {
+
+                                // Remove old selected class from participation class preview card
+                                $('#' + this.selectedParticipationClass.id).children().removeClass('selected');
+
+                                // Add selected class to new selected participation class preview card
+                                $('#' + response.id).children().addClass('selected');
+
+                                this.selectedParticipationClass = response;
+                            });
+                        }
+                        @endif
+
 
                     });
 

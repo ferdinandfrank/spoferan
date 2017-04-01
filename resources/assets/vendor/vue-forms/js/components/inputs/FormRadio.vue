@@ -3,7 +3,7 @@
         <input :id="name + '-' + value + '-input'"
                type="radio"
                ref="input"
-               :value="submitValue"
+               :value="value"
                :name="submitName"
                :checked="checked"
         />
@@ -31,25 +31,28 @@
         },
 
         watch: {
-            submitValue: function (val) {
-                val = $('input[name=' + this.submitName + ']:checked').val();
-                this.setValueOnForm(val);
-            },
 
-            value: function (val) {
-                this.submitValue = val;
-            }
         },
 
         mounted: function () {
             this.$nextTick(function () {
+                this.updateValue();
                 $(this.$refs.input).on('change', () => {
-                    let val = $('input[name=' + this.submitName + ']:checked').val();
-                    window.eventHub.$emit(this.name + '-input-changed', val);
-                    this.setValueOnForm(val);
+                    this.updateValue();
                 });
             })
         },
+
+        methods: {
+
+            updateValue: function () {
+                let checkedRadio = $('input[name=' + this.submitName + ']:checked');
+                if (checkedRadio.length) {
+                    this.submitValue = checkedRadio.val();
+                }
+
+            },
+        }
     }
 
 </script>
