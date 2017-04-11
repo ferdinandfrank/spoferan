@@ -15,6 +15,51 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $email
+ * @property string $password
+ * @property string $avatar
+ * @property string $current_user_type
+ * @property string $confirmation_token
+ * @property bool $confirmed
+ * @property bool $verified
+ * @property string $remember_token
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property string $deleted_at
+ * @property-read \App\Models\Admin $admin
+ * @property-read \App\Models\Athlete $athlete
+ * @property-read \App\Models\UserContact $contact
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\App\Models\DatabaseNotification[] $notifications
+ * @property-read \App\Models\Organizer $organizer
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentDetails[] $paymentDetails
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
+ * @property-read \App\Models\UserSettings $settings
+ * @property-read \App\Models\SocialMedia $socialMedia
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\App\Models\DatabaseNotification[] $unreadNotifications
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User search($searchQuery)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User searchAll($searchQuery, $boolean = 'and')
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User searchColumn($key, $value, $boolean = 'and', $columnRestriction = array())
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereAvatar($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereConfirmationToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereConfirmed($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereCurrentUserType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereVerified($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\PaymentDetails $activePaymentDetails
+ */
 class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable,
@@ -40,7 +85,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         'street',
         'phone',
         'city',
-        'user_type'
+        'current_user_type'
     ];
 
     /**
@@ -99,12 +144,44 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Get the corresponding payment details of the user.
+     * Get the social media information of the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function socialMedia() {
+        return $this->morphOne(SocialMedia::class, 'holder');
+    }
+
+    /**
+     * Get the corresponding user contact.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
+    public function contact() {
+        return $this->hasOne(UserContact::class);
+    }
+
+    /**
+     * Get the corresponding payment details of the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function paymentDetails() {
-        return $this->hasOne(PaymentDetails::class);
+        return $this->hasMany(PaymentDetails::class);
+    }
+
+    /**
+     * Get the current active corresponding payment details of the user
+     * based on the currently active user type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function activePaymentDetails() {
+        $stripeObject = 'customer';
+        if ($this->current_user_type === config('spoferan.user_type.organizer')) {
+            $stripeObject = 'account';
+        }
+        return $this->hasOne(PaymentDetails::class)->where('stripe_object', $stripeObject);
     }
 
     /**
@@ -147,16 +224,12 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     /**
      * Checks if the user is a specific type of user.
      *
-     * @param string|int
+     * @param string
      *
      * @return bool
      */
     public function isType($type) {
-        if (is_string($type)) {
-            return $this->user_type == config('spoferan.user_type.' . $type);
-        }
-
-        return $this->user_type == $type;
+        return $this->current_user_type === config('spoferan.user_type.' . $type) || $this->current_user_type === $type;
     }
 
     /**
@@ -248,7 +321,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @return User
      */
     public static function findByStripeId($stripeId) {
-        return static::whereHas('paymentDetails', function ($query) use($stripeId) {
+        return static::whereHas('paymentDetails', function ($query) use ($stripeId) {
             $query->where('stripe_id', $stripeId);
         })->first();
     }

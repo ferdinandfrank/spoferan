@@ -21,18 +21,25 @@ class FakerSeeder extends Seeder {
     public function run() {
         $this->faker = Faker\Factory::create();
 
+        factory(App\Models\Coupon::class, 10)->create();
+
         factory(App\Models\Athlete::class, 50)->create();
         factory(App\Models\Organizer::class, 30)->create();
         factory(App\Models\Event::class, 30)->create()->each(function ($event) {
             $event->checkPoints()->save(factory(App\Models\CheckPoint::class)->make());
             $event->participationClasses()->saveMany(factory(App\Models\ParticipationClass::class, rand(1, 3))->make());
+            $event->labels()->attach(\App\Models\Label::orderByRaw("RAND()")->limit(2)->get()->pluck('id'));
         });
 
         $user = factory(App\Models\User::class)->create([
-            'user_type' => config('spoferan.user_type.athlete'),
+            'current_user_type' => config('spoferan.user_type.athlete'),
             'email'     => 'gast@example.de',
             'password'  => 'password',
-            'verified'  => true,
+            'verified'  => true
+        ]);
+
+        $user->contact()->update([
+            'state'    => 'DE-BY',
             'country'   => 'DE',
             'postcode'  => '94032',
             'city'      => 'Passau',
@@ -47,9 +54,8 @@ class FakerSeeder extends Seeder {
             'birth_date' => '1994-08-25'
         ]);
 
-
         $organizerUser = factory(App\Models\User::class)->create([
-            'user_type' => config('spoferan.user_type.organizer'),
+            'current_user_type' => config('spoferan.user_type.organizer'),
             'email'     => 'organizer@mail.de',
             'password'  => 'password',
             'verified'  => true
@@ -69,12 +75,16 @@ class FakerSeeder extends Seeder {
             $organizer->raters()->attach($raterId, $params);
         }
 
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2015, 10, 14));
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2016, 10, 14));
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2017, 10, 14));
+        $eventGroup = factory(App\Models\EventGroup::class)->create([
+            'title' => 'Landkreislauf Starnberg',
+        ]);
+
+        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2015, 10, 14), $eventGroup);
+        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2016, 10, 14), $eventGroup);
+        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2017, 10, 14), $eventGroup);
 
         $teamSportOrganizerUser = factory(App\Models\User::class)->create([
-            'user_type' => config('spoferan.user_type.organizer'),
+            'current_user_type' => config('spoferan.user_type.organizer'),
             'email'     => 'teamsport-organizer@mail.de',
             'password'  => 'password',
             'verified'  => true
@@ -86,21 +96,21 @@ class FakerSeeder extends Seeder {
         ]);
 
         $this->createFullRealTeamSportEvent($teamSportOrganizer, \Carbon\Carbon::create(2017, 9, 14), "Basketmasters", [
-            'sport_type_id'     => 8,
-            'state'             => 'DE-BY',
-            'country'           => 'DE',
-            'postcode'          => '94036',
-            'city'              => 'Passau',
-            'street'            => 'Dr.-Emil-Brichta-Straße 11',
+            'sport_type_id' => 8,
+            'state'         => 'DE-BY',
+            'country'       => 'DE',
+            'postcode'      => '94036',
+            'city'          => 'Passau',
+            'street'        => 'Dr.-Emil-Brichta-Straße 11',
         ]);
 
         $this->createFullRealTeamSportEvent($teamSportOrganizer, \Carbon\Carbon::create(2017, 9, 21), "Soccermasters", [
-            'sport_type_id'     => 9,
-            'state'             => 'DE-BY',
-            'country'           => 'DE',
-            'postcode'          => '94036',
-            'city'              => 'Passau',
-            'street'            => 'Dr.-Emil-Brichta-Straße 11',
+            'sport_type_id' => 9,
+            'state'         => 'DE-BY',
+            'country'       => 'DE',
+            'postcode'      => '94036',
+            'city'          => 'Passau',
+            'street'        => 'Dr.-Emil-Brichta-Straße 11',
         ]);
 
         factory(App\Models\Participation::class, 50)->create();
@@ -136,10 +146,10 @@ class FakerSeeder extends Seeder {
         $date->setTime(8, 0);
 
         $event = factory(App\Models\Event::class)->create(array_merge([
-            'organizer_id'      => $organizer->user_id,
-            'title'             => $title,
-            'start_date'        => $date->toDateTimeString(),
-            'end_date'          => $date->addHours(12)->toDateTimeString(),
+            'organizer_id' => $organizer->user_id,
+            'title'        => $title,
+            'start_date'   => $date->toDateTimeString(),
+            'end_date'     => $date->addHours(12)->toDateTimeString(),
         ], $extraData));
 
         $this->createRealParticipationClass($event, 'Frauen');
@@ -156,13 +166,15 @@ class FakerSeeder extends Seeder {
     }
 
     private function createFullRealEvent(
-        \App\Models\Organizer $organizer, \Carbon\Carbon $date, $title = 'Landkreislauf Starnberg'
+        \App\Models\Organizer $organizer, \Carbon\Carbon $date, \App\Models\EventGroup $eventGroup = null,
+        $title = 'Landkreislauf Starnberg'
     ) {
         $title = $title . ' ' . $date->year;
         $date->setTime(8, 0);
 
         $event = factory(App\Models\Event::class)->create([
             'organizer_id'      => $organizer->user_id,
+            'event_group_id'    => $eventGroup->id,
             'title'             => $title,
             'description_short' => 'Der Landkreislauf ist das größte Breitensportereignis des Landkreises Starnberg und hat eine langjährige Tradition. Der 31. Starnberger Landkreislauf findet am 8. Oktober in Feldafing statt.',
             'description'       => 'Die Organisatoren und Ausrichter des 32. Starnberger Landkreislaufes, der am 8. Oktober in Feldafing im Rahmen der 900-jahrfeiern der Gemeinde stattfindet, haben die drei Teilstrecken besichtigt und deren Verlauf geplant, die jetzt mit der Polizei, Eigentümern und Behörden festgelegt werden. Ab August sind dann die Strecken wieder fürs Training markiert.Die Gesamtstrecke ist circa 42,2 Kilometer lang und gliedert sich in zehn Etappen. Die lange Runde ist 5,6 Kilometer lang und wird dreimal gelaufen. Die kürzeste Strecke hat eine Länge von 3,2 Kilometer und ist viermal zu absolvieren. Die Runden vier bis sechs sind über die mittlere Distanz auf 4,2 Kilometer festgelegt. Insgesamt entspricht dies fast genau der Originalstrecke des Marathonlaufes.Der Start- und Zielbereich ist nicht, wie im Jahr 2011 im Lennè-Park, sondern im Buchheim-Stadion in Feldafing. Damit sind auch größere Steigungen zu bewältigen. Die Strecke führt für alle Teilrunden vom Strandbad Feldafing zum Buchheimstadion. Dort wartet ein Höhenunterschied von etwa 40 Meter, zum Teil über Treppen, auf die Läufer. Alle Teilnehmer der Streckenbesichtigung am Vatertag fanden es aber auch für Kindermannschaften zu schaffen. Vor allem die mittlere Etappe ist anstrengend, weil eine weitere Steigung in Possenhofen dazu kommt.Derzeit verhandeln die Organisatoren noch mit der Stadt München über die Nutzung der Parkplätze beim Paradies in Possenhofen, da um das Stadion in Feldafing zu wenige Parkplätze vorhanden sind. Möglicherweise wird ein Shuttle-Bus zum Stadion eingesetzt.Ab August ist wie in den vergangenen Jahren geplant, die Strecken für das Training zu markieren. Interessierte Läuferinnen und Läufer können sich in Kürze die drei Teilstrecken unter der Internet-Adresse www.landkreislauf-starnberg.de ansehen.',
@@ -249,6 +261,7 @@ class FakerSeeder extends Seeder {
 
         return factory(App\Models\Event::class)->create([
             'organizer_id'      => $parentEvent->organizer_id,
+            'event_group_id'    => $parentEvent->event_group_id,
             'parent_event_id'   => $parentEvent->id,
             'title'             => $title,
             'description_short' => "$title ist ein Teil von $parentEvent->title.",

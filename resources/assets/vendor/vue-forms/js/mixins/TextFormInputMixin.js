@@ -5,6 +5,13 @@ module.exports = {
 
     props: {
 
+        // The event, when the value of the input shall be validated and updated on the parent form.
+        // Valid values: 'input', 'change'
+        validateOn: {
+            type: String,
+            default: 'input'
+        },
+
         // The minimum length of the input value.
         minLength: {
             type: Number
@@ -15,7 +22,7 @@ module.exports = {
             type: Number
         },
 
-        // If true, the input is treated as a confirmation input and needs to have a corresponding input with the same value.
+        // States if the input shall be treated as a confirmation input and needs to have a corresponding input with the same value.
         // Ex.: If the name of this input is 'foo_confirmation', the input with the name 'foo' must have the same value.
         confirmed: {
             type: Boolean
@@ -27,14 +34,20 @@ module.exports = {
             default: false
         },
 
-        // The icon to show next to the input field.
-        icon: {
+        // The icon to show left to the input field.
+        iconLeft: {
             type: String
         },
 
-        // States, if a click on the input's icon shall submit the parents form.
-        addonSubmit: {
-            type: Boolean
+        // The icon to show right to the input field.
+        iconRight: {
+            type: String
+        },
+
+        // The icon to show next to the input field, which will be used to submit the parent form.
+        // If no icon is set, the parent form can not be submitted through this input.
+        submitIcon: {
+            type: String
         },
     },
 
@@ -49,21 +62,11 @@ module.exports = {
             return this.$t('placeholder.' + langKey);
         },
 
-        // The text to show to the user, if the value of the input is to short.
-        minLengthMessage: function () {
-            return this.getLocalizationString('min.string', {min: this.minLength, 'attribute': this.name});
-        },
-
-        // The text to show to the user, if the value of the input is to long.
-        maxLengthMessage: function () {
-            return this.getLocalizationString('max.string', {max: this.maxLength, 'attribute': this.name});
-        },
-
         // The text to show to the user, if the confirmation input does not have the same value as this input.
         confirmedMessage: function () {
             let confirmNameLength = this.name.length - '_confirmation'.length;
             let confirmName = this.name.substring(0, confirmNameLength);
-            return this.getLocalizationString('confirmed', {'attribute': confirmName});
+            return this.getLocalizedErrorMessage('confirmed', {'attribute': confirmName});
         },
 
         // States if the max length counter shall be shown on the input.
@@ -74,7 +77,7 @@ module.exports = {
         // States if the min length counter shall be shown on the input.
         showMinLengthCounter: function () {
             return this.minLength && this.submitValue.length < this.minLength;
-        }
+        },
     },
 
     methods: {
@@ -92,13 +95,13 @@ module.exports = {
                 if (isFunction(this.check)) {
                     this.check(this.submitValue, (valid, errorMessage) => {
                         if (valid) {
-                            this.addSuccess();
+                            this.errorMessage = null;
                         } else {
-                            this.addError(errorMessage);
+                            this.errorMessage = errorMessage;
                         }
                     });
                 } else {
-                    this.addSuccess();
+                    this.errorMessage = null;
                 }
             }
         },
@@ -111,7 +114,7 @@ module.exports = {
          */
         checkMaxLength: function () {
             if (this.maxLength && this.submitValue.length > this.maxLength) {
-                this.addError(this.maxLengthMessage);
+                this.errorMessage = this.getLocalizedErrorMessage('max.string', {max: this.maxLength, 'attribute': this.name});
                 return false;
             }
             return true;
@@ -125,7 +128,7 @@ module.exports = {
          */
         checkMinLength: function () {
             if (this.minLength && this.submitValue.length < this.minLength) {
-                this.addError(this.minLengthMessage);
+                this.errorMessage = this.getLocalizedErrorMessage('min.string', {min: this.minLength, 'attribute': this.name});
                 return false;
             }
             return true;
@@ -142,8 +145,8 @@ module.exports = {
                 let confirmNameLength = this.name.length - '_confirmation'.length;
                 let confirmName = this.name.substring(0, confirmNameLength);
                 let confirmInput = $(this.$refs.input).parents('form').first().find(':input[name=' + confirmName + ']').first();
-                if (confirmInput.val() != this.submitValue) {
-                    this.addError(this.confirmedMessage);
+                if (confirmInput.val() !== this.submitValue) {
+                    this.errorMessage = this.confirmedMessage;
                     return false;
                 }
             }

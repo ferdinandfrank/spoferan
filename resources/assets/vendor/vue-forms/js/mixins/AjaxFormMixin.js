@@ -1,5 +1,8 @@
 let Form = require('./../helpers/Form');
+let removeElementMixin = require('./RemoveElementMixin');
 module.exports = {
+
+    mixins: [removeElementMixin],
 
     props: {
         // The default submit action of the form.
@@ -16,7 +19,7 @@ module.exports = {
             required: true
         },
 
-        // Check if a confirm message shall be shown, before the form is going to be submitted.
+        // States if a confirm message shall be shown before the form is going to be submitted.
         // Note: There will always be a confirm message, if the method is set to 'delete'.
         // See computed property: 'showConfirm'
         confirm: {
@@ -24,35 +27,33 @@ module.exports = {
             default: false
         },
 
-        // Check if an alert message shall be shown, after the request from the server has been received.
+        // States if an alert message shall be shown after the request from the server has been received.
         // Note: There will always be an alert if an error occurred, no matter how this property is set.
         // To prevent an error alert set the 'alertError' property to false.
-        // Note2: There will be no alert on 'get' requests by default. Except the property 'alertKey' is set.
         // See computed property: 'showAlert'
         alert: {
             type: Boolean,
             default: true
         },
 
-        // Set to false, to not show an error message, if an error occurred.
+        // States if an error alert message shall be shown when the server responds with an error.
         alertError: {
             type: Boolean,
             default: true
         },
 
-        // The key to use to identify the messages to show to the user on an alert or on a confirm alert.
+        // The lang key to identify the messages to show to the user on an alert or on a confirm alert.
         alertKey: {
             type: String,
             default: 'default'
         },
 
-        // The name of the object to make this request. Used for delete and update confirms.
+        // The name of the object this request is made for. Used for delete and update confirms.
         objectName: {
             type: String
         },
 
-        // The type of the confirm alert to ask the user, if he really wants to submit the form.
-        // Will only be of use if the 'confirm' property is set to true.
+        // The type of the confirm alert to use when a confirm shall be shown.
         confirmType: {
             type: String,
             default: 'warning'
@@ -64,17 +65,22 @@ module.exports = {
             default: 3000
         },
 
-        // Set to false, if the loader shall not be reset after a response from the server has been received.
-        // Useful if the user shall be redirected after the submit.
-        stopLoading: {
-            type: Boolean,
-            default: true
-        },
-
-        // The name of the event to call, after the form has been submitted.
+        // The suffix of the event names to call after the form has been submitted.
         callbackName: {
             type: String,
-            default: 'ajaxFormResponse'
+            default: 'ajaxForm'
+        },
+
+        // States if the form's inputs shall be cleared after the submit.
+        clear: {
+            type: Boolean,
+            default: false
+        },
+
+        // States if the form's inputs shall be reset after the submit.
+        reset: {
+            type: Boolean,
+            default: false
         },
 
         // The selector of the wrapper, where to append the response to.
@@ -96,144 +102,226 @@ module.exports = {
         // If this property is not set, no redirect will occur.
         redirect: {
             type: String
+        },
+
+        // If the form is used to create a new entity, this property is used to extract the route key of the created entity
+        // and append it on the updateAction property, so a full update url for the entity will be created and the future
+        // submit can successfully be treated as an update for the entity.
+        objectKey: {
+            type: String,
+            default: 'id'
+        },
+
+        // The link to the details page of the created or edited entity to redirect the user after the form was successfully submitted.
+        // If this property is not set, no redirect will occur.
+        // Important: Because the key of the entity isn't known before its creation, set the objectKey property to the route key
+        // of the entities model, so the key can be extracted from the response and the full update url for the entity can be created.
+        detailRedirect: {
+            type: String
+        },
+
+        // The html content (loader) to put in the submit button, while the form is submitting.
+        loader: {
+            type: String,
+            default: '<i class="fa fa-fw fa-circle-o-notch fa-spin"></i>'
         }
     },
 
     computed: {
 
-        // The submit button of the form. Used to show the loader as soon as the submit request is pending.
-        button: function() {
+        // The submit button of the form. Used to show a loader as soon as the submit request is pending.
+        submitButton: function () {
             return $(this.$el).find('button[type=submit]');
+        },
+
+        // The reset button of the form. Used to reset the form.
+        resetButton: function () {
+            return $(this.$el).find('button[type=reset]');
         },
 
         // The title of the alert to show after the request from the server has been received.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'alert' property is set to true.
+        // Will only be of used if the 'alert' property is set to true.
         alertTitle: function () {
-            return this.getLocalizationString('alert', 'title');
+            return this.getLocalizedAlertMessage('alert', 'title');
         },
 
         // The message of the alert to show after the request from the server has been received.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'alert' property is set to true.
+        // Will only be of used if the 'alert' property is set to true.
         alertMessage: function () {
-            if ((this.submitMethod == 'delete' || this.submitMethod == 'put')
+            if ((this.submitMethod === 'delete' || this.submitMethod === 'put')
                 && this.objectName) {
-                return this.getLocalizationString('alert', 'content', {name: this.objectName});
+                return this.getLocalizedAlertMessage('alert', 'content', {name: this.objectName});
             }
 
-            return this.getLocalizationString('alert', 'content');
+            return this.getLocalizedAlertMessage('alert', 'content');
         },
 
         // The title of the confirm alert to ask the user, if he really wants to submit the form.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'confirm' property is set to true.
+        // Will only be of used if the 'confirm' property is set to true.
         confirmTitle: function () {
-            return this.getLocalizationString('confirm', 'title');
+            return this.getLocalizedAlertMessage('confirm', 'title');
         },
 
         // The message of the confirm alert to ask the user, if he really wants to submit the form.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'confirm' property is set to true.
+        // Will only be of used if the 'confirm' property is set to true.
         confirmMessage: function () {
-            if ((this.submitMethod == 'delete' || this.submitMethod == 'put')
+            if ((this.submitMethod === 'delete' || this.submitMethod === 'put')
                 && this.objectName) {
-                return this.getLocalizationString('confirm', 'content', {name: this.objectName});
+                return this.getLocalizedAlertMessage('confirm', 'content', {name: this.objectName});
             }
 
-            return this.getLocalizationString('confirm', 'content');
+            return this.getLocalizedAlertMessage('confirm', 'content');
         },
 
         // The text of the confirm alert's ACCEPT button to ask the user, if he really wants to submit the form.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'confirm' property is set to true.
+        // Will only be of used if the 'confirm' property is set to true.
         confirmAccept: function () {
-            return this.getLocalizationString('confirm', 'accept');
+            return this.getLocalizedAlertMessage('confirm', 'accept');
         },
 
         // The text of the confirm alert's CANCEL button to ask the user, if he really wants to submit the form.
         // Will be determined by the 'alertKey' property and the method of the next submit.
-        // Will only be of use if the 'confirm' property is set to true.
+        // Will only be of used if the 'confirm' property is set to true.
         confirmCancel: function () {
-            return this.getLocalizationString('confirm', 'cancel');
+            return this.getLocalizedAlertMessage('confirm', 'cancel');
         },
 
-        // Holds the state, if a confirm message shall be shown before the submit.
+        // States if a confirm message shall be shown before the submit.
         // Note: A confirm message will always be shown, if the method is set to 'delete'.
         showConfirm: function () {
-            if (!this.confirm && this.submitMethod == 'delete') {
+            if (!this.confirm && this.submitMethod === 'delete') {
                 return true;
             }
             return this.confirm;
         },
 
-        // Holds the state, if an alert message shall be shown after the submit.
-        // Note: An alert message won't be shown, if the method is set to 'get'.
+        // States if an alert message shall be shown after the submit.
         showAlert: function () {
-            if (this.submitMethod == 'get' && this.alertKey == 'default') {
-                return false;
-            }
             return this.alert;
-        }
+        },
     },
+
 
     data() {
         return {
+
             // The url, where to send the form request.
             submitAction: this.action,
 
             // The method to use for the submit.
             submitMethod: this.method.toLowerCase(),
 
-            // States, if the form can be submitted.
-            valid: true,
-
-            // The html content to put in the loading button, after the form has been submitted and the loader has stopped.
-            originalLoadingContent: '',
-
-            // The html content to put in the submit button, while the form is submitting.
-            loadingContent: '<i class="fa fa-fw fa-circle-o-notch fa-spin"></i>',
+            // The content of the submit button to insert, after the form has been submitted and the loader has stopped.
+            submitButtonContent: '',
 
             // The form instance containing the data to send.
-            form: new Form()
+            form: new Form(),
+
+            // The child input components of the form.
+            inputs: [],
+
+            // The errors of the form inputs.
+            errors: {},
+
+            // States if any error exists on the form.
+            hasError: false,
         }
+
     },
 
     watch: {
+
         /**
-         * Watch the submit permission of the form, to enable or disable the submit button.
+         * Watches the submit permission of the form, to enable or disable the submit button.
          *
-         * @param isValid {@code true} if a submit is allowed, {@code false} otherwise.
+         * @param hasError {@code true} if an error exists and a submit is not allowed, {@code false} otherwise.
          */
-        valid: function (isValid) {
-            window.eventHub.$emit('validate_' + this.callbackName, isValid);
-            this.button.prop('disabled', !isValid);
+        hasError: function (hasError) {
+            this.submitButton.prop('disabled', hasError);
         },
     },
 
     mounted: function () {
         this.$nextTick(function () {
-            if (this.button.length) {
-                this.originalLoadingContent = this.button.html();
+
+            // Initializes the form inputs.
+            this.initializeValues();
+
+            // Save the content of the submit button to insert the original content of the button after the form has
+            // been submitted and the loader has stopped.
+            if (this.submitButton.length) {
+                this.submitButtonContent = this.submitButton.html();
             }
 
-            // Disable the submit permission, to let the user make at least one input
-            this.updateFormSubmitPermission();
+            // Setup the listener for the reset button to reset the form on click.
+            if (this.resetButton.length) {
+                this.resetButton.on('click', (event) => {
+                    event.preventDefault();
+                    this.resetInputs();
+                    this.submit();
+                })
+            }
+
+            // Listen to child events
+            window.eventHub.$on('input-value-changed', (name, value) => {
+
+                // Check if the input is part of this form
+                if (this.form.has(name)) {
+                    this.form.set(name, value);
+                }
+            });
+            window.eventHub.$on('input-error-changed', (name, error) => {
+
+                // Check if the input is part of this form
+                if (this.form.has(name)) {
+                    this.setError(name, error);
+                }
+            });
         })
     },
 
     methods: {
 
         /**
+         * Initializes the input values in the form object.
+         */
+        initializeValues: function () {
+            getListOfChildren(this).forEach((child) => {
+                if (child.submitName && child.hasOwnProperty('submitValue')) {
+                    this.form.set(child.submitName, child.submitValue);
+                    this.inputs.push(child);
+                }
+            });
+        },
+
+        /**
+         * Adds a new input to the form.
+         *
+         * @param inputComponent
+         */
+        addInput: function (inputComponent) {
+            if (inputComponent.name && inputComponent.submitValue) {
+                this.form.set(inputComponent.name, inputComponent.submitValue);
+                this.inputs.push(inputComponent);
+            }
+        },
+
+        /**
          * Starts the form submitting process.
          */
         submit: function () {
-            if (!this.valid) {
+
+            if (this.hasError) {
                 window.eventHub.$emit('prevented_' + this.callbackName, this);
                 return;
             }
 
-            // Let the user confirm his submit action, if a confirm was defined in the properties.
+            // Let the user confirm his submit action, if a confirm shall be shown.
             if (this.showConfirm) {
                 showConfirm(
                     this.confirmType,
@@ -257,10 +345,10 @@ module.exports = {
          * Shows the loader, if a loader shall be shown.
          */
         startLoader: function () {
-            if (this.button) {
-                this.originalLoadingContent = this.button.html();
-                this.button.html(this.loadingContent);
-                this.button.prop('disabled', true);
+            if (this.submitButton) {
+                this.submitButtonContent = this.submitButton.html();
+                this.submitButton.html(this.loader);
+                this.submitButton.prop('disabled', true);
             }
         },
 
@@ -268,9 +356,9 @@ module.exports = {
          * Stops the loader, if a loader is shown.
          */
         stopLoader: function () {
-            if (this.button) {
-                this.button.html(this.originalLoadingContent);
-                this.button.prop('disabled', false);
+            if (this.submitButton) {
+                this.submitButton.html(this.submitButtonContent);
+                this.submitButton.prop('disabled', false);
             }
         },
 
@@ -278,6 +366,7 @@ module.exports = {
          * Sends the data of the form to the server.
          */
         sendData: function () {
+
             // Let the parent chain know, that the submit will be processed.
             window.eventHub.$emit('submitting_' + this.callbackName, this);
 
@@ -291,13 +380,38 @@ module.exports = {
         },
 
         /**
+         * Adds the specified error to the specified field.
+         *
+         * @param field
+         * @param error
+         */
+        setError: function (field, error) {
+            if (error === null) {
+                this.removeError(field);
+            } else {
+                this.errors[field] = error;
+                this.hasError = true;
+            }
+        },
+
+        /**
+         * Removes the error on the specified field.
+         *
+         * @param field
+         */
+        removeError: function (field) {
+            delete this.errors[field];
+            this.hasError = Object.keys(this.errors).length !== 0;
+        },
+
+        /**
          * Handles the successful response from the server.
          *
          * @param response The response from the server.
          */
         handleSuccess: function (response) {
-            if (this.submitMethod == 'get') {
-                updateHrefParamsWithData(this.form.data());
+            if (this.submitMethod === 'get') {
+                updateHrefParamsWithData(this.form.getSubmitData());
             }
 
             if (this.appendResponse) {
@@ -312,12 +426,24 @@ module.exports = {
                 replaceData(this.replaceResponse, response);
             }
 
-            this.redirectUser();
+            // Clear the form inputs
+            if (this.clear) {
+                this.clearInputs();
+            }
+
+            // Reset the form inputs
+            if (this.reset) {
+                this.resetInputs();
+            }
+
+            this.removeElement();
+
+            this.redirectUser(response);
             this.onSuccess(response);
         },
 
         /**
-         * Handles the response from the server, after the form has been submitted.
+         * Handles the response from the server after the form has been submitted.
          *
          * @param success {@code true} if the submit was successful, {@code false} otherwise.
          * @param response The response from the server.
@@ -326,7 +452,8 @@ module.exports = {
 
             // Check the success type, show the corresponding alerts and call the corresponding callback methods.
             if (!success) {
-                this.showErrorMessage(response);
+                window.eventHub.$emit('form-errors-changed', this.form.errors);
+                this.showErrorAlert();
                 this.onError(response);
             } else {
 
@@ -339,12 +466,10 @@ module.exports = {
                 }
             }
 
-            // Stop the loader only if an error occurred, or if it's not explicitly forbidden (if an loader was set).
-            if (this.stopLoading || !success) {
+            // Stop the loader if an error occurred or if no redirect shall occur.
+            if (!this.redirect || !success) {
                 this.stopLoader();
             }
-
-            this.updateFormSubmitPermission();
 
             // Call the callback to handle the after submit action directly on the page.
             // The callback has 4 parameters (+ the callback name):
@@ -355,39 +480,46 @@ module.exports = {
             // - component: The current instance of this component (useful to extract the form with 'component.$el'
             setTimeout(() => {
                 // noinspection JSUnresolvedFunction
-                window.eventHub.$emit(this.callbackName, success, response, this.submitMethod, this);
+                window.eventHub.$emit('response_' + this.callbackName, success, response, this.submitMethod, this);
             }, (this.alertError && !success) || this.showAlert ? this.alertDuration : 0);
         },
 
         /**
-         * Redirects the user to the redirect path, if the 'redirect' property is set.
+         * Redirects the user if a basic redirect or
+         * a redirect to the details page of the created or edited object shall occur.
          */
-        redirectUser: function () {
-            if (this.redirect) {
+        redirectUser: function (response) {
+            let redirectURL = this.detailRedirect;
+            if (redirectURL) {
+
+                // Get the created key for the entity
+                if (this.objectKey) {
+                    let objectKey = response[this.objectKey];
+                    if (!redirectURL.endsWith(objectKey)) {
+                        if (!redirectURL.endsWith('/')) {
+                            redirectURL += '/';
+                        }
+                        redirectURL += objectKey;
+                    }
+                }
+
+                window.location.href = redirectURL;
+            } else if (this.redirect) {
                 window.location.href = this.redirect;
             }
         },
 
         /**
-         * Shows an error message to the user, after the form has been submitted and an error occurred on the server.
-         *
-         * @param response The error response of the server.
+         * Shows an error message to the user after the form has been submitted and an error occurred on the server.
          */
-        showErrorMessage: function (response) {
+        showErrorAlert: function () {
+
             // Check if an error message shall be shown to the user.
             if (this.alertError) {
-                let msg = null;
+                let msg = this.form.errors.get('msg');
 
-                // Extract the error message from the response
-                if(response && response.hasOwnProperty('msg')) {
-                    msg = response['msg'];
-                } else if (response) {
-                    for (let key in response) {
-                        if(response.hasOwnProperty(key)) {
-                            msg = response[key];
-                            break;
-                        }
-                    }
+                if (!msg) {
+                    msg = this.form.errors.first();
                 }
 
                 if (!msg) {
@@ -399,6 +531,34 @@ module.exports = {
         },
 
         /**
+         * Clears the values of the form.
+         */
+        clearInputs: function () {
+            this.inputs.forEach((child) => {
+                if (typeof child.clear === 'function') {
+                    child.clear();
+                }
+            });
+            if (this.submitMethod === 'get') {
+                updateHrefParamsWithData(this.form.getSubmitData());
+            }
+        },
+
+        /**
+         * Resets the values of the form.
+         */
+        resetInputs: function () {
+            this.inputs.forEach((child) => {
+                if (typeof child.reset === 'function') {
+                    child.reset();
+                }
+            });
+            if (this.submitMethod === 'get') {
+                updateHrefParamsWithData(this.form.getSubmitData());
+            }
+        },
+
+        /**
          * Gets the localization string for an alert type and a type and falls back to the default if necessary.
          *
          * @param alertType 'alert' or 'confirm'
@@ -406,11 +566,11 @@ module.exports = {
          * @param params localization params
          * @returns {string}
          */
-        getLocalizationString: function (alertType, type, params = null) {
+        getLocalizedAlertMessage: function (alertType, type, params = null) {
             let key = alertType + '.' + this.alertKey + '.' + this.submitMethod + '.' + type;
             let defaultKey = alertType + '.default.' + this.submitMethod + '.' + type;
             let text = this.$t(key, params);
-            if (key == text) {
+            if (key === text) {
                 text = this.$t(defaultKey, params);
             }
 
@@ -418,35 +578,20 @@ module.exports = {
         },
 
         /**
-         * Updates the state of the submit button and checks if the form can be submitted,
-         * depending if the child inputs allow a submit.
-         */
-        updateFormSubmitPermission: function () {
-            let allInputsValid = true;
-            let children = getListOfChildren(this);
-            for (let index in children) {
-                let child = children[index];
-                if (child.hasOwnProperty("valid") && !child.valid) {
-                    allInputsValid = false;
-                }
-            }
-
-            this.valid = allInputsValid;
-        },
-
-        /**
          * Will be called if the form was successfully submitted.
          *
          * @param response The response from the server.
          */
-        onSuccess: function (response) {},
+        onSuccess: function (response) {
+        },
 
         /**
          * Will be called if an error occurred on the form submit.
          *
          * @param response The response from the server.
          */
-        onError: function (response) {},
+        onError: function (response) {
+        },
     }
 };
 

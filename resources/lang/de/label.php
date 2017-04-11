@@ -37,6 +37,7 @@ return [
     'status'                     => 'Status',
     'name'                       => 'Name',
     'rank'                       => 'Platzierung',
+    'rank_abbr'                  => 'Platz',
     'hint'                       => 'Hinweis',
     'registered_at'              => 'Anmeldedatum',
     'contact'                    => 'Kontakt',

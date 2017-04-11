@@ -16,6 +16,9 @@
 /*********************
   2. Basic
 **********************/
+.table td, .table th {
+    vertical-align: middle !important;
+}
 .table tr:hover {
     background-color: transparent !important;
 }

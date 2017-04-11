@@ -3,9 +3,10 @@
         <thead>
         <tr>
             @if($finished)
-                <th>{{ trans('label.rank') }}</th>
+                <th><abbr title="{{ trans('label.rank') }}">{{ trans('label.rank_abbr') }}</abbr></th>
             @endif
             <th><abbr title="{{ trans('label.starter_number') }}">{{ trans('label.starter_number_abbr') }}</abbr></th>
+                <th></th>
             <th>{{ trans('label.name') }}</th>
             <th>{{ trans('label.participation_class') }}</th>
             <th>{{ trans('label.registered_at') }}</th>
@@ -16,10 +17,11 @@
             <tfoot>
             <tr>
                 @if($finished)
-                    <th>{{ trans('label.rank') }}</th>
+                    <th><abbr title="{{ trans('label.rank') }}">{{ trans('label.rank_abbr') }}</abbr></th>
                 @endif
                 <th><abbr title="{{ trans('label.starter_number') }}">{{ trans('label.starter_number_abbr') }}</abbr>
                 </th>
+                    <th></th>
                 <th>{{ trans('label.name') }}</th>
                 <th>{{ trans('label.participation_class') }}</th>
                 <th>{{ trans('label.registered_at') }}</th>
@@ -33,7 +35,9 @@
                 @if($finished)
                     <td>{{ $participation->rank  }}</td>
                 @endif
+
                 <td>{{ $participation->starter_number }}</td>
+                    <td>@if(!$participation->privacy)<img class="avatar x-small" src="{{ $participation->athlete->user->avatar }}">@endif</td>
                 <td>{!! $participation->getAthletePresentationName() !!}</td>
                 <td>{{ $participation->participationClass->title }}</td>
                 <td>{{ dateDiffForHumans($participation->created_at, false) }}</td>

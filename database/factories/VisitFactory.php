@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Creates a fake visit.
+ */
 $factory->define(App\Models\Visit::class, function (Faker\Generator $faker) {
 
     do {
@@ -14,6 +17,9 @@ $factory->define(App\Models\Visit::class, function (Faker\Generator $faker) {
     ];
 });
 
+/**
+ * Creates a fake visit class.
+ */
 $factory->define(App\Models\VisitClass::class, function (Faker\Generator $faker) {
     $event = \App\FactoryHelper::getRandomOrCreate(\App\Models\Event::class);
 

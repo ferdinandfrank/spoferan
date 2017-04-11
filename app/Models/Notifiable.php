@@ -9,7 +9,7 @@ namespace App\Models;
  * -----------------------
  *
  * @author  Ferdinand Frank
- * @version 0.1
+ * @version 1.0
  * @package App\Models
  */
 

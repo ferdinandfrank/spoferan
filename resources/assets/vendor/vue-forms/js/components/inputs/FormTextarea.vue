@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue }">
+    <div class="form-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': iconLeft, 'has-addon-right': showHelp || submitIcon || iconRight }">
         <textarea :id="name + '-input'"
                   :name="name"
                   v-model="submitValue"
@@ -8,30 +8,40 @@
                   :disabled="disabled"
                   :placeholder="showPlaceholder ? placeholder : ''"
                   ref="input"
+                  @input="validateOn == 'input' ? inputChanged() : ''"
+                  @change="validateOn == 'change' ? inputChanged() : ''"
                   @focus="activate"
                   @blur="deactivate"></textarea>
 
-        <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
-            <icon :icon="icon"></icon>
-        </button>
-        <span v-if="icon && !addonSubmit" class="form-group-addon">
-            <icon :icon="icon"></icon>
-        </span>
+        <div v-if="iconLeft" class="icon icon-left">
+            <icon :icon="iconLeft"></icon>
+        </div>
 
-        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
-            <span>{{ label }}</span>
-            <span v-if="showHelp" class="tooltip">
-                <i @click="openHelp" class="fa fa-fw fa-question help"></i>
-                <span v-if="helpTooltip" class="tooltip-text">{{ helpTooltip }}</span>
-            </span>
-        </label>
+        <div v-if="iconRight && !submitIcon" class="icon icon-right">
+            <icon :icon="iconRight"></icon>
+        </div>
+
+        <button type="submit" v-if="submitIcon" class="icon icon-right"
+                :style="{cursor: hasSuccess ? 'pointer' : 'not-allowed'}">
+            <icon :icon="submitIcon"></icon>
+        </button>
+
+        <div v-if="showHelp" class="help icon icon-right">
+            <div v-if="helpTooltip" class="tooltip tooltip-left">
+                <icon icon="fa fa-fw fa-question"></icon>
+                <span class="tooltip-text">{{ helpTooltip }}</span>
+            </div>
+            <icon v-if="helpPath" @click="openHelp()" icon="fa fa-fw fa-question"></icon>
+        </div>
+        <span class="info" v-if="hasError">{{ errorMessage }}</span>
+        <span class="info" v-if="hasSuccess">{{ successMessage }}</span>
+
         <span class="counter" :class="submitValue.length > maxLength ? 'error' : 'success'" v-if="showMaxLengthCounter">
             {{ submitValue.length + '/' + maxLength }}
         </span>
         <span class="counter" :class="submitValue.length < minLength ? 'error' : 'success'" v-if="showMinLengthCounter">
             {{ submitValue.length + '/' + minLength }}
         </span>
-        <slot></slot>
     </div>
 </template>
 

@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
  * -----------------------
  *
  * @author  Ferdinand Frank
- * @version 0.1
+ * @version 1.0
  * @package App\Models
  */
 trait RoutesNotifications {

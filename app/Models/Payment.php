@@ -2,6 +2,37 @@
 
 namespace App\Models;
 
+/**
+ * App\Models\Payment
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $payable_id_id
+ * @property string $payable_id_type
+ * @property string $payment_type
+ * @property int $amount
+ * @property string $charge_id
+ * @property string $coupon_id
+ * @property string $metadata
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereAmount($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereChargeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereCouponId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereMetadata($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment wherePayableIdId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment wherePayableIdType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment wherePaymentType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUserId($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Coupon $coupon
+ */
 class Payment extends BaseModel {
 
     /**
@@ -20,6 +51,9 @@ class Payment extends BaseModel {
         'amount',
         'charge_id',
         'description',
+        'payment_type',
+        'coupon_id',
+        'metadata',
         'user_id'
     ];
 
@@ -29,6 +63,15 @@ class Payment extends BaseModel {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user() {
-        return $this->belongsTo(User::class, 'payment_detail_id');
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Gets the coupon that was used for the payment.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function coupon() {
+        return $this->belongsTo(Coupon::class);
     }
 }

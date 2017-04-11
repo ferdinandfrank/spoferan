@@ -1,32 +1,37 @@
 <template>
-    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue, 'has-addon-left': icon, 'has-addon-right': showHelp }">
+    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': iconLeft, 'has-addon-right': showHelp || submitIcon || iconRight }">
         <input :id="name + '-input'"
                type="text"
-               :name="name"
+               :name="submitName"
                class="datetimepicker"
-               :placeholder="label"
+               :placeholder="showLabel ? label : ''"
                :disabled="disabled"
                ref="input"
                @focus="activate"
                @blur="deactivate">
 
-        <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
-            <icon :icon="icon"></icon>
-        </button>
-
-        <div v-if="icon && !addonSubmit" class="icon">
-            <icon :icon="icon"></icon>
+        <div v-if="iconLeft" class="icon icon-left">
+            <icon :icon="iconLeft"></icon>
         </div>
 
-        <div v-if="showHelp" class="help">
+        <div v-if="iconRight && !submitIcon" class="icon icon-right">
+            <icon :icon="iconRight"></icon>
+        </div>
+
+        <button type="submit" v-if="submitIcon" class="icon icon-right"
+                :style="{cursor: hasSuccess ? 'pointer' : 'not-allowed'}">
+            <icon :icon="submitIcon"></icon>
+        </button>
+
+        <div v-if="showHelp" class="help icon icon-right">
             <div v-if="helpTooltip" class="tooltip tooltip-left">
                 <icon icon="fa fa-fw fa-question"></icon>
                 <span class="tooltip-text">{{ helpTooltip }}</span>
             </div>
             <icon v-if="helpPath" @click="openHelp()" icon="fa fa-fw fa-question"></icon>
         </div>
-
-        <span class="info" v-if="labelMessage">{{ labelMessage }}</span>
+        <span class="info" v-if="hasError">{{ errorMessage }}</span>
+        <span class="info" v-if="hasSuccess">{{ successMessage }}</span>
     </div>
 </template>
 
@@ -45,6 +50,7 @@
                 });
                 $(this.$refs.input).on("dp.change", (moment) => {
                     this.submitValue = moment.date.format("YYYY-MM-DD");
+                    this.inputChanged();
                 });
             })
         },

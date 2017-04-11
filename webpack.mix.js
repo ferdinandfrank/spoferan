@@ -16,6 +16,5 @@ let exportPath = 'public/';
 mix.js([
     assetsPath + 'js/app.js',
     assetsPath + 'talvbansal/media-manager/js/media-manager.js',
-    assetsPath + 'vendor/vue-forms/js/vue-forms.js',
 ], exportPath + 'js')
    .sass('resources/assets/sass/app.scss', exportPath + 'css').version();

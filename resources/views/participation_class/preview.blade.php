@@ -6,7 +6,7 @@
                 <h3 class="title">{{ $participationClass->title }}</h3>
                 <p class="subtitle">{{ trans_choice('param_label.already_num_of_participants', count($participationClass->participations), ['num' => count($participationClass->participations)]) }}</p>
             </div>
-            <p class="price">{{ $participationClass->entry_fee }} <small>€</small></p>
+            <p class="price">{{ formatMoney($participationClass->price) }}</p>
         </div>
         <p>{{ $participationClass->description }}</p>
         <div class="action">

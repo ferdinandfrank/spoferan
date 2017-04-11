@@ -44,7 +44,7 @@
                 </small>
                 <div>
                     <span>{{ trans('label.starting_at') }}</span>
-                    <span class="price">{{ translateCents($event->getLowestPrice()) }} €</span>
+                    <span class="price">{{ formatMoney($event->getLowestPrice()) }}</span>
                 </div>
             </div>
         </div>

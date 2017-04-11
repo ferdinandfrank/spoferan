@@ -159,9 +159,22 @@
 
                                         <hr>
                                     @endif
+                                    <h4>3. Gutschein einlösen</h4>
+                                    <p class="is-warning">Info: Es kann der Gutschein-Code "TEST-COUPON" verwendet werden.</p>
+                                    <div class="columns">
+                                        <div class="column is-4">
+                                            <form-input name="coupon" :ignore-errors="true" :check="validateCoupon" icon-left="{{ config('icons.coupon') }}" validate-on="change"></form-input>
+                                        </div>
+                                    </div>
+                                        <hr>
                                     <div class="flex-end">
-                                        <p>Gesamtpreis inkl. Mwst.</p>
-                                        <h2>€ @{{ selectedParticipationClass.entry_fee }}</h2>
+                                        <div class="flex-column">
+                                            <p class="m-b-2">Gesamtpreis inkl. Mwst.</p>
+                                            <h2 class="m-none" v-if="!coupon">€ @{{ price }}</h2>
+                                            <h4 class="line-through m-none" v-if="coupon">€ @{{ price }}</h4>
+                                            <p v-if="coupon">@{{ couponInfo }}</p>
+                                            <h2 class="m-none" v-if="coupon">€ @{{ couponPrice }}</h2>
+                                        </div>
                                     </div>
                                     <div class="center m-t-50">
                                         <hidden-input name="participation_class_id"
@@ -186,7 +199,7 @@
         </div>
     </div>
 
-    <modal-form ref="addCCForm" action="{{ route('users.payment_details.store', $loggedUser->getKey()) }}"
+    <modal-form ref="addCCForm" action="{{ route('payment_details.store', $loggedUser->activePaymentDetails->getKey()) }}"
                 id="addCCForm"
                 :labels="{save: '{{ trans('action.add_credit_card') }}'}" title="{{ trans('action.add_credit_card') }}"
                 alert-key="credit_card" callback-name="addCreditCardResponse" :reset="true" method="POST">
@@ -248,7 +261,7 @@
         </div>
     </modal-form>
 
-    <modal-form ref="addBAForm" action="{{ route('users.payment_details.store', $loggedUser->getKey()) }}"
+    <modal-form ref="addBAForm" action="{{ route('payment_details.store', $loggedUser->getKey()) }}"
                 :labels="{save: '{{ trans('action.add_bank_account') }}'}"
                 title="{{ trans('action.add_bank_account') }}" alert-key="bank_account"
                 callback-name="addBankAccountResponse" :reset="true" method="POST">
@@ -277,11 +290,16 @@
                     form: null,
                     valid: false,
                     wizard: null,
+                    coupons: <?php echo $coupons; ?>,
                     selectedEvent: <?php echo $event; ?>,
                     selectedEventPart: <?php echo $selectedEventPart ?? '{}'; ?>,
                     selectedParticipationClass: <?php echo $selectedParticipationClass ?? '{}'; ?>,
-                    cards: <?php echo json_encode($loggedUser->paymentDetails->getCards()['data']); ?>,
-                    bankAccounts: <?php echo json_encode($loggedUser->paymentDetails->getBankAccounts()['data']); ?>
+                    cards: <?php echo json_encode($loggedUser->activePaymentDetails->getCards()['data']); ?>,
+                    bankAccounts: <?php echo json_encode($loggedUser->activePaymentDetails->getBankAccounts()['data']); ?>,
+                    coupon: null,
+                    couponInfo: null,
+                    couponPrice: null,
+                    price: null
                 }
             },
 
@@ -289,31 +307,35 @@
                 this.$nextTick(function () {
                     this.wizard = this.$refs.wizard;
                     this.form = this.$refs.form;
-                    this.valid = !!this.form.form.source;
+                    this.valid = !!this.form.form.data.source;
+                    this.price = formatMoney(this.selectedParticipationClass.price);
 
-                    window.eventHub.$on('addCreditCardResponse', (success, response) => {
+                    window.eventHub.$on('response_addCreditCard', (success, response) => {
                         if (success) {
                             this.$refs.addCCForm.hide();
                             this.cards.push(response);
                         }
                     });
 
-                    window.eventHub.$on('addBankAccountResponse', (success, response) => {
+                    window.eventHub.$on('response_addBankAccount', (success, response) => {
                         if (success) {
                             this.$refs.addBAForm.hide();
                             this.bankAccounts.push(response);
                         }
                     });
 
-                    window.eventHub.$on('source-input-changed', (value) => {
-                        this.valid = !!value;
+                    window.eventHub.$on('input-value-changed', (name, value) => {
+                        if (name === 'source') {
+                            this.valid = !!value;
+                        }
                     });
+
 
                     window.eventHub.$on('wizard_step_changed', (step, lastStep) => {
 
                         // Event Part selected
                         @if(count($event->childEvents))
-                        if (lastStep.index == 0 && lastStep.selectedKey != this.selectedEventPart.slug) {
+                        if (lastStep.index === 0 && lastStep.selectedKey !== this.selectedEventPart.slug) {
                             sendRequest('/events/' + lastStep.selectedKey + '/participation-classes', 'get', null, function (response) {
                                 replaceContent('#participation_classes_list', response);
                             });
@@ -328,7 +350,7 @@
 
                                 this.selectedEventPart = response;
                             });
-                        } else if (lastStep.index == 1 && lastStep.index < step.index && lastStep.selectedKey != this.selectedParticipationClass.id) {
+                        } else if (lastStep.index === 1 && lastStep.index < step.index && lastStep.selectedKey !== this.selectedParticipationClass.id) {
                             sendRequest('/api/participation-classes/' + lastStep.selectedKey, 'get', null, (response) => {
 
                                 // Remove old selected class from participation class preview card
@@ -338,10 +360,11 @@
                                 $('#' + response.id).children().addClass('selected');
 
                                 this.selectedParticipationClass = response;
+                                this.price = formatMoney(this.selectedParticipationClass.price);
                             });
                         }
                         @else
-                        if (lastStep.index == 0 && lastStep.selectedKey != this.selectedParticipationClass.id) {
+                        if (lastStep.index === 0 && lastStep.selectedKey !== this.selectedParticipationClass.id) {
                             sendRequest('/api/participation-classes/' + lastStep.selectedKey, 'get', null, (response) => {
 
                                 // Remove old selected class from participation class preview card
@@ -351,6 +374,7 @@
                                 $('#' + response.id).children().addClass('selected');
 
                                 this.selectedParticipationClass = response;
+                                this.price = formatMoney(this.selectedParticipationClass.price);
                             });
                         }
                         @endif
@@ -410,6 +434,23 @@
                 },
                 toSnakeCase: function (string) {
                     return toSnakeCase(string);
+                },
+
+                validateCoupon: function(value, callback) {
+                    let coupon = getObjectByValue(this.coupons, 'code', value);
+
+                    this.coupon = coupon;
+                    if (coupon) {
+                        let off = coupon.amount_off ? formatMoney(coupon.amount_off) + ' €' : coupon.percent_off + ' %';
+                        this.couponInfo = '- ' + off  + ' (' + coupon.code + ')';
+                        this.couponPrice = coupon.amount_off ? this.selectedParticipationClass.price - coupon.amount_off : this.selectedParticipationClass.price * (coupon.percent_off / 100);
+                        this.couponPrice = formatMoney(this.couponPrice);
+                        callback(true);
+                    } else {
+                        this.couponInfo = null;
+                        this.couponPrice = null;
+                        callback(false, this.$t('validation.coupon'));
+                    }
                 }
             }
         });

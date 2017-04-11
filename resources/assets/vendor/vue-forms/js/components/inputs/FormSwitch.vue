@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group switch-group" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue }">
+    <div class="form-group switch-group" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess }">
         <div class="switch" :class="[color ? 'switch-' + color : '', size ? 'switch-' + size : '' ]"
              @click="toggleValue">
             <div class="ios-switch" :class="submitValue ? 'on' : 'off'">
@@ -14,7 +14,7 @@
                    style="display: none;"
                    v-model="submitValue"/>
         </div>
-        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
+        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel">
             <span>{{ label }}</span>
             <span v-if="showHelp" class="tooltip">
                 <i @click="openHelp" class="fa fa-fw fa-question help"></i>

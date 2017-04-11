@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\Participation;
 use App\Http\Requests\ParticipationCreateRequest;
@@ -65,8 +66,9 @@ class ParticipationController extends Controller {
 
         $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')))->first();
         $selectedParticipationClass = ParticipationClass::find(request()->input(config('query.participation_class')));
+        $coupons = Coupon::redeemable(Coupon::$types['participation'])->get();
 
-        return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass'));
+        return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass', 'coupons'));
     }
 
     /**

@@ -1,20 +1,21 @@
 <?php
 
+/**
+ * Creates a fake user.
+ */
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'user_type' => random_int(0, 1),
-        'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
-        'confirmed' => true,
-        'country' => $faker->countryCode,
-        'postcode' => $faker->postcode,
-        'city' => $faker->city,
-        'street' => $faker->streetAddress,
-        'phone' => $faker->phoneNumber,
-        'avatar' => $faker->imageUrl(200, 200, 'people')
+        'current_user_type' => config('spoferan.user_type.athlete'),
+        'email'             => $faker->email,
+        'password'          => bcrypt(str_random(10)),
+        'confirmed'         => true,
+        'avatar'            => $faker->imageUrl(200, 200, 'people')
     ];
 });
 
+/**
+ * Creates a fake athlete.
+ */
 $factory->define(App\Models\Athlete::class, function (Faker\Generator $faker) {
 
     $gender = ['m', 'w'];
@@ -23,23 +24,26 @@ $factory->define(App\Models\Athlete::class, function (Faker\Generator $faker) {
     $sport_type_id = \App\Models\SportType::orderByRaw("RAND()")->first()->id;
 
     return [
-        'user_id' => function () {
-            return factory(App\Models\User::class)->create(['user_type' => config('spoferan.user_type.athlete')])->id;
+        'user_id'       => function () {
+            return factory(App\Models\User::class)->create(['current_user_type' => config('spoferan.user_type.athlete')])->id;
         },
-        'first_name' => $faker->firstName($genderName[$rand_gender_id]),
-        'last_name' => $faker->lastName,
-        'gender' => $gender[$rand_gender_id],
+        'first_name'    => $faker->firstName($genderName[$rand_gender_id]),
+        'last_name'     => $faker->lastName,
+        'gender'        => $gender[$rand_gender_id],
         'sport_type_id' => $sport_type_id,
-        'birth_date' => $faker->date("Y-m-d", '-18 years'),
+        'birth_date'    => $faker->date("Y-m-d", '-18 years'),
     ];
 });
 
+/**
+ * Creates a fake organizer.
+ */
 $factory->define(App\Models\Organizer::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => function () {
-            return factory(App\Models\User::class)->create(['user_type' => config('spoferan.user_type.organizer')])->id;
+        'user_id'     => function () {
+            return factory(App\Models\User::class)->create(['current_user_type' => config('spoferan.user_type.organizer')])->id;
         },
-        'name' => $faker->company,
+        'name'        => $faker->company,
         'description' => $faker->text()
     ];
 });

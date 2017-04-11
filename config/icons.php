@@ -69,6 +69,7 @@ return [
     'city'          => 'fa fa-fw fa-map-signs',
     'postcode'      => 'fa fa-fw fa-map-signs',
     'state'         => 'fa fa-fw fa-map',
+    'coupon'         => 'fa fa-fw fa-ticket',
     'sport_type'    => 'fa fa-fw fa-futbol-o',
     'credit_card'   => 'fa fa-fw fa-credit-card',
     'birthday'      => 'fa fa-fw fa-birthday-cake',

@@ -4,18 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
  * App\Models\SportType
  *
  * @property int $id
  * @property string $label
+ * @property string $slug
  * @property string $icon
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $athletes
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SportType whereIcon($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SportType whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SportType whereLabel($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SportType whereSlug($value)
  * @mixin \Eloquent
  */
 class SportType extends SlugModel {

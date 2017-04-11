@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider {
         'App\Events\AthleteCreated' => [
             'App\Listeners\CreateCustomerForAthlete',
         ],
+        'App\Events\OrganizerCreated' => [
+            'App\Listeners\CreateAccountForOrganizer',
+        ],
         'App\Events\UserCreated' => [
             'App\Listeners\CreateUserRelatedTables',
         ],

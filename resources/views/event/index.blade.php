@@ -14,26 +14,26 @@
                         <p class="subtitle">{{ trans('descriptions.event.search') }}</p>
                     </div>
                     <div class="content m-t-40">
-                        <ajax-form action="{{ route('events.index') }}" method="GET" replace-response="#event-preview-list">
+                        <ajax-form action="{{ route('events.index') }}" method="GET" :alert="false" replace-response="#event-preview-list">
                             <div class="columns is-multiline">
                                 <div class="column is-6">
                                     <div class="columns is-multiline">
                                         <div class="column is-12">
-                                            <form-input icon="{{ config('icons.search') }}" name="search" value="{{ request('search') }}"></form-input>
+                                            <form-input icon-left="{{ config('icons.search') }}" name="search" value="{{ request('search') }}"></form-input>
                                         </div>
                                         <div class="column is-12">
-                                            <form-select icon="{{ config('icons.sport_type') }}" name="sport_type" value="{{ request('sport_type') }}">
+                                            <form-select icon-left="{{ config('icons.sport_type') }}" name="sport_type" value="{{ request('sport_type') }}">
                                                 @foreach(\App\Models\SportType::all() as $sportType)
                                                     <option value="{{ $sportType->getRouteKey() }}">{{ trans('sport_types.' . $sportType->label) }}</option>
                                                 @endforeach
                                             </form-select>
                                         </div>
                                         <div class="column is-6">
-                                            <form-date-input icon="{{ config('icons.calendar') }}" name="date_interval_start"
+                                            <form-date-input icon-left="{{ config('icons.calendar') }}" name="date_interval_start"
                                                              value="{{ request('date_interval_start') }}"></form-date-input>
                                         </div>
                                         <div class="column is-6">
-                                            <form-date-input icon="{{ config('icons.calendar') }}" name="date_interval_end"
+                                            <form-date-input icon-left="{{ config('icons.calendar') }}" name="date_interval_end"
                                                              value="{{ request('date_interval_end') }}"></form-date-input>
                                         </div>
 
@@ -42,23 +42,23 @@
                                 <div class="column is-6">
                                     <div class="columns is-multiline">
                                         <div class="column is-12">
-                                            <form-select icon="{{ config('icons.country') }}" name="country" value="{{ request('country') }}">
+                                            <form-select icon-left="{{ config('icons.country') }}" name="country" value="{{ request('country') }}">
                                                 @foreach(Country::all() as $countryCode)
                                                     <option value="{{ $countryCode }}">{{ trans('countries.' . $countryCode) }}</option>
                                                 @endforeach
                                             </form-select>
                                         </div>
                                         <div class="column is-12">
-                                            <form-select icon="{{ config('icons.state') }}" name="state" value="{{ request('state') }}">
+                                            <form-select icon-left="{{ config('icons.state') }}" name="state" v-model="selectedState">
                                                 <option v-for="state in states"
                                                         :value="state.code">@{{ state.name }}</option>
                                             </form-select>
                                         </div>
                                         <div class="column is-6">
-                                            <form-input icon="{{ config('icons.city') }}" name="city" value="{{ request('city') }}"></form-input>
+                                            <form-input icon-left="{{ config('icons.city') }}" name="city" value="{{ request('city') }}"></form-input>
                                         </div>
                                         <div class="column is-6">
-                                            <form-input icon="{{ config('icons.postcode') }}" name="postcode" value="{{ request('postcode') }}"></form-input>
+                                            <form-input icon-left="{{ config('icons.postcode') }}" name="postcode" value="{{ request('postcode') }}"></form-input>
                                         </div>
 
                                     </div>
@@ -98,18 +98,23 @@
                 return {
                     stateCodes: <?php echo json_encode(State::all()); ?>,
                     countryCode: '<?php echo request('country'); ?>',
-                    states: []
+                    states: [],
+                    selectedState: ''
                 }
             },
 
             mounted: function () {
                 this.$nextTick(function () {
-                    window.eventHub.$on('country-input-changed', (countryCode) => {
-                        this.countryCode = countryCode;
-                        this.updateStates();
+                    window.eventHub.$on('input-value-changed', (name, value) => {
+                        if (name === 'country') {
+                            this.countryCode = value;
+                            this.updateStates();
+                        }
+
                     });
 
                     this.updateStates();
+                    this.selectedState = '<?php echo request('state'); ?>';
                 })
             },
 

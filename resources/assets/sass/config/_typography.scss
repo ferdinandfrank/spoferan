@@ -97,6 +97,10 @@ p {
     color: $muted-color !important;
 }
 
+.line-through {
+    text-decoration: line-through;
+}
+
 .no-data {
     text-align: center;
     color: $muted-color !important;

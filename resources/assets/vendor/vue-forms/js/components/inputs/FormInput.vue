@@ -1,34 +1,41 @@
 <template>
-    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': icon, 'has-addon-right': showHelp }">
-        <input :id="name + '-input'"
-               type="text"
-               :name="name"
+    <div class="form-input" ref="inputWrapper"
+         :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': iconLeft, 'has-addon-right': showHelp || submitIcon || iconRight }">
+
+        <input :id="name + '-input'" type="text" :name="submitName"
                v-model="submitValue"
-               :placeholder="label"
+               :placeholder="showLabel ? label : ''"
                :step="step"
                :disabled="disabled"
                ref="input"
+               @input="validateOn == 'input' ? inputChanged() : ''"
+               @change="validateOn == 'change' ? inputChanged() : ''"
                @focus="activate"
                @blur="deactivate"
                :title="label">
 
-        <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
-            <icon :icon="icon"></icon>
-        </button>
-
-        <div v-if="icon && !addonSubmit" class="icon">
-            <icon :icon="icon"></icon>
+        <div v-if="iconLeft" class="icon icon-left">
+            <icon :icon="iconLeft"></icon>
         </div>
 
-        <div v-if="showHelp" class="help">
+        <div v-if="iconRight && !submitIcon" class="icon icon-right">
+            <icon :icon="iconRight"></icon>
+        </div>
+
+        <button type="submit" v-if="submitIcon" class="icon icon-right"
+                :style="{cursor: hasSuccess ? 'pointer' : 'not-allowed'}">
+            <icon :icon="submitIcon"></icon>
+        </button>
+
+        <div v-if="showHelp" class="help icon icon-right">
             <div v-if="helpTooltip" class="tooltip tooltip-left">
                 <icon icon="fa fa-fw fa-question"></icon>
                 <span class="tooltip-text">{{ helpTooltip }}</span>
             </div>
             <icon v-if="helpPath" @click="openHelp()" icon="fa fa-fw fa-question"></icon>
         </div>
-
-        <span class="info" v-if="labelMessage">{{ labelMessage }}</span>
+        <span class="info" v-if="hasError">{{ errorMessage }}</span>
+        <span class="info" v-if="hasSuccess">{{ successMessage }}</span>
 
         <span class="counter" :class="submitValue.length > maxLength ? 'error' : 'success'" v-if="showMaxLengthCounter">
             {{ submitValue.length + '/' + maxLength }}
@@ -71,8 +78,8 @@
              * @returns {boolean}
              */
             checkComponentSpecific: function () {
-                if (this.type == 'email' && !isValidEmail(this.submitValue)) {
-                    this.addError(this.getLocalizationString('email', {'attribute': this.name}, true));
+                if (this.type === 'email' && !isValidEmail(this.submitValue)) {
+                    this.errorMessage = this.getLocalizedErrorMessage('email', {'attribute': this.name}, true);
                     return false;
                 }
                 return true;

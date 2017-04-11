@@ -12,6 +12,7 @@ class AuthServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $policies = [
+		\App\Models\Coupon::class => \App\Policies\CouponPolicy::class,
 		\App\Models\ParticipationClass::class => \App\Policies\ParticipationClassPolicy::class,
 		\App\Models\Participation::class => \App\Policies\ParticipationPolicy::class,
 		\App\Models\Athlete::class => \App\Policies\AthletePolicy::class,

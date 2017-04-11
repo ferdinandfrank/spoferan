@@ -6,6 +6,7 @@
  and simple, leaving you to focus on building your next great project.
  ************************************************************/
 window.Vue = require('vue');
+require('./../vendor/vue-forms/js/vue-forms');
 require('vue-resource');
 Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
@@ -35,11 +36,12 @@ import slider from './components/Slider.vue';
 Vue.component('slider', slider);
 
 window.VueModel = Vue.extend({
+    i18n,
 
     data() {
         return {
             // States if the notifications have already been marked as read
-            notificationsMarked: false
+            notificationsMarked: false,
         }
     },
 

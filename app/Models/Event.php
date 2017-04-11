@@ -7,69 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-/**
- * App\Models\Event
- *
- * @property int                                                                            $id
- * @property int                                                                            $organizer_id
- * @property int                                                                            $event_group_id
- * @property int                                                                            $parent_event_id
- * @property string                                                                         $title
- * @property string                                                                         $slug
- * @property string                                                                         $description_short
- * @property string                                                                         $description
- * @property string                                                                         $email
- * @property string                                                                         $phone
- * @property string                                                                         $cover
- * @property int                                                                            $sport_type_id
- * @property bool                                                                           $published
- * @property \Carbon\Carbon                                                                 $start_date
- * @property \Carbon\Carbon                                                                 $end_date
- * @property string                                                                         $country
- * @property string                                                                         $postcode
- * @property string                                                                         $city
- * @property string                                                                         $street
- * @property \Carbon\Carbon                                                                 $created_at
- * @property \Carbon\Carbon                                                                 $updated_at
- * @property \Carbon\Carbon                                                                 $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CheckPoint[]         $checkPoints
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[]              $childEvents
- * @property-read \App\Models\Organizer                                                     $organizer
- * @property-read \App\Models\Event                                                         $parentEvent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ParticipationClass[] $participationClasses
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[]      $participations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[]            $raters
- * @property-read \App\Models\SportType                                                     $sportType
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\VisitClass[]         $visitClasses
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[]              $visits
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event main()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event open()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event published()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCity($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCountry($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCover($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereDeletedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereDescriptionShort($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereEndDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereEventGroupId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereOrganizerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereParentEventId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePhone($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePostcode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event wherePublished($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereSlug($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereSportTypeId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereStartDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereStreet($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Event whereUpdatedAt($value)
- * @mixin \Eloquent
- */
 class Event extends SlugModel {
 
     use SoftDeletes;
@@ -188,12 +125,30 @@ class Event extends SlugModel {
     }
 
     /**
+     * Gets the event group of the event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function eventGroup() {
+        return $this->belongsTo(EventGroup::class);
+    }
+
+    /**
      * Gets the participation classes of the event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function participationClasses() {
         return $this->hasMany(ParticipationClass::class);
+    }
+
+    /**
+     * Gets the labels of the event.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function labels() {
+        return $this->belongsToMany(Label::class, 'event_labels');
     }
 
     /**

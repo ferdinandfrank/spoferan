@@ -95,7 +95,7 @@ $select-search-choice-font-size: $font-size-x-small;
             padding-left: $input-padding-ver-addon;
         }
 
-        .icon {
+        .icon-left {
             left: ($input-padding-ver-addon * 0.375) / 2;
         }
     }
@@ -106,7 +106,7 @@ $select-search-choice-font-size: $font-size-x-small;
             padding-right: $input-padding-ver-addon;
         }
 
-        .help {
+        .icon-right {
             right: ($input-padding-ver-addon * 0.375) / 2;
         }
     }
@@ -131,10 +131,13 @@ $select-search-choice-font-size: $font-size-x-small;
             width: $input-padding-ver-addon * 0.625;
             height: $input-height * 0.5;
             top: ($input-height * 0.5) / 2;
-            pointer-events: none;
             color: $input-icon-color;
             align-items: center;
             justify-content: center;
+            line-height: normal;
+            background: transparent;
+            border: none;
+            padding: 0;
 
             * {
                 font-size: $font-size-large;

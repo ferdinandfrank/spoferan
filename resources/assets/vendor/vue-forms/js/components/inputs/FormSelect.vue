@@ -1,5 +1,5 @@
 <template>
-    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': icon, 'has-addon-right': showHelp }">
+    <div class="form-input" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess, 'has-addon-left': iconLeft, 'has-addon-right': showHelp || submitIcon || iconRight }">
         <select :id="name + '-input'"
                 :name="submitName"
                 @focus="activate"
@@ -12,23 +12,28 @@
             <slot></slot>
         </select>
 
-        <button type="submit" v-if="icon && addonSubmit" class="form-group-addon" :style="{cursor: valid ? 'pointer' : 'not-allowed'}">
-            <icon :icon="icon"></icon>
-        </button>
-
-        <div v-if="icon && !addonSubmit" class="icon">
-            <icon :icon="icon"></icon>
+        <div v-if="iconLeft" class="icon icon-left">
+            <icon :icon="iconLeft"></icon>
         </div>
 
-        <div v-if="showHelp" class="help">
+        <div v-if="iconRight && !submitIcon" class="icon icon-right">
+            <icon :icon="iconRight"></icon>
+        </div>
+
+        <button type="submit" v-if="submitIcon" class="icon icon-right"
+                :style="{cursor: hasSuccess ? 'pointer' : 'not-allowed'}">
+            <icon :icon="submitIcon"></icon>
+        </button>
+
+        <div v-if="showHelp" class="help icon icon-right">
             <div v-if="helpTooltip" class="tooltip tooltip-left">
                 <icon icon="fa fa-fw fa-question"></icon>
                 <span class="tooltip-text">{{ helpTooltip }}</span>
             </div>
             <icon v-if="helpPath" @click="openHelp()" icon="fa fa-fw fa-question"></icon>
         </div>
-
-        <span class="info" v-if="labelMessage">{{ labelMessage }}</span>
+        <span class="info" v-if="hasError">{{ errorMessage }}</span>
+        <span class="info" v-if="hasSuccess">{{ successMessage }}</span>
 
     </div>
 </template>
@@ -54,7 +59,6 @@
         data: function () {
             return {
                 input: '',
-                hasChanged: false
             }
         },
 
@@ -66,19 +70,6 @@
                     return this.name + '[]';
                 }
                 return this.name;
-            },
-
-            // States if a success layout shall be shown on the input.
-            hasSuccess: function () {
-                if (this.valid && this.submitValue && this.hasChanged) {
-                    return typeof this.submitValue === 'string' || typeof this.submitValue === 'number' || this.submitValue.length > 0
-                }
-                return false;
-            },
-
-            // States if an error layout shall be shown on the input.
-            hasError: function () {
-                return this.invalid && !this.valid;
             },
 
             // The label text of the input, based upon the property 'name' or the property 'langKey', if it is set.
@@ -98,13 +89,25 @@
             },
         },
 
+        watch: {
+
+            /**
+             * Updated the selected value when the submit value gets changed.
+             *
+             * @param value The new value.
+             */
+            value: function (value) {
+                this.input.select2().select2('val', value);
+            }
+        },
+
         mounted() {
             this.$nextTick(function () {
                 this.input = $(this.$refs.input);
 
                 this.input.select2();
 
-                if (this.value != null) {
+                if (this.value !== null) {
                     this.input.val(this.value);
                 }
 
@@ -119,7 +122,7 @@
 
                 this.input.on("change", () => {
                     this.submitValue = this.input.val();
-                    this.hasChanged = true;
+                    this.inputChanged();
                     if (this.submitValue === '') {
                         $(this.$el).find('.select2-chosen').addClass('label');
                     } else {
@@ -135,10 +138,8 @@
              */
             reset: function () {
                 this.submitValue = this.value;
-                this.input.select2().select2('val',this.value);
-                this.labelMessage = null;
-                this.invalid = false;
-                this.valid = !this.required || this.value;
+                this.input.select2().select2('val', this.value);
+                this.inputChanged();
             },
 
             /**
@@ -146,10 +147,8 @@
              */
             clear: function () {
                 this.submitValue = null;
-                this.input.select2().select2('val',null);
-                this.labelMessage = null;
-                this.invalid = false;
-                this.valid = !this.required;
+                this.input.select2().select2('val', null);
+                this.inputChanged();
             },
         }
     }

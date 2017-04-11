@@ -25,10 +25,10 @@
 </template>
 
 <script>
-    import extendedAjaxFormMixin from '../../vendor/vue-forms/js/mixins/ExtendedAjaxFormMixin';
+    import ajaxFormMixin from '../../vendor/vue-forms/js/mixins/AjaxFormMixin';
     import modalMixin from './mixins/ModalMixin';
 
     export default {
-        mixins: [extendedAjaxFormMixin, modalMixin]
+        mixins: [ajaxFormMixin, modalMixin]
     }
 </script>

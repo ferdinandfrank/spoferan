@@ -2,8 +2,10 @@
 
 return [
     'user_type' => [
-        'athlete'   => 0,
-        'organizer' => 1,
-        'admin'     => 2,
+        'athlete'   => 'athlete',
+        'organizer' => 'organizer',
+        'trainer'   => 'trainer',
+        'company'   => 'company',
+        'admin'     => 'admin',
     ]
 ];

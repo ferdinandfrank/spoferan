@@ -5,10 +5,10 @@
 </template>
 
 <script>
-    import extendedAjaxFormMixin from '../../vendor/vue-forms/js/mixins/ExtendedAjaxFormMixin';
+    import ajaxFormMixin from '../../vendor/vue-forms/js/mixins/AjaxFormMixin';
 
     export default {
-        mixins: [extendedAjaxFormMixin],
+        mixins: [ajaxFormMixin],
 
         props: {
             action: {

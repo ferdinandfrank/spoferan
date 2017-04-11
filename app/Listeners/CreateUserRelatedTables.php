@@ -28,7 +28,7 @@ class CreateUserRelatedTables {
         // Create settings entry for the user
         $user->settings()->create([]);
 
-        // Create payment details entry for the user
-        $user->paymentDetails()->create([]);
+        // Create contact entry for the user
+        $user->contact()->create([]);
     }
 }

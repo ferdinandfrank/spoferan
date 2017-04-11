@@ -3,6 +3,7 @@ module.exports = {
     props: {
 
         // The name of the input. Will also be the name of the value, when the form gets submitted.
+        // See data: 'submitName'
         name: {
             type: String,
             required: true
@@ -26,10 +27,17 @@ module.exports = {
             default: false
         },
 
-        // True, if a label shall be displayed above the input.
+        // True if a label shall be shown for the input.
         showLabel: {
             type: Boolean,
             default: true
+        },
+
+        // States if the errors does not matter for a form submit. An error message will be shown, but the form
+        // won't be prevented to submit.
+        ignoreErrors: {
+            type: Boolean,
+            default: false
         },
 
         // Function to check if the input is valid. If it is invalid an error message,
@@ -53,40 +61,38 @@ module.exports = {
             type: String
         },
 
+        // The icon to show as the input's help.
+        // No icon will be shown if the property 'helpPath' and the property 'helpTooltip' isn't set.
+        helpIcon: {
+            type: String,
+            default: 'fa fa-fw fa-question'
+        },
+
         // The tooltip to show if the user hovers over the help icon.
         // No icon will be shown if this property and the property 'helpPath' isn't set.
         helpTooltip: {
             type: String
         },
 
-        // The size of the input.
-        // Valid values: 'large', 'small', 'medium'
-        size: {
-            type: String
-        }
     },
 
     data: function () {
         return {
 
-            // States if a help icon shall be displayed next to the input.
+            // States if a help icon shall be displayed for the input.
             showHelp: this.helpPath || this.helpTooltip ? true : false,
 
-            submitValue: '',
+            // The value which will be submitted.
+            submitValue: this.value,
 
-            labelMessage: '',
+            // The error message to show for the input.
+            errorMessage: null,
 
-            // States if the input's value is valid.
-            valid: !this.required || this.value,
+            // The success message to show for the input.
+            successMessage: null,
 
-            // States if the input's value is invalid.
-            invalid: false,
-
-            // The parent components of the component.
-            parents: '',
-
-            // States if the input is currently focused.
-            active: false
+            // States if the user edited the input
+            valueChanged: false
         }
     },
 
@@ -108,79 +114,66 @@ module.exports = {
             return label;
         },
 
-        // The text to show to the user, if the check function exists and returns false.
-        errorMessage: function () {
-            return this.getLocalizationString(this.name);
+        // States if the current input value is invalid.
+        hasError: function () {
+            return this.errorMessage && this.valueChanged;
         },
 
-        // The text to show to the user, if the input is required and the user did not enter a value.
-        requiredMessage: function () {
-            return this.getLocalizationString('required', {'attribute': this.name});
+        // States if the current input value is valid.
+        hasSuccess: function () {
+            return !this.errorMessage && this.valueChanged;
         },
 
         // The name of the input. Will also be the name of the value, when the form gets submitted.
-        // Info: This value is based upon the 'name' property.
         submitName: function () {
             return this.name;
-        },
-
-        // States if the current input value is invalid for showing an error.
-        hasError: function () {
-            return this.invalid && !this.valid;
-        },
-
-        // States if the current input value is valid for showing a success feedback.
-        hasSuccess: function () {
-            return this.valid && this.submitValue;
         }
     },
 
     mounted: function () {
         this.$nextTick(function () {
-            this.submitValue = this.value;
-            this.parents = getListOfParents(this);
+            this.checkInput();
+            window.eventHub.$on('form-errors-changed', function (errors) {
+                if (errors.hasOwnProperty(this.submitName)) {
+                    this.errorMessage = errors[this.submitName];
+                }
+            });
         })
     },
 
     watch: {
-        submitValue: function (val) {
 
-            // Convert booleans to integer
-            if (typeof(val) === "boolean"){
-                this.submitValue = val ? 1 : 0;
-                return;
+        /**
+         * Notifies the parent chain if the error message of the input changed.
+         *
+         * @param error The new error message.
+         */
+        errorMessage: function (error) {
+            if (!this.ignoreErrors) {
+                window.eventHub.$emit('input-error-changed', this.submitName, error);
             }
-
-            this.setValueOnForm(val);
-
-            window.eventHub.$emit(this.name + '-input-changed', val);
-
-            // Only check input if the input wasn't cleared
-            if (val || val === '' || this.active) {
-                this.checkInput();
-                this.validateParentForm();
-            }
-
         },
 
-        value: function (val) {
-            this.submitValue = val;
+        /**
+         * Updated the submit value when the value prop gets changed.
+         *
+         * @param value The new value.
+         */
+        value: function (value) {
+            this.submitValue = value;
+            this.inputChanged();
         }
     },
 
     methods: {
 
-        setValueOnForm: function (value) {
-            for (let index in this.parents) {
-                let parent = this.parents[index];
-                if (parent.hasOwnProperty("form")) {
-                    if (value === null || value === '') {
-                        delete parent.form[this.submitName];
-                    } else {
-                        parent.form[this.submitName] = value;
-                    }
-                }
-            }
+        /**
+         * Notifies the parent chain that the value of the input changed.
+         */
+        inputChanged: function () {
+            this.valueChanged = this.submitValue !== this.value;
+            window.eventHub.$emit('input-value-changed', this.submitName, this.submitValue);
+            this.checkInput();
         },
 
         /**
@@ -188,7 +181,6 @@ module.exports = {
          */
         activate: function () {
             $(this.$refs.inputWrapper).addClass('active');
-            this.active = true;
         },
 
         /**
@@ -196,7 +188,6 @@ module.exports = {
          */
         deactivate: function () {
             $(this.$refs.inputWrapper).removeClass('active');
-            this.active = false;
         },
 
         /**
@@ -209,22 +200,13 @@ module.exports = {
                 if (isFunction(this.check)) {
                     this.check(this.submitValue, (valid, errorMessage) => {
                         if (valid) {
-                            this.addSuccess();
+                            this.errorMessage = null;
                         } else {
-                            this.addError(errorMessage);
+                            this.errorMessage = errorMessage;
                         }
                     });
                 } else {
-                    this.addSuccess();
-                }
-            }
-        },
-
-        validateParentForm: function () {
-            for (let index in this.parents) {
-                let parent = this.parents[index];
-                if (isFunction(parent.updateFormSubmitPermission)) {
-                    parent.updateFormSubmitPermission();
+                    this.errorMessage = null;
                 }
             }
         },
@@ -237,7 +219,7 @@ module.exports = {
          */
         checkRequired: function () {
             if ((!this.submitValue || this.submitValue === '') && this.required) {
-                this.addError(this.requiredMessage);
+                this.errorMessage = this.getLocalizedErrorMessage('required', {'attribute': this.name});
                 return false;
             }
             return true;
@@ -253,26 +235,6 @@ module.exports = {
         },
 
         /**
-         * Adds the specified error message to the input field.
-         *
-         * @param errorMessage
-         */
-        addError: function (errorMessage = this.errorMessage) {
-            this.labelMessage = errorMessage;
-            this.invalid = true;
-            this.valid = false;
-        },
-
-        /**
-         * Shows a success sign on the input field.
-         */
-        addSuccess: function () {
-            this.labelMessage = null;
-            this.invalid = false;
-            this.valid = true;
-        },
-
-        /**
          * Opens the help page for the input.
          */
         openHelp: function () {
@@ -282,34 +244,30 @@ module.exports = {
         },
 
         /**
-         * Resets the input's value.
+         * Resets the value of the input.
          */
         reset: function () {
             this.submitValue = this.value;
-            this.labelMessage = null;
-            this.invalid = false;
-            this.valid = !this.required || this.value;
+            this.inputChanged();
         },
 
         /**
-         * Clears the input's value.
+         * Clears the value of the input.
          */
         clear: function () {
-            this.submitValue = null;
-            this.labelMessage = null;
-            this.invalid = false;
-            this.valid = !this.required;
+            this.submitValue = '';
+            this.inputChanged();
         },
 
         /**
-         * Gets the localization string for the error messages.
+         * Gets the localized error message for the specified error type.
          *
-         * @param type
-         * @param props
-         * @param plain
+         * @param type The error key.
+         * @param props The additional props to insert in the error message.
+         * @param plain States if the lang key of the input shall be used to build the error key.
          * @returns {string}
          */
-        getLocalizationString: function (type = null, props = null, plain = false) {
+        getLocalizedErrorMessage: function (type = null, props = null, plain = false) {
             let langKey = '';
             if (this.langKey && !plain) {
                 langKey = this.langKey + '.';
@@ -323,7 +281,7 @@ module.exports = {
             }
 
             let text = this.$t(key, props);
-            if (text == key) {
+            if (text === key) {
                 text = this.$t(defaultKey, props);
             }
 

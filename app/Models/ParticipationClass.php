@@ -8,45 +8,55 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use Illuminate\Database\Query\Builder;
 
+
 /**
  * App\Models\ParticipationClass
  *
- * @property int                                                                       $id
- * @property int                                                                       $event_id
- * @property string                                                                    $title
- * @property string                                                                    $description
- * @property float                                                                     $entry_fee
- * @property bool                                                                      $privacy
- * @property \Carbon\Carbon                                                            $start_date
- * @property \Carbon\Carbon                                                            $end_date
- * @property \Carbon\Carbon                                                            $register_date
- * @property \Carbon\Carbon                                                            $unregister_date
- * @property int                                                                       $restr_limit
- * @property \Carbon\Carbon                                                            $restr_birth_date_min
- * @property \Carbon\Carbon                                                            $restr_birth_date_max
- * @property string                                                                    $restr_gender
- * @property string                                                                    $restr_country
- * @property string                                                                    $restr_city
- * @property int                                                                       $restr_postcode
- * @property \Carbon\Carbon                                                            $created_at
- * @property \Carbon\Carbon                                                            $updated_at
- * @property-read \App\Models\Event                                                    $event
+ * @property int $id
+ * @property int $event_id
+ * @property string $title
+ * @property string $description
+ * @property int $price
+ * @property bool $privacy
+ * @property \Carbon\Carbon $start_date
+ * @property \Carbon\Carbon $end_date
+ * @property \Carbon\Carbon $register_date
+ * @property \Carbon\Carbon $unregister_date
+ * @property bool $only_clubs
+ * @property bool $multiple_starts
+ * @property int $restr_limit
+ * @property \Carbon\Carbon $restr_birth_date_min
+ * @property \Carbon\Carbon $restr_birth_date_max
+ * @property string $restr_gender
+ * @property int $restr_club_id
+ * @property string $restr_country
+ * @property string $restr_state
+ * @property string $restr_postcode
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\Event $event
+ * @property-read string $entry_fee
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereEndDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereEntryFee($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereEventId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereMultipleStarts($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereOnlyClubs($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass wherePrice($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass wherePrivacy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRegisterDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrBirthDateMax($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrBirthDateMin($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrCity($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrClubId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrCountry($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrGender($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrLimit($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrPostcode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereRestrState($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereStartDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\ParticipationClass whereUnregisterDate($value)
@@ -73,8 +83,8 @@ class ParticipationClass extends BaseModel {
         'title',
         'description',
         'price',
-        'club_participants_limit',
         'privacy',
+        'only_clubs',
         'multiple_starts',
         'restr_limit',
         'restr_birth_date_min',
@@ -83,7 +93,6 @@ class ParticipationClass extends BaseModel {
         'restr_label_id',
         'restr_club_id',
         'restr_country',
-        'restr_city',
         'restr_postcode',
         'start_date',
         'end_date',
@@ -123,13 +132,6 @@ class ParticipationClass extends BaseModel {
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['entry_fee'];
-
-    /**
      * The parents in the route paths as a string array to build the resource routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
      *
@@ -137,15 +139,6 @@ class ParticipationClass extends BaseModel {
      */
     protected static function getRouteParents() {
         return ['event'];
-    }
-
-    /**
-     * Gets the amount of the participation class as a decimal amount.
-     *
-     * @return string
-     */
-    public function getEntryFeeAttribute() {
-        return translateCents($this->attributes['price']);
     }
 
     /**
@@ -257,10 +250,9 @@ class ParticipationClass extends BaseModel {
         ) {
             $result['msg'] = trans('validation.event.participate.restr_country', ['country' => $this->restr_country]);
 
-        } elseif (!empty($this->restr_city) && !empty($this->restr_postcode) && $this->restr_city != $user->city
-                  && $this->restr_postcode != $user->postcode
+        } elseif (!empty($this->restr_postcode) && $this->restr_postcode != $user->postcode
         ) {
-            $result['msg'] = trans('validation.event.participate.restr_city', ['city' => $this->restr_city]);
+            $result['msg'] = trans('validation.event.participate.restr_postcode', ['postcode' => $this->restr_postcode]);
 
         } elseif ($this->isCreator($user)) {
             $result['msg'] = trans('validation.event.participate.restr_creator');
@@ -332,9 +324,6 @@ class ParticipationClass extends BaseModel {
                      })
                      ->where(function ($subQuery) use ($athlete) {
                          $subQuery->whereNull('restr_country')->orWhere('restr_country', $athlete->user->country);
-                     })
-                     ->where(function ($subQuery) use ($athlete) {
-                         $subQuery->whereNull('restr_city')->orWhere('restr_city', $athlete->user->city);
                      })
                      ->where(function ($subQuery) use ($athlete) {
                          $subQuery->whereNull('restr_postcode')->orWhere('restr_postcode', $athlete->user->postcode);

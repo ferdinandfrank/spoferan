@@ -400,9 +400,10 @@ export default {
             }
         },
         "info": {
+            "not_available_yet": "Diese Funktion ist im Prototypen noch nicht verfügbar",
             "payment": {
                 "no_credit_cards": "Bisher hast du noch keine Kreditkarte hinzugefügt, die du als Zahlungsmethode auswählen kannst.",
-                "no_bank_accounts": "Bisher hast du noch kein Bankeinzugskonto hinzugefügt, welches du als Zahlungsmethode auswählen kannst.",
+                "no_bank_accounts": "Ein Bankeinzugskonto kann in diesem Prototypen aus Sicherheitsgründen bisher nicht hinzugefügt werden.",
                 "no_payment_method": "Wähle eine Zahlungsmethode aus, oder füge eine neue hinzu, um dich für dieses Event anzumelden."
             },
             "event": {
@@ -437,6 +438,7 @@ export default {
             "year": "Jahr",
             "date_interval_start": "Ab dem",
             "date_interval_end": "Bis zum",
+            "coupon": "Gutscheincode",
             "credit_card": {
                 "number": "Kartennummer",
                 "name": "Karteninhaber",
@@ -447,7 +449,9 @@ export default {
                 "iban": "IBAN",
                 "name": "Kontoinhaber"
             },
-            "user_type": "Als Veranstalter registrieren?",
+            "registration": {
+                "user_type": "Als Veranstalter registrieren?"
+            },
             "participation": {
                 "privacy": "Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar."
             },
@@ -463,6 +467,7 @@ export default {
         "label": {
             "profile": "Profil",
             "forgot_my_password": "Passwort vergessen?",
+            "already_registered": "Bereits registriert? Melde dich jetzt an.",
             "not_registered": "Noch keinen Account? Jetzt registrieren!",
             "male": "Männlich",
             "female": "Weiblich",
@@ -472,7 +477,7 @@ export default {
                 "organizer": "Veranstalter",
                 "admin": "Admin"
             },
-            "clubs": "Clubs",
+            "clubs": "Vereine",
             "statistics": "Statistiken",
             "starting_at": "ab",
             "participants": "Teilnehmer",
@@ -496,6 +501,7 @@ export default {
             "status": "Status",
             "name": "Name",
             "rank": "Platzierung",
+            "rank_abbr": "Platz",
             "hint": "Hinweis",
             "registered_at": "Anmeldedatum",
             "contact": "Kontakt",
@@ -554,7 +560,9 @@ export default {
             "swimming": "Schwimmen",
             "inline_skating": "Inline Skating",
             "nordic_walking": "Nordic Walking",
-            "cycling": "Radfahren"
+            "cycling": "Radfahren",
+            "basketball": "Basketball",
+            "soccer": "Fußball"
         },
         "states": {
             "DE": {
@@ -701,7 +709,7 @@ export default {
                     "restr_label_id": "Für diese Teilnahmeklasse brauchst du das Label {label}.",
                     "restr_club_id": "Für diese Teilnahmeklasse musst du Mitglied in dem Club {club} sein.",
                     "restr_country": "Für diese Teilnahmeklasse musst du aus {country} kommen.",
-                    "restr_city": "Für diese Teilnahmeklasse musst du aus der Stadt {country} kommen.",
+                    "restr_postcode": "Für diese Teilnahmeklasse musst du aus der Stadt mit der Postleitzahl {postcode} kommen.",
                     "multiple_starts_this": "Um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Teilnahmeklasse starten.",
                     "multiple_starts_other": "Du bist bereits in einer Teilnahmeklasse angemeldet, die einen weiteren Start in dieser Teilnahmeklasse nicht erlaubt.",
                     "club_participants_limit": "Ees ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.",
@@ -736,7 +744,8 @@ export default {
                 "card_declined": "Die eingegebene Karte wurde abgelehnt.",
                 "missing": "Es existiert keine Karte in deinem Profil, mit welcher bezahlt werden kann.",
                 "processing_error": "Ein Fehler ist während der Verarbeitung aufgetreten. Bitte versuche es noch einmal."
-            }
+            },
+            "coupon": "Dieser Gutscheincode existiert nicht oder ist nicht mehr gültig."
         }
     },
     "en": {

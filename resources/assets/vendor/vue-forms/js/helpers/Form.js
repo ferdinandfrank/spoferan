@@ -1,34 +1,54 @@
 module.exports = class Form {
 
     /**
-     * Create a new Form instance.
+     * Creates a new Form instance.
      *
-     * @param {object|null} data
+     * @param {object} data
      */
     constructor(data = null) {
-        for (let field in data) {
-            this[field] = data[field];
-        }
+        this.data = data ? data : {};
     }
 
     /**
-     * Fetch all relevant data for the form.
+     * Adds the specified field with its value to the forms data.
+     *
+     * @param field
+     * @param value
      */
-    data() {
-        let data = {};
+    set(field, value) {
+        this.data[field] = value;
+    }
 
-        for (let property in this) {
-            if (!isFunction(this[property])) {
-                data[property] = this[property];
+    /**
+     * Determines if the form contains the specified field.
+     *
+     * @param {string} field
+     * @returns {boolean}
+     */
+    has(field) {
+        return this.data.hasOwnProperty(field);
+    }
+
+    /**
+     * Gets the data that will be submitted.
+     *
+     * @returns {{}}
+     */
+    getSubmitData() {
+        let submitData = {};
+        for (let key in this.data) {
+            let value = this.data[key];
+            if (value !== '' && value !== null) {
+                submitData[key] = value;
             }
         }
 
-        return data;
+        return submitData;
     }
 
     /**
-     * Send a POST request to the given URL.
-     * .
+     * Sends a POST request to the given URL.
+     *
      * @param {string} url
      */
     post(url) {
@@ -36,8 +56,8 @@ module.exports = class Form {
     }
 
     /**
-     * Send a PUT request to the given URL.
-     * .
+     * Sends a PUT request to the given URL.
+     *
      * @param {string} url
      */
     put(url) {
@@ -45,8 +65,8 @@ module.exports = class Form {
     }
 
     /**
-     * Send a PATCH request to the given URL.
-     * .
+     * Sends a PATCH request to the given URL.
+     *
      * @param {string} url
      */
     patch(url) {
@@ -54,8 +74,8 @@ module.exports = class Form {
     }
 
     /**
-     * Send a DELETE request to the given URL.
-     * .
+     * Sends a DELETE request to the given URL.
+     *
      * @param {string} url
      */
     delete(url) {
@@ -63,7 +83,7 @@ module.exports = class Form {
     }
 
     /**
-     * Submit the form.
+     * Submits the form.
      *
      * @param {string} requestType
      * @param {string} url
@@ -73,7 +93,7 @@ module.exports = class Form {
             $.ajax({
                 type: requestType.toLowerCase(),
                 url: url,
-                data: this.data(),
+                data: this.getSubmitData(),
                 success: response => {
                     resolve(response);
                 },
@@ -84,5 +104,3 @@ module.exports = class Form {
         });
     }
 };
-
-

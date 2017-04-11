@@ -1,13 +1,14 @@
 <template>
-    <div class="radio-wrapper" ref="inputWrapper" :class="{ 'has-error': invalid && !valid, 'has-success': valid && submitValue }" >
+    <div class="radio-wrapper" ref="inputWrapper" :class="{ 'has-error': hasError, 'has-success': hasSuccess }" >
         <input :id="name + '-' + value + '-input'"
                type="radio"
                ref="input"
                :value="value"
-               :name="submitName"
+               v-model="submitValue"
+               :name="name"
                :checked="checked"
         />
-        <label :for="name + '-' + value + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
+        <label :for="name + '-' + value + '-input'" v-if="showLabel" ref="inputLabel">
             <slot></slot>
             <span v-if="showHelp" class="tooltip">
                 <i @click="openHelp" class="fa fa-fw fa-question help"></i>
@@ -49,6 +50,7 @@
                 let checkedRadio = $('input[name=' + this.submitName + ']:checked');
                 if (checkedRadio.length) {
                     this.submitValue = checkedRadio.val();
+                    this.inputChanged();
                 }
 
             },

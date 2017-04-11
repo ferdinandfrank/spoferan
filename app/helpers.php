@@ -20,6 +20,18 @@ function isRoute($routeKey, $recursive = false) {
 }
 
 /**
+ * Formats the specified amount of cents to a localized money string.
+ *
+ * @param $cents
+ *
+ * @return string
+ */
+function formatMoney($cents) {
+    $fmt = new NumberFormatter( 'de_DE', NumberFormatter::CURRENCY );
+    return $fmt->formatCurrency($cents / 100, "EUR");
+}
+
+/**
  * Gets the diff for humans if the specified date is in the range of one day from today, otherwise the localized date.
  *
  * @param \Carbon\Carbon $date
@@ -56,23 +68,6 @@ function getParticipationStatusClass(\App\Models\Participation $participation) {
     }
 
     return $class;
-}
-
-/**
- * Translate an amount of cents to a full decimal amount.
- *
- * @param $centsAmount
- *
- * @return string
- */
-function translateCents($centsAmount) {
-    $amount = 0;
-    $centsAmount = strval($centsAmount);
-    if (strlen($centsAmount) >= 3) {
-        $amount = substr($centsAmount, 0, -2);
-    }
-
-    return $amount . ',' . substr($centsAmount, -2);
 }
 
 /**

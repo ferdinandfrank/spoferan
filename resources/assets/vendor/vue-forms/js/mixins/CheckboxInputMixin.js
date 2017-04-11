@@ -11,6 +11,13 @@ module.exports = {
         },
     },
 
+    watch: {
+
+        submitValue: function (value) {
+            this.inputChanged();
+        }
+    },
+
     methods: {
         /**
          * Toggles the submit value.

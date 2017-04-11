@@ -15,6 +15,7 @@ use App\Events\AthleteCreated;
  * @property \Carbon\Carbon $birth_date
  * @property string $gender
  * @property int $sport_type_id
+ * @property string $starter_number
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $eventRatings
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $nextParticipations
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Organizer[] $organizerRatings
@@ -24,12 +25,15 @@ use App\Events\AthleteCreated;
  * @property-read \App\Models\User $user
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereBirthDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereFirstName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereGender($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereLastName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereSlug($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereSportTypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereStarterNumber($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Athlete whereUserId($value)
  * @mixin \Eloquent
@@ -56,7 +60,8 @@ class Athlete extends UserModel {
         'last_name',
         'birth_date',
         'gender',
-        'sport_type_id'
+        'sport_type_id',
+        'starter_number'
     ];
 
     /**

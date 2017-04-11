@@ -23,7 +23,6 @@ $card-hover-transition-duration: .5s;
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
     border-radius: 2px;
 
     &.suggestion {
@@ -94,6 +93,7 @@ $card-hover-transition-duration: .5s;
         &.card-header-image {
             background: $dark;
             min-height: 200px;
+            overflow: hidden;
         }
 
         .card-image {

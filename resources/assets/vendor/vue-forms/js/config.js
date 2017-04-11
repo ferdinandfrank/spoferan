@@ -1,16 +1,19 @@
 
-import locales from './../../../js/locales';
-let supportedLocales = ['de'];
+import messages from './../../../js/locales';
+let supportedLocales = ['de']; // Set the locales which the app supports
 
-import VueInternationalization from "vue-i18n";
-Vue.use(VueInternationalization);
+import VueI18n from "vue-i18n";
+Vue.use(VueI18n);
 
+// Read the current locale from the url
 let locale = window.location.pathname.split('/')[1];
-if (locale == null || supportedLocales.indexOf(locale) < 0) {
+if (locale === null || supportedLocales.indexOf(locale) < 0) {
     locale = supportedLocales[0];
 }
-Vue.config.lang = locale;
 
-Object.keys(locales).forEach(function (lang) {
-    Vue.locale(lang, locales[lang])
+// Set the locale for the vue instance
+window.i18n = new VueI18n({
+    locale: locale,
+    fallbackLocale: 'de',
+    messages
 });

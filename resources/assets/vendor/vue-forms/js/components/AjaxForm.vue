@@ -5,10 +5,10 @@
 </template>
 
 <script>
-    import extendedAjaxFormMixin from '../mixins/ExtendedAjaxFormMixin';
+    import ajaxFormMixin from '../mixins/AjaxFormMixin';
 
     export default {
-        mixins: [extendedAjaxFormMixin]
+        mixins: [ajaxFormMixin]
     }
 
 </script>

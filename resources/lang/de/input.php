@@ -27,6 +27,7 @@ return [
     'year'                  => 'Jahr',
     'date_interval_start'   => 'Ab dem',
     'date_interval_end'     => 'Bis zum',
+    'coupon'                => 'Gutscheincode',
 
     'credit_card' => [
         'number' => 'Kartennummer',
@@ -40,7 +41,9 @@ return [
         'name' => 'Kontoinhaber',
     ],
 
-    'user_type' => 'Als Veranstalter registrieren?',
+    'registration' => [
+        'user_type' => 'Als Veranstalter registrieren?',
+    ],
 
     'participation' => [
         'privacy' => 'Möchtest du an diesem Event anonym teilnehmen? Deine Athleten-Informationen sind dann nicht öffentlich einsehbar.'

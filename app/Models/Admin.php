@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 /**
  * App\Models\Admin
  *
@@ -11,8 +10,11 @@ namespace App\Models;
  * @property string $last_name
  * @property string $display_name
  * @property string $slug
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin whereDisplayName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin whereFirstName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Admin whereLastName($value)
@@ -61,7 +63,7 @@ class Admin extends UserModel {
     }
 
     /**
-     * Set the admin's first name.
+     * Sets the admin's first name.
      *
      * @param  string $value
      * @return void
@@ -71,7 +73,7 @@ class Admin extends UserModel {
     }
 
     /**
-     * Set the admin's last name.
+     * Sets the admin's last name.
      *
      * @param  string $value
      * @return void
@@ -81,7 +83,7 @@ class Admin extends UserModel {
     }
 
     /**
-     * Set the admin's display name.
+     * Sets the admin's display name.
      *
      * @param  string $value
      * @return void
@@ -89,4 +91,14 @@ class Admin extends UserModel {
     public function setDisplayNameAttribute($value) {
         $this->attributes['display_name'] = ucfirst($value);
     }
+
+    /**
+     * Gets the roles of the admin.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles() {
+        return $this->belongsToMany(Role::class);
+    }
+
 }

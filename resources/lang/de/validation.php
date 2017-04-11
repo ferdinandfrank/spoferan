@@ -165,7 +165,7 @@ return [
             'restr_label_id'            => 'Für diese Teilnahmeklasse brauchst du das Label :label.',
             'restr_club_id'             => 'Für diese Teilnahmeklasse musst du Mitglied in dem Club :club sein.',
             'restr_country'             => 'Für diese Teilnahmeklasse musst du aus :country kommen.',
-            'restr_city'                => 'Für diese Teilnahmeklasse musst du aus der Stadt :country kommen.',
+            'restr_postcode'                => 'Für diese Teilnahmeklasse musst du aus der Stadt mit der Postleitzahl :postcode kommen.',
             'multiple_starts_this'      => 'Um an dem Event in dieser Kategorie teilzunehmen, darfst du in keiner anderen Teilnahmeklasse starten.',
             'multiple_starts_other'     => 'Du bist bereits in einer Teilnahmeklasse angemeldet, die einen weiteren Start in dieser Teilnahmeklasse nicht erlaubt.',
             'club_participants_limit'   => 'Ees ist bereits die maximale Anzahl aus deinem Club für diese Kategorie angemeldet.',
@@ -201,6 +201,8 @@ return [
         'card_declined'        => 'Die eingegebene Karte wurde abgelehnt.',
         'missing'              => 'Es existiert keine Karte in deinem Profil, mit welcher bezahlt werden kann.',
         'processing_error'     => 'Ein Fehler ist während der Verarbeitung aufgetreten. Bitte versuche es noch einmal.'
-    ]
+    ],
+
+    'coupon' => 'Dieser Gutscheincode existiert nicht oder ist nicht mehr gültig.'
 
 ];

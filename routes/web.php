@@ -38,4 +38,7 @@ Route::resource('participations', 'ParticipationController');
 
 Route::post('webhook/stripe', 'WebhooksController@handle');
 
-Route::post('users/{paymentDetails}/payment-details', 'PaymentDetailsController@store')->name('users.payment_details.store');
+Route::post('payment-details/{paymentDetails}', 'PaymentDetailsController@store')->name('payment_details.store');
+
+
+Route::resource('coupons', 'CouponController');

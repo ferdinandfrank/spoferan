@@ -60,7 +60,7 @@ Vue.component('icon', icon);
  * any events that may emitted by components...
  */
 if (!window.eventHub) {
-    window.eventHub = new Vue();
+    window.eventHub = new Vue({i18n});
 }
 
 

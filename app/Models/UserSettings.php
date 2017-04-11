@@ -4,23 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * App\Models\UserSettings
  *
  * @property int $user_id
- * @property bool $receive_ads
+ * @property bool $receive_newsletter
  * @property bool $privacy_profile
  * @property bool $privacy_address
  * @property bool $privacy_event_history
  * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings wherePrivacyAddress($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings wherePrivacyEventHistory($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings wherePrivacyProfile($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings whereReceiveAds($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings whereReceiveNewsletter($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserSettings whereUserId($value)
  * @mixin \Eloquent
  */
-class UserSettings extends Model {
+class UserSettings extends BaseModel {
 
     /**
      * The table associated with the model.
@@ -49,6 +52,14 @@ class UserSettings extends Model {
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * All of the relationships to be touched and which timestamps
+     * shall be updated, if the timestamps of this model would be updated.
+     *
+     * @var array
+     */
+    protected $touches = ['user'];
 
     /**
      * The attributes that are mass assignable.

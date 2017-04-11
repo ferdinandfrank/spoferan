@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\OrganizerCreated;
 
 /**
  * App\Models\Organizer
@@ -14,6 +15,8 @@ namespace App\Models;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $raters
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Organizer whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Organizer whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Organizer whereSlug($value)
@@ -43,6 +46,15 @@ class Organizer extends UserModel {
     ];
 
     /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $events = [
+        'created' => OrganizerCreated::class,
+    ];
+
+    /**
      * Gets the attribute name of the model, that shall be used for the slug of the model.
      *
      * @return string
@@ -61,7 +73,7 @@ class Organizer extends UserModel {
     }
 
     /**
-     * Gets the events, which the organizer created.
+     * Gets the events the organizer created.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-
 /**
- * App\Models\TrackPoint
+ * App\Models\CheckPoint
  *
- * @property-read \App\Models\Event $event
- * @mixin \Eloquent
  * @property int $id
  * @property int $event_id
  * @property int $position
@@ -21,6 +18,9 @@ namespace App\Models;
  * @property string $description
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\Event $event
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCity($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCountry($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereCreatedAt($value)
@@ -34,6 +34,7 @@ namespace App\Models;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereStreet($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\CheckPoint whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class CheckPoint extends BaseModel {
 

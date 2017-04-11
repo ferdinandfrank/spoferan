@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $deleted_at
  * @property-read \App\Models\Athlete $athlete
  * @property-read \App\Models\VisitClass $visitClass
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Visit whereAthleteId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Visit whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Visit whereDeletedAt($value)
@@ -39,7 +41,7 @@ class Visit extends BaseModel {
     protected $fillable = [
         'visit_class_id',
         'privacy',
-        'paid',
+        'athlete_id',
     ];
 
     /**

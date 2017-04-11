@@ -43,11 +43,13 @@ class CreateCustomerForAthlete {
                     ]
                 ]
             ]);
-            $user->paymentDetails()->update([
-                'stripe_id' => $customer->id
+
+            $user->paymentDetails()->create([
+                'stripe_id' => $customer->id,
+                'stripe_object' => $customer->object
             ]);
         } catch (\Exception $exception) {
-            \Log::alert("Customer creation failed for user $user->id: " . $exception->getMessage());
+            \Log::alert("Stripe customer creation failed for user $user->id: " . $exception->getMessage());
         }
     }
 }

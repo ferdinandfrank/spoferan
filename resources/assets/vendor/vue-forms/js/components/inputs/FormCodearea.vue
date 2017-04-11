@@ -6,13 +6,16 @@
                   v-model="submitValue"
                   ref="input"></textarea>
         <div data-editable :data-name="name" class="codearea" @click="editContent" v-html="submitValue"></div>
-        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel" :data-message="labelMessage">
+        <label :for="name + '-input'" v-if="showLabel" ref="inputLabel">
             <span>{{ label }}</span>
             <span v-if="showHelp" class="tooltip">
                 <i @click="openHelp" class="fa fa-fw fa-question help"></i>
                 <span v-if="helpTooltip" class="tooltip-text">{{ helpTooltip }}</span>
             </span>
         </label>
+
+        <span class="info" v-if="hasError">{{ errorMessage }}</span>
+        <span class="info" v-if="hasSuccess">{{ successMessage }}</span>
     </div>
 </template>
 
@@ -51,6 +54,7 @@
 
                     if (regions.hasOwnProperty(this.name)) {
                         this.submitValue = regions[this.name];
+                        this.inputChanged();
                     }
 
                 });

@@ -11,5 +11,12 @@
     import formInputMixin from '../../mixins/FormInputMixin';
     export default{
         mixins: [formInputMixin],
+
+        watch: {
+
+            submitValue: function (value) {
+                this.inputChanged();
+            }
+        },
     }
 </script>

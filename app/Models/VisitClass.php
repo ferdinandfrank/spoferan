@@ -6,33 +6,35 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 /**
  * App\Models\VisitClass
  *
- * @property-read \App\Models\Event $event
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
- * @mixin \Eloquent
  * @property int $id
  * @property int $event_id
  * @property string $title
  * @property string $description
+ * @property int $price
  * @property int $restr_limit
- * @property float $entry_fee
  * @property \Carbon\Carbon $register_date
  * @property \Carbon\Carbon $unregister_date
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
+ * @property-read \App\Models\Event $event
+ * @property-read string $entry_fee
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel findByKey($key)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereEntryFee($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereEventId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass wherePrice($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereRegisterDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereRestrLimit($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereTitle($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUnregisterDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class VisitClass extends BaseModel {
 
@@ -87,13 +89,6 @@ class VisitClass extends BaseModel {
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['entry_fee'];
-
-    /**
      * The parents in the route paths as a string array to build the resource routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
      *
@@ -101,15 +96,6 @@ class VisitClass extends BaseModel {
      */
     protected static function getRouteParents() {
         return ['event'];
-    }
-
-    /**
-     * Gets the amount of the visit class as a decimal amount.
-     *
-     * @return string
-     */
-    public function getEntryFeeAttribute() {
-        return translateCents($this->attributes['price']);
     }
 
     /**

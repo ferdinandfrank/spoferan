@@ -9,11 +9,11 @@
                        class="card-content" redirect="{{ route('index') }}">
                 <div class="columns is-multiline">
                     <div class="column is-12">
-                        <form-input icon="{{ config('icons.email') }}" value="gast@example.de" type="email" name="email"
+                        <form-input icon-left="{{ config('icons.email') }}" value="gast@example.de" type="email" name="email"
                                     :required="true"></form-input>
                     </div>
                     <div class="column is-12">
-                        <form-input icon="{{ config('icons.password') }}" value="password" type="password"
+                        <form-input icon-left="{{ config('icons.password') }}" value="password" type="password"
                                     name="password" :required="true"></form-input>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                     <button type="submit" class="button is-success">{{ trans('action.login') }}</button>
                 </div>
                 <p class="is-warning m-t-20">Info: Dieser Prototyp dient lediglich zur Darstellung einiger Kernfunktionen von
-                    Spoferan.
+                    Spoferan und ist nicht für die Öffentlichkeit bestimmt.
                     Alle Daten der Veranstaltungen sind frei erfunden bzw. teilweise automatisch generiert und sollen keine realen Veranstaltungen
                     darstellen.</p>
                 <hr class="light">

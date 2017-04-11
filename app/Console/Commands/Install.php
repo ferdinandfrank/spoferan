@@ -145,9 +145,18 @@ class Install extends Command {
     private function resetStripeData() {
         if (Schema::hasTable('payment_details')) {
             foreach (PaymentDetails::all() as $paymentDetails) {
-                $customer = \Stripe\Customer::retrieve($paymentDetails->stripe_id);
-                if ($customer->email) {
-                    $customer->delete();
+                $stripeObject = null;
+                switch ($paymentDetails->object) {
+                    case 'account':
+                        $stripeObject = \Stripe\Account::retrieve($paymentDetails->stripe_id);
+                        break;
+                    case 'customer':
+                        $stripeObject = \Stripe\Customer::retrieve($paymentDetails->stripe_id);
+                        break;
+                }
+
+                if ($stripeObject && $stripeObject->email) {
+                    $stripeObject->delete();
                 }
             }
         }
@@ -254,7 +263,7 @@ class Install extends Command {
             $firstName = $this->admin->admin->first_name;
             $lastName = $this->admin->admin->last_name;
 
-            $this->logger->info("Old admin data with email '$email'' retrieved from database. You just have to enter your password again.");
+            $this->logger->info("Old admin data with email '$email' retrieved from database. You just have to enter your password again.");
         }
 
         // Ask for the password, no matter if old data existed
@@ -276,11 +285,11 @@ class Install extends Command {
         $this->savePageInfo('author', $admin->display_name);
     }
 
-    private function createUser($email, $password, $userType = 0) {
+    private function createUser($email, $password, $userType) {
         $user = new User();
         $user->email = $email;
         $user->password = $password;
-        $user->user_type = $userType;
+        $user->current_user_type = $userType;
         $user->confirmed = true;
         $user->verified = true;
         $user->save();
