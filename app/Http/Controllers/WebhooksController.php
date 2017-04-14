@@ -48,24 +48,28 @@ class WebhooksController extends Controller {
     public function onChargeSucceeded($payload) {
 
         // Get the coupon that was used for the charge
-        $couponId = $payload['data']['object']['metadata']['coupon_id'];
+        $metadata = $payload['data']['object']['metadata'];
+        $couponId = null;
         $coupon = null;
-        if ($couponId) {
-            $coupon = Coupon::findByKey($couponId)->first();
-            if (!$coupon) {
-                $couponId = null;
+        if (array_key_exists('coupon_id', $metadata)) {
+            $couponId = $payload['data']['object']['metadata']['coupon_id'];
+            if ($couponId) {
+                $coupon = Coupon::findByKey($couponId)->first();
+                if (!$coupon) {
+                    $couponId = null;
+                }
             }
         }
 
         // Create the payment with the transmitted data
         $payment = $this->getUserByStripePayload($payload)->payments()->create([
             'amount' => $payload['data']['object']['amount'],
-            'fee' => $payload['data']['object']['metadata']['fee'],
-            'payable_id' => $payload['data']['object']['metadata']['payable_id'],
-            'payable_type' => $payload['data']['object']['metadata']['payable_type'],
+            'fee' => $metadata['fee'],
+            'payable_id' => $metadata['payable_id'],
+            'payable_type' => $metadata['payable_type'],
             'payment_type' => $payload['data']['object']['source']['object'],
             'charge_id' => $payload['data']['object']['id'],
-            'coupon_id' => $payload['data']['object']['metadata']['coupon_id'],
+            'coupon_id' => $couponId,
         ]);
 
         // Call the coupon redeemed event, if a coupon was used
