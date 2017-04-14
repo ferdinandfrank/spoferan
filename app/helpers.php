@@ -43,6 +43,9 @@ function dateDiffForHumans(\Carbon\Carbon $date, $withTime = true) {
     $formattedDate = $date->formatLocalized('%d %b %Y');
     if ($date->isToday() || $date->isTomorrow() || $date->isYesterday()) {
         $formattedDate = $date->diffForHumans();
+
+        // Only the hours or minutes are shown if the date is very close, so remove the extra time
+        $withTime = false;
     }
 
     return $withTime ? trans('param_label.date_at_time', ['date' => $formattedDate, 'time' => $date->formatLocalized('%H:%M')]) : $formattedDate;
@@ -87,4 +90,9 @@ function queryRoute($route, array $queryParams) {
     }
 
     return $route;
+}
+
+function calculateCCFee($cents) {
+    $fullAmount = ($cents + intval(Settings::stripeCCFeeAmount())) / (1 - floatval(Settings::stripeCCFeePercent()));
+    return round($fullAmount - $cents);
 }

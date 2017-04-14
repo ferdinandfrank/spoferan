@@ -2,6 +2,9 @@
     <a @if(isset($onClick)) v-on:click.prevent="{{ $onClick }}" @else href="{{ $link ?? $event->getPath() }}" @endif>
         <div class="card-header card-header-image">
             <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
+            @if($event->isMain())
+                @include('rating.stars', ['rating' => $event->getRating()])
+            @endif
             <div class="card-header-info toggle">
                 <h1 class="title">{{ $hoverText ?? trans('action.show_event') }}</h1>
             </div>
@@ -26,11 +29,15 @@
                     {{ $event->description_short }}
                 </p>
                 <ul class="info-list">
-                    <li>
+                    <li title="{{ trans('label.registration_start') }}">
+                        <icon icon="{{ config('icons.info') }}"></icon>
+                        {!! $event->getStatusText() !!}
+                    </li>
+                    <li title="{{ trans('label.event_start_date') }}">
                         <icon icon="{{ config('icons.date') }}"></icon>
                         <span>{{ dateDiffForHumans($event->start_date) }}</span>
                     </li>
-                    <li>
+                    <li title="{{ trans('label.event_location') }}">
                         <icon icon="{{ config('icons.location') }}"></icon>
                         <span>{{ $event->getFullAddress() }}</span>
                     </li>

@@ -84,6 +84,6 @@ $factory->define(App\Models\CheckPoint::class, function (Faker\Generator $faker)
         'city' => $faker->city,
         'postcode' => $faker->postcode,
         'street' => $faker->streetAddress,
-        'description' => $faker->text
+        'description' => $faker->text(50)
     ];
 });

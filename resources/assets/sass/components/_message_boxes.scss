@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Message Boxes
+   ========================================================================== */
+/**
+ * Table of Contents:
+ *
+ *  1. Declarations
+ *  2. General
+ *  3. Success Message Box
+ */
+
+/*********************
+  1. Declarations
+**********************/
+$message-box-border-radius: 3px;
+$message-box-padding-h: 0.5rem;
+$message-box-padding-v: 0.75rem;
+
+/*********************
+  2. General
+**********************/
+.message-box {
+    background-color: $message-box-background-color;
+    margin-bottom: 1.5rem;
+    border-radius: $message-box-border-radius;
+
+    .message-box-header {
+        background-color: $message-box-header-background-color;
+        color: $message-box-header-text-color;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        border-radius: $message-box-border-radius $message-box-border-radius 0 0;
+        padding: $message-box-padding-h $message-box-padding-v;
+
+        *:first-child {
+            margin: 0;
+        }
+    }
+
+    .message-box-content {
+        border: 1px solid $message-box-header-background-color;
+        border-top: none;
+        border-radius: 0 0 $message-box-border-radius $message-box-border-radius;
+        padding: $message-box-padding-h * 2 $message-box-padding-v * 2;
+
+        p, p * {
+            color: darken($message-box-background-color, 70%);
+        }
+    }
+}
+
+/*********************
+  3. Success Message Box
+**********************/
+.message-box.is-success {
+    background-color: $message-box-success-background-color;
+
+    .message-box-header {
+        background-color: $message-box-success-header-background-color;
+        color: $message-box-success-header-text-color;
+    }
+
+    .message-box-content {
+        border-color: $message-box-success-header-background-color;
+
+        p, p * {
+            color: darken($message-box-success-background-color, 80%);
+        }
+    }
+}

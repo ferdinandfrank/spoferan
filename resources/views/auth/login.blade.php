@@ -6,6 +6,7 @@
             <h1 class="center">{{ trans('action.login') }}</h1>
             <hr class="light">
             <ajax-form :stop-loading="false" action="{{ route('login.post') }}" method="POST" :alert="false"
+                       error-wrapper="#login-form-error"
                        class="card-content" redirect="{{ route('index') }}">
                 <div class="columns is-multiline">
                     <div class="column is-12">
@@ -16,6 +17,9 @@
                         <form-input icon-left="{{ config('icons.password') }}" value="password" type="password"
                                     name="password" :required="true"></form-input>
                     </div>
+                    <div class="column is-12 p-t-none p-b-none">
+                        <p id="login-form-error" class="error"></p>
+                    </div>
                 </div>
 
                 <form-checkbox name="remember" :value="true"></form-checkbox>
@@ -25,8 +29,7 @@
                 </div>
                 <p class="is-warning m-t-20">Info: Dieser Prototyp dient lediglich zur Darstellung einiger Kernfunktionen von
                     Spoferan und ist nicht für die Öffentlichkeit bestimmt.
-                    Alle Daten der Veranstaltungen sind frei erfunden bzw. teilweise automatisch generiert und sollen keine realen Veranstaltungen
-                    darstellen.</p>
+                    Alle Daten der Veranstaltungen, Veranstaltern und Athleten sind frei erfunden bzw. teilweise automatisch generiert.</p>
                 <hr class="light">
 
                 <div class="center flex-column">

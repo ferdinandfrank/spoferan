@@ -6,8 +6,7 @@
                :value="value"
                v-model="submitValue"
                :name="name"
-               :checked="checked"
-        />
+               :checked="checked"/>
         <label :for="name + '-' + value + '-input'" v-if="showLabel" ref="inputLabel">
             <slot></slot>
             <span v-if="showHelp" class="tooltip">
@@ -33,6 +32,9 @@
 
         watch: {
 
+            submitValue: function (value) {
+                this.updateValue();
+            }
         },
 
         mounted: function () {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -98,6 +99,24 @@ class Event extends SlugModel {
     ];
 
     /**
+     * Gets the column name of the rater.
+     *
+     * @return string
+     */
+    public function getRaterKeyName() {
+        return 'participation_id';
+    }
+
+    /**
+     * Gets the class name of the rater.
+     *
+     * @return string
+     */
+    public function getRaterClass() {
+        return Participation::class;
+    }
+
+    /**
      * Gets the attribute name of the model, that shall be used for the slug of the model.
      *
      * @return string
@@ -177,6 +196,36 @@ class Event extends SlugModel {
      */
     public function parentEvent() {
         return $this->belongsTo(Event::class, 'parent_event_id');
+    }
+
+    /**
+     * Gets the direct pre event (prerunner) of the last year.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function preEvent() {
+        return $this->belongsTo(Event::class, 'pre_event_id');
+    }
+
+    /**
+     * Get all pre events (prerunner) from all last years.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAllPreEvents() {
+        $preEvent = $this->preEvent;
+
+        if ($preEvent) {
+            $preEvents = collect([$preEvent]);
+            while ($preEvent->preEvent) {
+                $preEvents->push($preEvent->preEvent);
+                $preEvent = $preEvent->preEvent;
+            }
+
+            return $preEvents;
+        }
+
+        return collect();
     }
 
     /**
@@ -476,6 +525,34 @@ class Event extends SlugModel {
     }
 
     /**
+     * Gets a html text of the event's status.
+     *
+     * @return string
+     */
+    public function getStatusText() {
+        $now = Carbon::now();
+        $registerDate = $this->getRegisterDate();
+        $unregisterDate = $this->getUnregisterDate();
+        if ($now->lt($registerDate)) {
+            if ($registerDate->isToday() || $registerDate->isTomorrow()) {
+                return '<span class="is-warning">'. trans('param_label.registration_starts_day', ['day' => $registerDate->diffForHumans()]) .'</span>';
+            } else if ($now->diffInDays($registerDate) <= 10) {
+                return '<span class="is-warning">'. trans('param_label.registration_starts_in_days', ['days' => $registerDate->diffForHumans()]) .'</span>';
+            } else {
+                return '<span class="is-warning">'. trans('param_label.registration_starts_at_date', ['date' => $registerDate->formatLocalized('%d %b %Y')]) .'</span>';
+            }
+        } elseif ($registerDate->lte($now) && $unregisterDate->gt($now)) {
+            return '<span class="is-success">'.trans('label.registration_is_active') .'</span>';
+        } elseif ($unregisterDate->lte($now) && $now->lt($this->start_date)) {
+            return '<span class="is-danger">'.trans('label.registration_is_over') .'</span>';
+        } elseif ($this->isActive()) {
+            return '<span class="is-success">'.trans('label.event_is_active') .'</span>';
+        }
+
+        return '<span class="is-danger">'.trans('label.event_has_finished') .'</span>';
+    }
+
+    /**
      * Checks if the event is over.
      *
      * @return bool
@@ -566,6 +643,36 @@ class Event extends SlugModel {
         }
 
         return parent::isFillable($key);
+    }
+
+    /**
+     * Gets the average rating of this model.
+     *
+     * @return mixed
+     */
+    public function getRating() {
+        if ($this->hasFinished()) {
+            return DB::table($this->getRateableTable())->where($this->getForeignKey(), $this->getKey())->avg('rating');
+        }
+
+        $preEvent = $this->preEvent;
+        if (!$preEvent) {
+            return null;
+        }
+        $preEventRating = $preEvent->getRating();
+        $prePreEventRatings = 0;
+        $prePreEvents = 0;
+        while ($preEvent->preEvent != null) {
+            $preEvent = $preEvent->preEvent;
+            $prePreEventRatings += $preEvent->getRating();
+            $prePreEvents++;
+        }
+
+        if ($prePreEventRatings > 0 && $prePreEvents > 0) {
+            return ($preEventRating + ($prePreEventRatings / $prePreEvents)) / 2;
+        }
+
+        return $preEventRating;
     }
 
     /**

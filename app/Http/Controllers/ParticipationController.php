@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\Participation;
 use App\Http\Requests\ParticipationCreateRequest;
 use App\Models\ParticipationClass;
 use App\Models\ParticipationState;
+use Barryvdh\DomPDF\PDF;
 use DB;
 use Exception;
 use Stripe\Charge;
@@ -38,16 +40,47 @@ class ParticipationController extends Controller {
     /**
      * Displays the specified participation.
      *
+     * @param Event $event
      * @param Participation $participation
-     *
      * @return \Illuminate\View\View
      */
-    public function show(Participation $participation) {
+    public function show(Event $event, Participation $participation) {
         if (\Gate::denies('view', $participation)) {
             abort(404, 'Page not found.');
         }
 
-        return view('participation.show', compact('participation'));
+        $event = $participation->participationClass->event;
+        $childEvent = null;
+        if ($event->isChild()) {
+            $childEvent = $event;
+            $event = $event->parentEvent;
+        }
+
+        return view('participation.show', compact('participation', 'event', 'childEvent'));
+    }
+
+    /**
+     * Downloads the specified participation.
+     *
+     * @param Event $event
+     * @param Participation $participation
+     * @return \Illuminate\Http\Response
+     */
+    public function download(Event $event, Participation $participation) {
+        if (\Gate::denies('view', $participation)) {
+            abort(404, 'Page not found.');
+        }
+
+        $event = $participation->participationClass->event;
+        $childEvent = null;
+        if ($event->isChild()) {
+            $childEvent = $event;
+            $event = $event->parentEvent;
+        }
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('participation.download', ['participation' => $participation, 'event' => $event, 'childEvent' => $childEvent]);
+        return $pdf->stream();
     }
 
     /**
@@ -66,7 +99,7 @@ class ParticipationController extends Controller {
 
         $selectedEventPart = Event::findByKey(request()->input(config('query.child_event')))->first();
         $selectedParticipationClass = ParticipationClass::find(request()->input(config('query.participation_class')));
-        $coupons = Coupon::redeemable(Coupon::$types['participation'])->get();
+        $coupons = Coupon::redeemable(Coupon::$types['participation'], $event)->get();
 
         return view('participation.create', compact('event', 'selectedEventPart', 'selectedParticipationClass', 'coupons'));
     }
@@ -103,6 +136,7 @@ class ParticipationController extends Controller {
 
         try {
             $participationClass = ParticipationClass::findOrFail($request->get('participation_class_id'));
+
             $participation = DB::transaction(function () use ($participationClass, $request) {
                 $participation = Participation::create([
                     'participation_class_id' => $participationClass->getKey(),
@@ -111,16 +145,26 @@ class ParticipationController extends Controller {
                     'privacy'                => $request->get('privacy', 0),
                     'starter_number'         => \Auth::user()->athlete->starter_number
                 ]);
-                $customerId = \Auth::user()->paymentDetails->stripe_id;
+                $customerId = \Auth::user()->activePaymentDetails->stripe_id;
+
+                // Check if a coupon was used and calculate the discount
+                $coupon = Coupon::redeemable(Coupon::$types['participation'], $participationClass->event)
+                    ->where('code', $request->get('coupon'))->first();
+                $price = $participationClass->getDiscountPrice($coupon);
 
                 Charge::create([
                     'customer'    => $customerId,
                     'source'      => $request->get('source'),
-                    'amount'      => $participationClass->price,
+                    'amount'      => $price,
                     "description" => "Charge for participation '" . $participation->getKey() . "' in event '"
                                      . $participationClass->event->title . "' at class '" . $participationClass->title
                                      . "'.",
-                    "metadata"    => ["participation_id" => $participation->getKey()],
+                    "metadata"    => [
+                        'payable_id' => $participation->getKey(),
+                        'payable_type' => Participation::class,
+                        'coupon_id' => $coupon ? $coupon->getKey() : null,
+                        'fee' => calculateCCFee($price)
+                    ],
                     'currency'    => 'eur'
                 ]);
 

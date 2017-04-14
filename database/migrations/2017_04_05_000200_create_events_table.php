@@ -23,6 +23,7 @@ class CreateEventsTable extends Migration {
             $table->increments('id');
             $table->unsignedInteger('organizer_id');
             $table->unsignedInteger('event_group_id')->nullable();
+            $table->unsignedInteger('pre_event_id')->nullable();
             $table->unsignedInteger('parent_event_id')->nullable();
             $table->string('title', config('validation.event.title.max'));
             $table->string('slug', config('validation.slug.max'))->unique();
@@ -60,6 +61,12 @@ class CreateEventsTable extends Migration {
                   ->on('events')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('pre_event_id')
+                ->references('id')
+                ->on('events')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
 
             $table->foreign('event_group_id')
                   ->references('id')

@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUnregisterDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\VisitClass canVisit(\App\Models\Athlete $athlete = null)
  */
 class VisitClass extends BaseModel {
 

@@ -66,6 +66,7 @@ use Illuminate\Database\Query\Builder;
 class ParticipationClass extends BaseModel {
 
     use HasResourceRoutes;
+    use HasDiscountablePrice;
 
     /**
      * The table associated with the model.
@@ -282,6 +283,16 @@ class ParticipationClass extends BaseModel {
 
         return parent::isFillable($key);
     }
+
+    /**
+     * Gets the path to the model's 'show' view.
+     *
+     * @return string
+     */
+    public function getPath() {
+        return $this->event->getPath() . '#participation_class_' . $this->getKey();
+    }
+
 
     /**
      * Scopes a query to only find participation classes on which the specified athlete can participate.

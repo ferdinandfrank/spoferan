@@ -96,6 +96,18 @@ $card-hover-transition-duration: .5s;
             overflow: hidden;
         }
 
+        .rating-stars {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            margin: 5px;
+
+            &.center {
+                position: relative;
+                margin: 5px 0;
+            }
+        }
+
         .card-image {
             background-position: 50%;
             background-size: cover;
@@ -127,7 +139,7 @@ $card-hover-transition-duration: .5s;
             }
 
             > .title {
-                margin-top: 10px;
+                margin: 10px 0;
                 text-align: center;
                 color: $white-smooth;
             }

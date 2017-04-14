@@ -114,7 +114,9 @@
                             </div>
                             <div class="content">
                                 @if(count($event->participations))
-                                    @include('participation.table', ['participations' => $event->participations, 'finished' => $participationRestriction == 'restr_finished'])
+                                    @foreach($event->participationClasses as $participationClass)
+                                        @include('participation.table', ['participations' => $participationClass->participations, 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
+                                    @endforeach
                                 @elseif(!count($event->childEvents))
                                     <p class="muted">{{ trans('info.event.no_participants') }}</p>
                                 @endif
@@ -122,7 +124,9 @@
                                 @foreach($event->childEvents as $childEvent)
                                     <h4>{{ trans('label.child_event') }}: {{ $childEvent->title }}</h4>
                                     <div class="m-b-40">
-                                        @include('participation.table', ['participations' => $childEvent->participations, 'finished' => $participationRestriction == 'restr_finished'])
+                                        @foreach($childEvent->participationClasses as $participationClass)
+                                            @include('participation.table', ['participations' => $participationClass->participations, 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
+                                        @endforeach
                                     </div>
                                 @endforeach
                             </div>
@@ -145,13 +149,50 @@
                             </div>
                         </section>
 
+                        @if(count($event->getAllPreEvents()))
+                            <section id="pre_events" class="section">
+                                <div class="heading">
+                                    <h2 class="title">{{ trans('label.pre_events') }}</h2>
+                                    <p class="subtitle">{{ trans('descriptions.event.pre_events') }}</p>
+                                </div>
+                                <div class="content">
+                                    <div class="columns is-multiline">
+                                        @foreach($event->getAllPreEvents() as $preEvent)
+                                            <div id="{{ $preEvent->getRouteKey() }}" class="column">
+                                                @include('event.preview', ['event' => $preEvent])
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </section>
+                        @endif
+
+                        @if($event->isMain())
+                        <section id="ratings" class="section">
+                            <div class="heading">
+                                @include('rating.stars', ['rating' => $event->isChild() ? $event->parentEvent->getRating() : $event->getRating(), 'class' => 'm-b-10'])
+                                <h2 class="title">{{ trans('label.ratings') }}</h2>
+                                @if(!$event->hasFinished() && $event->preEvent && count($event->preEvent->raters))
+                                    <p class="subtitle">
+                                        {{ trans_choice('param_label.num_of_raters', count($event->preEvent->raters), ['num' => count($event->preEvent->raters)]) }}:
+                                        <span class="is-warning">{{ trans('info.event.pre_event_ratings', ['event' => $event->preEvent->title]) }}</span>
+                                    </p>
+                                @else
+                                    <p class="subtitle">{{ trans_choice('param_label.num_of_raters', count($event->raters), ['num' => count($event->raters)]) }}</p>
+                                @endif
+                            </div>
+                            <div class="content">
+                                @include('rating.index', ['event' => $event])
+                            </div>
+                        </section>
+                        @endif
                     </div>
-                    <div id="sidebar" class="column">
+                    <div id="sidebar" class="column is-3">
                         <div class="theiaStickySidebar">
                             <div class="columns is-multiline">
                                 <div class="column is-12">
                                     @if(empty($participationRestriction))
-                                        <a href="{{ $event->isChild() ? route('participation.create', ['event' => $event->parentEvent]) : route('participation.create', ['event' => $event]) }}"
+                                        <a href="{{ $event->isChild() ? route('participations.create', ['event' => $event->parentEvent]) : route('participations.create', ['event' => $event]) }}"
                                            class="button is-large is-success responsive">
                                         <span class="icon is-small">
                                             <icon icon="{{ config('icons.buy') }}"></icon>
@@ -166,7 +207,12 @@
                                             <span>{{ trans('action.login') }}</span>
                                         </a>
                                     @else
-                                        <p class="is-warning">{{ trans('label.hint') }}: {{ trans('validation.event.' . $participationRestriction) }}</p>
+                                        @if($loggedUser->athlete && $event->isParticipant($loggedUser->athlete))
+                                            <p class="is-warning">{{ trans('label.hint') }}: Du bist für dieses Event bereits angemeldet. Es gibt jedoch keine weitere Teilnahmeklasse, für die du dich zusätzlich anmelden könntest.</p>
+                                        @else
+                                            <p class="is-danger">{{ trans('label.hint') }}: {{ trans('validation.event.' . $participationRestriction) }}</p>
+                                        @endif
+
                                         @if($participationRestriction == 'restr_finished')
                                             <a href="#participants" data-scroll class="button is-large is-success responsive">
                                                 <span class="icon is-small">
@@ -250,7 +296,14 @@
                                 <li class="menu-label"><a
                                             href="#about_the_organizer">{{ trans('label.about_the_organizer') }}</a>
                                 </li>
+                                @if(count($event->getAllPreEvents()))
+                                <li class="menu-label"><a
+                                            href="#pre_events">{{ trans('label.pre_events') }}</a>
+                                </li>
+                                @endif
+                                @if($event->isMain())
                                 <li class="menu-label"><a href="#ratings">{{ trans('label.ratings') }}</a></li>
+                                @endif
                             </scrollspy-list>
                             <hr>
                             <h4 class="title">{{ trans('label.contact') }}</h4>

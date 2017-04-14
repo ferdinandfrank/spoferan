@@ -28,7 +28,7 @@ class CreateParticipationsTable extends Migration {
             $table->unsignedInteger('participation_state_id')->default(1);
             $table->boolean('privacy')->default(false);
             $table->unsignedInteger('rank')->nullable();
-            $table->text('description')->nullable();
+            $table->text('info')->nullable();
             $table->text('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();

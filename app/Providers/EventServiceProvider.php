@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider {
         'App\Events\UserCreated' => [
             'App\Listeners\CreateUserRelatedTables',
         ],
+        'App\Events\CouponRedeemed' => [
+            'App\Listeners\IncreaseCouponRedemptions',
+        ]
     ];
 
     /**

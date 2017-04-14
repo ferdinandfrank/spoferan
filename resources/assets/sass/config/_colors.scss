@@ -13,6 +13,7 @@
  *  7. Buttons
  *  8. Dropdowns
  *  9. Lists
+ * 10. Message Boxes
  */
 
 /*********************
@@ -62,6 +63,8 @@ $danger-invert: $white !default;
 
 $info: #f0820a !default;
 $info-invert: $white !default;
+
+$star: #ffa534 !default;
 
 $website: $secondary !default;
 $facebook: #4267b2 !default;
@@ -182,3 +185,14 @@ $notification-list-unread-background-color: $white-smooth;
 $notification-list-title-color: $secondary;
 $notification-list-text-color: $text;
 $notification-list-date-color: $muted-color;
+
+/*********************
+  10. Message Boxes
+**********************/
+$message-box-background-color: $grey-light !default;
+$message-box-header-background-color: $grey !default;
+$message-box-header-text-color: $white !default;
+
+$message-box-success-background-color: lighten($success, 50%) !default;
+$message-box-success-header-background-color: $success !default;
+$message-box-success-header-text-color: $white !default;

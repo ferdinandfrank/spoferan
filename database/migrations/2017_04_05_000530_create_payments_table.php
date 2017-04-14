@@ -22,12 +22,12 @@ class CreatePaymentsTable extends Migration {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->morphs('payable_id');
+            $table->morphs('payable');
             $table->string('payment_type', config('validation.payment_type.max'));
             $table->smallInteger('amount');
+            $table->smallInteger('fee')->nullable();
             $table->string('charge_id', config('validation.charge_id.max'))->nullable();
             $table->unsignedInteger('coupon_id')->nullable();
-            $table->text('metadata')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

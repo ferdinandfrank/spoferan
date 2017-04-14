@@ -53,5 +53,5 @@ window.formatMoney = function(cents){
     }
 
     // put it all together
-    return [dollars, decimal].join(".");
+    return [dollars, decimal].join(",") + ' €';
 };

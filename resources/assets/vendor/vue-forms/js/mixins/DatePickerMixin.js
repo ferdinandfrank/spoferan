@@ -14,5 +14,14 @@ module.exports = {
             default: 'all'
         }
     },
+
+
+    data: function () {
+        return {
+
+            // The format of the date
+            format: 'DD.MM.YYYY'
+        }
+    },
 };
 

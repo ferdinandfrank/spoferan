@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DB;
 
 /**
  * Rateable
@@ -22,23 +23,32 @@ trait Rateable {
      * @return Athlete
      */
     public function raters() {
-        return $this->belongsToMany(Athlete::class, $this->getRateableTable(), $this->getForeignKey(), 'athlete_id')
+        return $this->belongsToMany($this->getRaterClass(), $this->getRateableTable(), $this->getForeignKey(), $this->getRaterKeyName())
             ->withPivot('rating', 'description', 'privacy')
             ->withTimestamps();
     }
 
     /**
+     * Gets the average rating of this model.
+     *
+     * @return mixed
+     */
+    public function getRating() {
+        return DB::table($this->getRateableTable())->where($this->getForeignKey(), $this->getKey())->avg('rating');
+    }
+
+    /**
      * Gets the rating for the specific user, if he's a rater of the rateable object.
      *
-     * @param User|int|string $user
+     * @param BaseModel|int|string $user
      * @return mixed|null
      */
-    public function getRatingForUser($user) {
-        if ($user instanceof User) {
+    public function getRatingFor($user) {
+        if ($user instanceof BaseModel) {
             $user = $user->getKey();
         }
 
-        $rater = $this->raters()->where('athlete_id', $user)->first();
+        $rater = $this->raters()->where($this->getRaterKeyName(), $user)->first();
         if (empty($rater)) {
             return null;
         }
@@ -47,18 +57,36 @@ trait Rateable {
     }
 
     /**
+     * Gets the column name of the rater.
+     *
+     * @return string
+     */
+    public function getRaterKeyName() {
+        return 'athlete_id';
+    }
+
+    /**
+     * Gets the class name of the rater.
+     *
+     * @return string
+     */
+    public function getRaterClass() {
+        return Athlete::class;
+    }
+
+    /**
      * Checks if an user is a rater of the rateable object.
      *
-     * @param User|Athlete|int|string $user
+     * @param BaseModel|int|string $user
      *
      * @return bool
      */
     public function hasRater($user) {
-        if ($user instanceof User || $user instanceof Athlete) {
+        if ($user instanceof BaseModel) {
             $user = $user->getKey();
         }
 
-        return $this->raters()->where('athlete_id', $user)->count() > 0;
+        return $this->raters()->where($this->getRaterKeyName(), $user)->count() > 0;
     }
 
     /**

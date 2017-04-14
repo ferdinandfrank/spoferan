@@ -34,7 +34,10 @@ Route::resource('events/{event}/participation-classes', 'ParticipationClassContr
 Route::get('events/{event}/{child}', 'EventController@showChild')->name('events.children.show');
 Route::resource('athletes', 'AthleteController');
 
-Route::resource('participations', 'ParticipationController');
+Route::get('events/{event}/participate', 'ParticipationController@create')->name('participations.create');
+Route::get('events/{event}/participations/{participation}', 'ParticipationController@show')->name('participations.show');
+Route::get('events/{event}/participations/{participation}/download', 'ParticipationController@download')->name('participations.download');
+Route::post('participations', 'ParticipationController@store')->name('participations.store');
 
 Route::post('webhook/stripe', 'WebhooksController@handle');
 

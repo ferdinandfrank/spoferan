@@ -35,6 +35,9 @@ Vue.component('modal-form', modalForm);
 import slider from './components/Slider.vue';
 Vue.component('slider', slider);
 
+import messageBox from './components/MessageBox.vue';
+Vue.component('message-box', messageBox);
+
 window.VueModel = Vue.extend({
     i18n,
 

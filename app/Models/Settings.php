@@ -69,6 +69,24 @@ class Settings extends BaseModel {
     }
 
     /**
+     * Gets the stripe_cc_fee_percent of the page.
+     *
+     * @return string
+     */
+    public static function stripeCCFeePercent() {
+        return self::getByName('stripe_cc_fee_percent');
+    }
+
+    /**
+     * Gets the stripe_cc_fee_amount of the page.
+     *
+     * @return string
+     */
+    public static function stripeCCFeeAmount() {
+        return self::getByName('stripe_cc_fee_amount');
+    }
+
+    /**
      * Gets the short description of the page.
      *
      * @return string

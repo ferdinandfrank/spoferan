@@ -9,7 +9,7 @@ namespace App\Models;
  * -----------------------
  *
  * @author  Ferdinand Frank
- * @version 0.1
+ * @version 1.0
  * @package App\Models
  */
 trait HasAnonymousAthletes {
@@ -27,10 +27,11 @@ trait HasAnonymousAthletes {
      * Gets the name of the model's athlete in an html format.
      * Will be the anonymous name representation, if the privacy is set to true.
      *
+     * @param $forcePrivacy
      * @return string
      */
-    public function getAthletePresentationName() {
-        if ($this->privacy) {
+    public function getAthletePresentationName($forcePrivacy = false) {
+        if ($forcePrivacy || $this->privacy) {
             return '<em>' . $this->athlete->getAnonymousName() . '</em>';
         }
 

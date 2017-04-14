@@ -145,6 +145,11 @@ ul.info-list {
     margin-left: 0.5em;
 
     li {
+        color: $grey;
+        display: flex;
+        align-items: center;
+        margin: 7px 0;
+
         i:first-child {
             margin-right: $list-icon-margin;
         }
@@ -161,9 +166,10 @@ ul.info-list {
             border-radius: 50px;
         }
 
-        color: $grey;
-        display: flex;
-        align-items: center;
+        span {
+            font-size: $font-size - 0.1rem;
+            line-height: 1rem;
+        }
     }
 }
 

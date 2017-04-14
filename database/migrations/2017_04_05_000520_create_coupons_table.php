@@ -23,6 +23,7 @@ class CreateCouponsTable extends Migration {
             $table->increments('id');
             $table->string('code', config('validation.coupon.code.max'))->unique();
             $table->unsignedInteger('creator_id')->nullable();
+            $table->unsignedInteger('event_id')->nullable();
             $table->unsignedInteger('amount_off')->nullable();
             $table->unsignedTinyInteger('percent_off')->nullable();
             $table->dateTime('redeem_start')->nullable();
@@ -38,6 +39,12 @@ class CreateCouponsTable extends Migration {
                   ->on('users')
                   ->onUpdate('cascade')
                   ->onDelete('set null');
+
+            $table->foreign('event_id')
+                ->references('id')
+                ->on('events')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

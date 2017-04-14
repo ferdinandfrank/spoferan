@@ -135,7 +135,7 @@ module.exports = {
             this.checkInput();
             window.eventHub.$on('form-errors-changed', function (errors) {
                 if (errors.hasOwnProperty(this.submitName)) {
-                    this.errorMessage = errors[this.submitName];
+                    this.errorMessage = errors[this.submitName][0];
                 }
             });
         })

@@ -124,6 +124,12 @@ module.exports = {
         loader: {
             type: String,
             default: '<i class="fa fa-fw fa-circle-o-notch fa-spin"></i>'
+        },
+
+        // The selector of the wrapper where to insert general error response messages from the server.
+        // Error messages with the key of the data 'generalErrorKey' will be treated as general.
+        errorWrapper: {
+            type: String
         }
     },
 
@@ -230,6 +236,9 @@ module.exports = {
 
             // States if any error exists on the form.
             hasError: false,
+
+            // The key of a general error message from the server, that does not belong to a specific input.
+            generalErrorKey: 'msg'
         }
 
     },
@@ -271,8 +280,12 @@ module.exports = {
             window.eventHub.$on('input-value-changed', (name, value) => {
 
                 // Check if the input is part of this form
-                if (this.form.has(name)) {
+                if ($(this.$el).find('[name=' + name + ']').length) {
                     this.form.set(name, value);
+
+                    // Delete the general error
+                    this.removeError(this.generalErrorKey);
+                    $(this.errorWrapper).html('');
                 }
             });
             window.eventHub.$on('input-error-changed', (name, error) => {
@@ -380,13 +393,17 @@ module.exports = {
         },
 
         /**
-         * Adds the specified error to the specified field.
+         * Adds the specified error to the specified field. The field can be an object with error messages
+         * to merge to the current error messages.
          *
          * @param field
          * @param error
          */
         setError: function (field, error) {
-            if (error === null) {
+            if (typeof field === 'object') {
+                Object.assign(this.errors, field);
+                this.hasError = true;
+            }else if (error === null) {
                 this.removeError(field);
             } else {
                 this.errors[field] = error;
@@ -402,6 +419,66 @@ module.exports = {
         removeError: function (field) {
             delete this.errors[field];
             this.hasError = Object.keys(this.errors).length !== 0;
+        },
+
+        /**
+         * Handles the response from the server after the form has been submitted.
+         *
+         * @param success {@code true} if the submit was successful, {@code false} otherwise.
+         * @param response The response from the server.
+         */
+        handleResponse: function (success, response) {
+
+            // Check the success type, show the corresponding alerts and call the corresponding callback methods.
+            if (!success) {
+                this.handleError(response);
+            } else {
+
+                if (this.showAlert) {
+                    showAlert('success', this.alertTitle, this.alertMessage, this.alertDuration, () => {
+                        this.handleSuccess(response);
+                    });
+                } else {
+                    this.handleSuccess(response);
+                }
+            }
+
+            // Stop the loader if an error occurred or if no redirect shall occur.
+            if (!this.redirect || !success) {
+                this.stopLoader();
+            }
+
+            // Call the callback to handle the after submit action directly on the page.
+            // The callback has 4 parameters (+ the callback name):
+            // - callbackName: The name of the event to listen to for the callback.
+            // - success: {@code true} if the request was successful handled on the server, {@code false} otherwise.
+            // - response: The response message retrieved from the server.
+            // - method: The method that was used to proceed the request.
+            // - component: The current instance of this component (useful to extract the form with 'component.$el'
+            setTimeout(() => {
+                // noinspection JSUnresolvedFunction
+                window.eventHub.$emit('response_' + this.callbackName, success, response, this.submitMethod, this);
+            }, (this.alertError && !success) || this.showAlert ? this.alertDuration : 0);
+        },
+
+        /**
+         * Handles an error response from the server.
+         *
+         * @param response The response from the server.
+         */
+        handleError: function (response) {
+            this.setError(response);
+
+            // Notify the child inputs of the errors
+            window.eventHub.$emit('form-errors-changed', response);
+
+            // Set the general error
+            if (this.errorWrapper && response.hasOwnProperty('msg')) {
+                $(this.errorWrapper).html(response[this.generalErrorKey][0]);
+            }
+
+            this.showErrorAlert();
+            this.onError(response);
         },
 
         /**
@@ -443,48 +520,6 @@ module.exports = {
         },
 
         /**
-         * Handles the response from the server after the form has been submitted.
-         *
-         * @param success {@code true} if the submit was successful, {@code false} otherwise.
-         * @param response The response from the server.
-         */
-        handleResponse: function (success, response) {
-
-            // Check the success type, show the corresponding alerts and call the corresponding callback methods.
-            if (!success) {
-                window.eventHub.$emit('form-errors-changed', this.form.errors);
-                this.showErrorAlert();
-                this.onError(response);
-            } else {
-
-                if (this.showAlert) {
-                    showAlert('success', this.alertTitle, this.alertMessage, this.alertDuration, () => {
-                        this.handleSuccess(response);
-                    });
-                } else {
-                    this.handleSuccess(response);
-                }
-            }
-
-            // Stop the loader if an error occurred or if no redirect shall occur.
-            if (!this.redirect || !success) {
-                this.stopLoader();
-            }
-
-            // Call the callback to handle the after submit action directly on the page.
-            // The callback has 4 parameters (+ the callback name):
-            // - callbackName: The name of the event to listen to for the callback.
-            // - success: {@code true} if the request was successful handled on the server, {@code false} otherwise.
-            // - response: The response message retrieved from the server.
-            // - method: The method that was used to proceed the request.
-            // - component: The current instance of this component (useful to extract the form with 'component.$el'
-            setTimeout(() => {
-                // noinspection JSUnresolvedFunction
-                window.eventHub.$emit('response_' + this.callbackName, success, response, this.submitMethod, this);
-            }, (this.alertError && !success) || this.showAlert ? this.alertDuration : 0);
-        },
-
-        /**
          * Redirects the user if a basic redirect or
          * a redirect to the details page of the created or edited object shall occur.
          */
@@ -516,10 +551,11 @@ module.exports = {
 
             // Check if an error message shall be shown to the user.
             if (this.alertError) {
-                let msg = this.form.errors.get('msg');
+                let msg = this.errors['msg'];
 
+                // If no general error was found, just alert the first random one
                 if (!msg) {
-                    msg = this.form.errors.first();
+                    msg = this.errors[Object.keys(this.errors)[0]];
                 }
 
                 if (!msg) {

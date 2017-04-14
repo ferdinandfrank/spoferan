@@ -67,7 +67,7 @@
 
         watch: {
             currentPosition: function (position, prevPosition) {
-                if (position != prevPosition) {
+                if (position !== prevPosition) {
                     if (position > prevPosition) {
                         this.items[prevPosition].hide();
                         this.items[prevPosition + this.itemsPerPage].show();

@@ -45,7 +45,7 @@
             this.$nextTick(function () {
                 $(this.$refs.input).datetimepicker({
                     locale: 'de',
-                    format: 'DD.MM.YYYY',
+                    format: this.format,
                     defaultDate: this.submitValue
                 });
                 $(this.$refs.input).on("dp.change", (moment) => {
@@ -54,5 +54,25 @@
                 });
             })
         },
+
+        methods: {
+            /**
+             * Resets the value of the input.
+             */
+            reset: function () {
+                this.submitValue = this.value;
+                $(this.$refs.input).val(this.value);
+                this.inputChanged();
+            },
+
+            /**
+             * Clears the value of the input.
+             */
+            clear: function () {
+                this.submitValue = '';
+                $(this.$refs.input).val('');
+                this.inputChanged();
+            },
+        }
     }
 </script>

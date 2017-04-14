@@ -46,6 +46,7 @@ class Participation extends BaseModel {
     use SoftDeletes;
     use HasResourceRoutes;
     use HasAnonymousAthletes;
+    use IsPayable;
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +70,15 @@ class Participation extends BaseModel {
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'metadata' => 'array',
+    ];
 
     /**
      * Gets the participation class of the participation.

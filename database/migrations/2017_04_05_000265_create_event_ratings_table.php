@@ -21,15 +21,15 @@ class CreateEventRatingsTable extends Migration {
         Schema::create('event_ratings', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->unsignedInteger('event_id');
-            $table->unsignedInteger('athlete_id');
+            $table->unsignedInteger('participation_id');
             $table->tinyInteger('rating');
             $table->text('description')->nullable();
             $table->boolean('privacy')->default(false);
             $table->timestamps();
 
-            $table->foreign('athlete_id')
-                  ->references('user_id')
-                  ->on('athletes')
+            $table->foreign('participation_id')
+                  ->references('id')
+                  ->on('participations')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
@@ -39,7 +39,7 @@ class CreateEventRatingsTable extends Migration {
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
-            $table->primary(['event_id', 'athlete_id']);
+            $table->primary(['event_id', 'participation_id']);
         });
     }
 

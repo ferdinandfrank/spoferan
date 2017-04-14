@@ -20,7 +20,6 @@ $factory->define(App\Models\Participation::class, function (Faker\Generator $fak
         'starter_number' => $athlete->starter_number,
         'privacy' => $privacy,
         'rank' => null,
-        'description' => null
     ];
 });
 

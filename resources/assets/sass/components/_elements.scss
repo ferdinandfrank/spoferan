@@ -13,6 +13,7 @@
  *  7. Wizard
  *  8. Slider
  *  9. Modals
+ * 10. Rating
  */
 
 /*********************
@@ -263,4 +264,48 @@ time.calendar {
 
 .modal-card-foot {
     justify-content: flex-end;
+}
+
+/*********************
+  10. Rating
+**********************/
+.rating {
+    padding: 30px 0;
+
+    &:not(:last-of-type) {
+        border-bottom: 1px solid $grey-light;
+    }
+
+    .rating-heading {
+        display: flex;
+        margin-bottom: 10px;
+
+        .rating-info {
+            display: flex;
+            flex-direction: column;
+
+            &:not(:first-child) {
+                margin-left: 10px;
+            }
+
+            .title {
+                margin-bottom: 2px;
+
+                * {
+                    font-size: inherit;
+                }
+            }
+        }
+    }
+
+    .rating-stars {
+        margin-bottom: 5px;
+        font-size: $font-size-large;
+    }
+}
+
+.rating-stars {
+    display: flex;
+    font-size: $font-size-x-large;
+    color: $star !important;
 }

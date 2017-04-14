@@ -20,36 +20,39 @@
                     <wizard ref="wizard"
                             :step-props="[@if($selectedEventPart){selectedTitle: '{{ $selectedEventPart->title}}'}@if($selectedParticipationClass),{selectedTitle: '{{ $selectedParticipationClass->title}}'}@endif @endif]">
                         @if(count($event->childEvents))
-                        <section id="{{ config('query.child_event') }}" class="section wizard-section">
-                            <div class="heading">
-                                <h2 class="title wizard-title">{{ trans('action.select_event_part') }}</h2>
-                                <p class="subtitle">Wähle den Eventteil aus, für den du dich anmelden möchtest.</p>
-                            </div>
-                            <div class="content">
-                                <div class="columns is-multiline">
-                                    @if(count($event->participationClasses))
-                                        <div id="{{ $event->getRouteKey() }}" class="column">
-                                            @include('event.preview', ['event' => $event, 'hoverText' => trans('action.select_event_part'), 'onClick' => "select('". $event->getRouteKey(). "', '".$event->title."')"])
-                                        </div>
-                                    @endif
-                                    @foreach($event->childEvents as $childEvent)
-                                        <div id="{{ $childEvent->getRouteKey() }}" class="column">
-                                            @include('event.preview', [
-                                            'event' => $childEvent,
-                                            'hoverText' => trans('action.select_event_part'),
-                                            'onClick' => "select('". $childEvent->getRouteKey(). "', '".$childEvent->title."')",
-                                            'class' => isset($selectedEventPart) && $selectedEventPart->getKey() == $childEvent->getKey() ? 'selected' : ''])
-                                        </div>
-                                    @endforeach
+                            <section id="{{ config('query.child_event') }}" class="section wizard-section">
+                                <div class="heading">
+                                    <h2 class="title wizard-title">{{ trans('action.select_event_part') }}</h2>
+                                    <p class="subtitle">Wähle den Eventteil des Events {{ $event->title }} aus, für den du dich anmelden möchtest.<br/>
+                                        <span class="is-warning">Info: Es werden nur Eventteile angezeigt, für die du dich anmelden kannst.</span></p>
                                 </div>
-                            </div>
-                        </section>
+                                <div class="content">
+                                    <div class="columns is-multiline">
+                                        @if(count($event->participationClasses))
+                                            <div id="{{ $event->getRouteKey() }}" class="column">
+                                                @include('event.preview', ['event' => $event, 'hoverText' => trans('action.select_event_part'), 'onClick' => "select('". $event->getRouteKey(). "', '".$event->title."')"])
+                                            </div>
+                                        @endif
+                                        @foreach($event->childEvents as $childEvent)
+                                            @if($childEvent->canParticipate())
+                                                <div id="{{ $childEvent->getRouteKey() }}" class="column">
+                                                    @include('event.preview', [
+                                                    'event' => $childEvent,
+                                                    'hoverText' => trans('action.select_event_part'),
+                                                    'onClick' => "select('". $childEvent->getRouteKey(). "', '".$childEvent->title."')",
+                                                    'class' => isset($selectedEventPart) && $selectedEventPart->getKey() == $childEvent->getKey() ? 'selected' : ''])
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </section>
                         @endif
                         <section id="{{ config('query.participation_class') }}" class="section wizard-section">
                             <div class="heading">
                                 <h2 class="title wizard-title">{{ trans('action.select_participation_class') }}</h2>
                                 <p class="subtitle">Wähle die Teilnahmeklasse aus, für die du dich anmelden
-                                    möchtest.</p>
+                                    möchtest. <br/><span class="is-warning">Info: Es werden nur Teilnahmeklassen angezeigt, für die du dich anmelden kannst.</span></p>
                             </div>
                             <div class="content">
                                 <div id="participation_classes_list" class="columns is-multiline">
@@ -69,7 +72,7 @@
                             </div>
                             <div class="content">
                                 <ajax-form ref="form" action="{{ route('participations.store') }}" method="POST"
-                                           alert-key="participation_payed" redirect="{{ $event->getPath() }}">
+                                           alert-key="participation_payed" detail-redirect="/events/{{ $event->getRouteKey() }}/participations">
                                     <h4>1. {{ trans('label.participation_overview') }}</h4>
                                     <div class="columns">
                                         <div class="column is-6">
@@ -86,8 +89,9 @@
                                                 @endif
                                                 <li><b>Ausgewählte Teilnahmeklasse:</b>&nbsp;<span
                                                             id="selected-participation_class-title">@{{ selectedParticipationClass.title }}</span>
-                                                    &nbsp;<small v-on:click.prevent="@if(count($event->childEvents))setStep(1)@else setStep(0) @endif"
-                                                                 class="is-secondary link">{{ trans('action.change') }}</small>
+                                                    &nbsp;<small
+                                                            v-on:click.prevent="@if(count($event->childEvents))setStep(1)@else setStep(0) @endif"
+                                                            class="is-secondary link">{{ trans('action.change') }}</small>
                                                 </li>
                                             </ul>
                                         </div>
@@ -108,14 +112,18 @@
                                     <hr>
                                     @if(count($loggedUser->paymentDetails))
                                         <h4>2. Zahlungsmethode auswählen</h4>
-                                        <p class="is-warning">Info: Zur Darstellung des Bezahlprozesses für eine Eventanmeldung dient die Bezahlung mit Kreditkarte.
-                                            Weitere Zahlungsmethoden können im Prototypen aus Sicherheits- und Testgründen nicht vorgeführt werden.</p>
+                                        <p class="is-warning">Info: Zur Darstellung des Bezahlprozesses für eine
+                                            Eventanmeldung dient die Bezahlung mit Kreditkarte.
+                                            Weitere Zahlungsmethoden können im Prototypen aus Sicherheits- und
+                                            Testgründen nicht vorgeführt werden.</p>
                                         <div class="columns">
                                             <div class="column is-12">
-                                                <h5>Kreditkarten</h5>
+                                                <h5>Kreditkarten <small class="is-warning">+ @{{ ccFeePercent }} %  + @{{ ccFeeFixed }} € Zahlungsgebühr</small></h5>
+
                                                 <p class="no-data"
                                                    v-if="!cards || !cards.length">{{ trans('info.payment.no_credit_cards') }}</p>
                                                 <form-radio v-for="(card, index) in cards" name="source"
+                                                            :key="card.id"
                                                             :value="card.id" :checked="index == 0">
                                                     <div>
                                                         <img :src="'/images/icons/credit_cards/' + toSnakeCase(card.brand) + '.png'"
@@ -136,44 +144,52 @@
                                                 </a>
                                             </div>
                                             {{--<div class="column is-6">--}}
-                                                {{--<h5>Bankeinzugskonten</h5>--}}
-                                                {{--<p class="no-data"--}}
-                                                   {{--v-if="!bankAccounts || !bankAccounts.length">{{ trans('info.payment.no_bank_accounts') }}</p>--}}
-                                                {{--<form-radio v-for="(bankAccount, index) in bankAccounts" name="source"--}}
-                                                            {{--:value="bankAccount.id" :checked="index == 0">--}}
-                                                    {{--<div>--}}
-                                                        {{--<b>Bankeinzugskonto</b>--}}
-                                                        {{--<small>endet auf @{{ bankAccount.last4 }}</small>--}}
-                                                    {{--</div>--}}
-                                                    {{--<small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>--}}
-                                                {{--</form-radio>--}}
+                                            {{--<h5>Bankeinzugskonten</h5>--}}
+                                            {{--<p class="no-data"--}}
+                                            {{--v-if="!bankAccounts || !bankAccounts.length">{{ trans('info.payment.no_bank_accounts') }}</p>--}}
+                                            {{--<form-radio v-for="(bankAccount, index) in bankAccounts" name="source"--}}
+                                            {{--:value="bankAccount.id" :checked="index == 0">--}}
+                                            {{--<div>--}}
+                                            {{--<b>Bankeinzugskonto</b>--}}
+                                            {{--<small>endet auf @{{ bankAccount.last4 }}</small>--}}
+                                            {{--</div>--}}
+                                            {{--<small class="m-t-2 m-b-2">@{{ bankAccount.account_holder_name }}</small>--}}
+                                            {{--</form-radio>--}}
 
-                                                {{--<a class="button is-small" disabled>--}}
+                                            {{--<a class="button is-small" disabled>--}}
                                             {{--<span class="icon is-small">--}}
-                                                {{--<icon icon="{{ config('icons.add') }}"></icon>--}}
+                                            {{--<icon icon="{{ config('icons.add') }}"></icon>--}}
                                             {{--</span>--}}
-                                                    {{--<span>{{ trans('action.add_bank_account') }}</span>--}}
-                                                {{--</a>--}}
+                                            {{--<span>{{ trans('action.add_bank_account') }}</span>--}}
+                                            {{--</a>--}}
                                             {{--</div>--}}
                                         </div>
 
                                         <hr>
                                     @endif
                                     <h4>3. Gutschein einlösen</h4>
-                                    <p class="is-warning">Info: Es kann der Gutschein-Code "TEST-COUPON" verwendet werden.</p>
+                                    <p class="is-warning">Info: Es kann der Gutschein-Code "TESTCOUPON" verwendet
+                                        werden.</p>
                                     <div class="columns">
                                         <div class="column is-4">
-                                            <form-input name="coupon" :ignore-errors="true" :check="validateCoupon" icon-left="{{ config('icons.coupon') }}" validate-on="change"></form-input>
+                                            <form-input name="coupon" :ignore-errors="true" :check="validateCoupon"
+                                                        icon-left="{{ config('icons.coupon') }}"
+                                                        validate-on="change"></form-input>
                                         </div>
                                     </div>
-                                        <hr>
+                                    <hr>
                                     <div class="flex-end">
                                         <div class="flex-column">
                                             <p class="m-b-2">Gesamtpreis inkl. Mwst.</p>
-                                            <h2 class="m-none" v-if="!coupon">€ @{{ price }}</h2>
-                                            <h4 class="line-through m-none" v-if="coupon">€ @{{ price }}</h4>
-                                            <p v-if="coupon">@{{ couponInfo }}</p>
-                                            <h2 class="m-none" v-if="coupon">€ @{{ couponPrice }}</h2>
+                                            <h4 class="line-through m-none is-danger" v-if="coupon">
+                                                @{{ formatMoney(price) }}</h4>
+                                            <p class="m-b-3"
+                                               v-if="fee && !coupon">@{{ formatMoney(price) }}</p>
+                                            <p class="m-b-3" v-if="coupon">@{{ couponInfo }}</p>
+                                            <p class="m-b-3"
+                                               v-if="fee && coupon">@{{ formatMoney(couponPrice) }}</p>
+                                            <p class="m-b-3" v-if="fee">+ @{{ formatMoney(fee) }} Zahlungsgebühr</p>
+                                            <h2 class="m-none is-success">@{{ formatMoney(fullPrice) }}</h2>
                                         </div>
                                     </div>
                                     <div class="center m-t-50">
@@ -199,10 +215,11 @@
         </div>
     </div>
 
-    <modal-form ref="addCCForm" action="{{ route('payment_details.store', $loggedUser->activePaymentDetails->getKey()) }}"
+    <modal-form ref="addCCForm"
+                action="{{ route('payment_details.store', $loggedUser->activePaymentDetails->getKey()) }}"
                 id="addCCForm"
                 :labels="{save: '{{ trans('action.add_credit_card') }}'}" title="{{ trans('action.add_credit_card') }}"
-                alert-key="credit_card" callback-name="addCreditCardResponse" :reset="true" method="POST">
+                alert-key="credit_card" callback-name="addCreditCard" :reset="true" method="POST">
         <div class="columns">
             <div class="column">
                 <p>Spoferan akzeptiert die folgenden Kreditkarten:</p>
@@ -241,18 +258,23 @@
         <div class="columns is-multiline">
             <hidden-input name="type" value="card"></hidden-input>
             <div class="column is-6">
-                <form-input icon="{{ config('icons.credit_card') }}" lang-key="credit_card" name="number" :required="true"></form-input>
+                <form-input icon="{{ config('icons.credit_card') }}" lang-key="credit_card" name="number"
+                            :required="true"></form-input>
             </div>
             <div class="column is-6">
-                <form-input icon="{{ config('icons.user') }}" lang-key="credit_card" name="name" :required="true"></form-input>
+                <form-input icon="{{ config('icons.user') }}" lang-key="credit_card" name="name"
+                            :required="true"></form-input>
             </div>
             <div class="column is-6">
-                <form-input icon="{{ config('icons.calendar') }}" lang-key="credit_card" name="expiry" :required="true"></form-input>
+                <form-input icon="{{ config('icons.calendar') }}" lang-key="credit_card" name="expiry"
+                            :required="true"></form-input>
             </div>
             <div class="column is-6">
-                <form-input icon="{{ config('icons.password') }}" lang-key="credit_card" type="number" name="cvc" :required="true"></form-input>
+                <form-input icon="{{ config('icons.password') }}" lang-key="credit_card" type="number" name="cvc"
+                            :required="true"></form-input>
             </div>
-            <p class="is-warning">Info: Zum Testen des Prototypen kann eine Kreditkarte mit den folgenden Test-Kartennummern und beliebigen weiteren Daten erstellt werden:</p>
+            <p class="is-warning">Info: Zum Testen des Prototypen kann eine Kreditkarte mit den folgenden
+                Test-Kartennummern und beliebigen weiteren Daten erstellt werden:</p>
             <ul class="info-list">
                 <li><b>Visa:</b>&nbsp;4242 4242 4242 4242</li>
                 <li><b>Mastercard:</b>&nbsp;5555 5555 5555 4444</li>
@@ -264,7 +286,7 @@
     <modal-form ref="addBAForm" action="{{ route('payment_details.store', $loggedUser->getKey()) }}"
                 :labels="{save: '{{ trans('action.add_bank_account') }}'}"
                 title="{{ trans('action.add_bank_account') }}" alert-key="bank_account"
-                callback-name="addBankAccountResponse" :reset="true" method="POST">
+                callback-name="addBankAccount" :reset="true" method="POST">
         <div class="columns is-multiline">
             <hidden-input name="type" value="sepa_debit"></hidden-input>
             <div class="column is-6">
@@ -288,7 +310,6 @@
             data() {
                 return {
                     form: null,
-                    valid: false,
                     wizard: null,
                     coupons: <?php echo $coupons; ?>,
                     selectedEvent: <?php echo $event; ?>,
@@ -296,19 +317,80 @@
                     selectedParticipationClass: <?php echo $selectedParticipationClass ?? '{}'; ?>,
                     cards: <?php echo json_encode($loggedUser->activePaymentDetails->getCards()['data']); ?>,
                     bankAccounts: <?php echo json_encode($loggedUser->activePaymentDetails->getBankAccounts()['data']); ?>,
+                    source: null,
                     coupon: null,
                     couponInfo: null,
-                    couponPrice: null,
-                    price: null
+                    couponBenefit: null,
+                    price: null,
                 }
+            },
+
+            computed: {
+
+                valid: function () {
+                    return !!this.source;
+                },
+
+                ccFeeFixed: function () {
+                    if ('{{ Settings::stripeCCFeeAmount() }}') {
+                        return parseInt('{{ Settings::stripeCCFeeAmount() }}') / 100;
+                    }
+
+                    return 0;
+                },
+
+                ccFeePercent: function () {
+                    if ('{{ Settings::stripeCCFeePercent() }}') {
+                        return (parseFloat('{{ Settings::stripeCCFeePercent() }}') * 100).toFixed(2);
+                    }
+
+                    return 0;
+                },
+
+                fee: function () {
+                    return this.fullPrice - this.couponPrice;
+                },
+
+                couponPrice: function () {
+                    if (this.price) {
+                        let price = this.price;
+                        if (this.couponBenefit) {
+                            price -= this.couponBenefit;
+                        }
+
+                        return price;
+                    }
+
+                    return null;
+                },
+
+                fullPrice: function () {
+                    if (this.price) {
+                        let price = this.price;
+                        if (this.couponBenefit) {
+                            price -= this.couponBenefit;
+                        }
+
+                        if (this.source && this.source.startsWith('card')) {
+                            let feePercent = parseFloat('{{ Settings::stripeCCFeePercent() }}');
+                            let feeFixed = parseInt('{{ Settings::stripeCCFeeAmount() }}');
+
+                            price = (price + feeFixed) / (1 - feePercent);
+                        }
+
+                        return price;
+                    }
+
+                    return null;
+                },
             },
 
             mounted: function () {
                 this.$nextTick(function () {
                     this.wizard = this.$refs.wizard;
                     this.form = this.$refs.form;
-                    this.valid = !!this.form.form.data.source;
-                    this.price = formatMoney(this.selectedParticipationClass.price);
+                    this.source = this.form.form.data.source;
+                    this.price = this.selectedParticipationClass ? this.selectedParticipationClass.price : null;
 
                     window.eventHub.$on('response_addCreditCard', (success, response) => {
                         if (success) {
@@ -326,10 +408,9 @@
 
                     window.eventHub.$on('input-value-changed', (name, value) => {
                         if (name === 'source') {
-                            this.valid = !!value;
+                            this.source = value;
                         }
                     });
-
 
                     window.eventHub.$on('wizard_step_changed', (step, lastStep) => {
 
@@ -360,7 +441,7 @@
                                 $('#' + response.id).children().addClass('selected');
 
                                 this.selectedParticipationClass = response;
-                                this.price = formatMoney(this.selectedParticipationClass.price);
+                                this.price = this.selectedParticipationClass.price;
                             });
                         }
                         @else
@@ -374,7 +455,7 @@
                                 $('#' + response.id).children().addClass('selected');
 
                                 this.selectedParticipationClass = response;
-                                this.price = formatMoney(this.selectedParticipationClass.price);
+                                this.price = this.selectedParticipationClass.price;
                             });
                         }
                         @endif
@@ -435,20 +516,25 @@
                 toSnakeCase: function (string) {
                     return toSnakeCase(string);
                 },
+                formatMoney: function (value) {
+                    return formatMoney(value);
+                },
 
-                validateCoupon: function(value, callback) {
+                validateCoupon: function (value, callback) {
                     let coupon = getObjectByValue(this.coupons, 'code', value);
 
                     this.coupon = coupon;
                     if (coupon) {
                         let off = coupon.amount_off ? formatMoney(coupon.amount_off) + ' €' : coupon.percent_off + ' %';
-                        this.couponInfo = '- ' + off  + ' (' + coupon.code + ')';
-                        this.couponPrice = coupon.amount_off ? this.selectedParticipationClass.price - coupon.amount_off : this.selectedParticipationClass.price * (coupon.percent_off / 100);
-                        this.couponPrice = formatMoney(this.couponPrice);
+                        this.couponInfo = '- ' + off + ' (' + coupon.code + ')';
+                        if (coupon.amount_off) {
+                            this.couponBenefit = coupon.amount_off;
+                        } else if (coupon.percent_off) {
+                            this.couponBenefit = this.selectedParticipationClass.price - (this.selectedParticipationClass.price * (coupon.percent_off / 100));
+                        }
                         callback(true);
                     } else {
-                        this.couponInfo = null;
-                        this.couponPrice = null;
+                        this.couponBenefit = null;
                         callback(false, this.$t('validation.coupon'));
                     }
                 }

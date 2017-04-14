@@ -60,6 +60,10 @@
                                         href="#">
                                     <icon icon="{{ config('icons.edit') }}"></icon>{{ trans('action.edit_profile') }}
                                 </a></li>
+                            <li @if (Request::is('admin/profile/*')) class="active" @endif><a
+                                        href="#">
+                                    <icon icon="{{ config('icons.participate') }}"></icon>{{ trans('label.my_participations') }}
+                                </a></li>
                             <li id="logout-button">
                                 <form-link :alert="false" redirect="{{ route('login') }}" action="{{ route('logout') }}"
                                            method="POST">

@@ -38,6 +38,9 @@ use Illuminate\Database\Query\Builder;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Coupon whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Coupon whereValid($value)
  * @mixin \Eloquent
+ * @property int $event_id
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Coupon redeemable($purchaseType = null, \App\Models\Event $event = null)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Coupon whereEventId($value)
  */
 class Coupon extends BaseModel {
 
@@ -65,6 +68,13 @@ class Coupon extends BaseModel {
         'times_redeemed',
         'valid',
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['redeem_start', 'redeem_end'];
 
     /**
      * The types a coupon is redeemable for.
@@ -114,18 +124,73 @@ class Coupon extends BaseModel {
     }
 
     /**
+     * Increases the redemption count of the coupon.
+     */
+    public function increaseRedemption() {
+        $this->times_redeemed = $this->times_redeemed + 1;
+        $this->save();
+    }
+
+    /**
+     * Checks if the coupon is valid for the specified purchase type and the event.
+     *
+     * @param string|null $purchaseType
+     * @param Event|null $event
+     * @return bool
+     */
+    public function isRedeemable($purchaseType = null, Event $event = null) {
+        $now = Carbon::now();
+
+        if (!$this->valid) {
+            return false;
+        }
+
+        // Check the purchase type
+        if ($purchaseType && in_array($purchaseType, self::$types) && $purchaseType != $this->type) {
+            return false;
+        }
+
+        // Check the event
+        if ($event && $this->event_id != $event->id) {
+            return false;
+        }
+
+        // Check max redemptions
+        if ($this->max_redemptions && $this->times_redeemed >= $this->max_redemptions) {
+            return false;
+        }
+
+        // Check coupon validity interval
+        if ($this->redeem_start && $this->redeem_start->gt($now)) {
+            return false;
+        }
+        if ($this->redeem_end && $this->redeem_end->lte($now)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Scopes a query to only include valid and redeemable coupons for the specified purchase.
      *
      * @param Builder $query
-     * @param string|null    $purchaseType
+     * @param string|null $purchaseType
      *
+     * @param Event|null $event
      * @return Builder
      */
-    public function scopeRedeemable($query, $purchaseType = null) {
+    public function scopeRedeemable($query, $purchaseType = null, Event $event = null) {
         $now = Carbon::now();
 
+        // Check the purchase type
         if ($purchaseType && in_array($purchaseType, self::$types)) {
             $query->where('type','all')->orWhere('type', $purchaseType);
+        }
+
+        // Check the event
+        if ($event) {
+            $query->where('event_id', $event->id)->orWhereNull('event_id');
         }
 
         return $query->where('valid', true)

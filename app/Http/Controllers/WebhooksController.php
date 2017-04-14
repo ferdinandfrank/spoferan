@@ -2,16 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CouponRedeemed;
+use App\Models\Coupon;
 use App\Models\Participation;
 use App\Models\User;
 
+/**
+ * WebhooksController
+ * -----------------------
+ * Controller to handle webhook routes like notifications about events from Stripe.
+ * -----------------------
+ * @author Ferdinand Frank
+ * @version 1.0
+ * @package App\Http\Controllers
+ */
 class WebhooksController extends Controller {
 
+    /**
+     * Handles the events from Stripe.
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function handle() {
         $payload = request()->all();
 
+        // Call specific method dependent on the event type
         $method = $this->eventToMethod($payload['type']);
-
         if (method_exists($this, $method)) {
             return $this->$method($payload);
         }
@@ -23,25 +39,49 @@ class WebhooksController extends Controller {
         return 'on' . studly_case(str_replace('.', '_', $event));
     }
 
+    /**
+     * Handles the event from stripe, when a charge was successfully processed.
+     *
+     * @param $payload
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function onChargeSucceeded($payload) {
+
+        // Get the coupon that was used for the charge
+        $couponId = $payload['data']['object']['metadata']['coupon_id'];
+        $coupon = null;
+        if ($couponId) {
+            $coupon = Coupon::findByKey($couponId)->first();
+            if (!$coupon) {
+                $couponId = null;
+            }
+        }
+
+        // Create the payment with the transmitted data
         $payment = $this->getUserByStripePayload($payload)->payments()->create([
             'amount' => $payload['data']['object']['amount'],
+            'fee' => $payload['data']['object']['metadata']['fee'],
+            'payable_id' => $payload['data']['object']['metadata']['payable_id'],
+            'payable_type' => $payload['data']['object']['metadata']['payable_type'],
+            'payment_type' => $payload['data']['object']['source']['object'],
             'charge_id' => $payload['data']['object']['id'],
-            'description' => $payload['data']['object']['description']
+            'coupon_id' => $payload['data']['object']['metadata']['coupon_id'],
         ]);
 
-        $participationId = $payload['data']['object']['metadata']['participation_id'];
-        if ($participationId) {
-            $participation = Participation::find($participationId);
-            if ($participation) {
-                $participation->payment_id = $payment->id;
-                $participation->save();
-            }
+        // Call the coupon redeemed event, if a coupon was used
+        if ($coupon) {
+            event(new CouponRedeemed($coupon));
         }
 
         return $payment;
     }
 
+    /**
+     * Finds the user by the Stripe id in the specified Stripe payload.
+     *
+     * @param $stripePayload
+     * @return User
+     */
     protected function getUserByStripePayload($stripePayload) {
         return User::findByStripeId($stripePayload['data']['object']['customer']);
     }

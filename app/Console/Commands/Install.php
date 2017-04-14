@@ -334,6 +334,8 @@ class Install extends Command {
         $this->savePageInfo('facebook', $this->settings['facebook']);
         $this->savePageInfo('twitter', $this->settings['twitter']);
         $this->savePageInfo('instagram', $this->settings['instagram']);
+        $this->savePageInfo('stripe_cc_fee_percent', $this->settings['stripe_cc_fee_percent'] ?? '0.029');
+        $this->savePageInfo('stripe_cc_fee_amount', $this->settings['stripe_cc_fee_amount'] ?? '27');
     }
 
     private function finishSetup() {

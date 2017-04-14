@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn" :class="[size ? 'btn-' + size : '', color ? 'btn-' + color : '']" @click="submit">
+    <button type="button" class="button" :class="[size ? 'is-' + size : '', color ? 'is-' + color : '']" @click="submit">
         <slot></slot>
     </button>
 </template>

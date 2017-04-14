@@ -12,6 +12,13 @@ return [
 
     'event' => [
         'no_participants' => 'Für dieses Event hat sich bisher noch kein Athlet angemeldet.',
-        'no_results'      => 'Für deine Suchanfrage wurden leider keine Events gefunden. Versuche es noch einmal mit einer anderen Suchanfrage.'
+        'no_results'      => 'Für deine Suchanfrage wurden leider keine Events gefunden. Versuche es noch einmal mit einer anderen Suchanfrage.',
+        'no_ratings' => 'Dieses Event wurde bisher noch nicht bewertet.',
+        'pre_event_ratings' => 'Dieses Event hat noch nicht gestartet. Es werden deshalb die Bewertungen des Events :event aus dem Vorjahr angezeigt. Die Gesamtbewertung ergibt sich durch Einberechnung aller Bewertungen aus allen Events der Vorjahre.',
+        'no_ratings_not_started' => 'Dieses Event hat noch nicht gestartet und konnte deshalb noch keine Bewertungen erhalten.'
+    ],
+
+    'participation' => [
+        'no_info' => 'Der Veranstalter hat bisher noch keine Informationen über deine Teilnahme mit dir geteilt.'
     ]
 ];

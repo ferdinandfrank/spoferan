@@ -62,17 +62,32 @@
                         @endif
                     </div>
                 </div>
-                <div class="tile is-parent">
-                    <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
-                        <a >
-                            <div class="card-header card-header-image">
-                                <div class="card-image" style="background-image: url({{ asset('images/club.jpg') }})"></div>
-                                <div class="card-header-info">
-                                    <icon icon="{{ config('icons.club') }}"></icon>
-                                    <h1  class="title">{{ trans('label.clubs') }}</h1>
+                <div class="tile">
+                    <div class="tile is-parent">
+                        <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
+                            <a >
+                                <div class="card-header card-header-image">
+                                    <div class="card-image" style="background-image: url({{ asset('images/participation.jpg') }})"></div>
+                                    <div class="card-header-info">
+                                        <icon icon="{{ config('icons.participate') }}"></icon>
+                                        <h1  class="title">{{ trans('label.my_participations') }}</h1>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="tile is-parent">
+                        <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
+                            <a >
+                                <div class="card-header card-header-image">
+                                    <div class="card-image" style="background-image: url({{ asset('images/club.jpg') }})"></div>
+                                    <div class="card-header-info">
+                                        <icon icon="{{ config('icons.club') }}"></icon>
+                                        <h1  class="title">{{ trans('label.clubs') }}</h1>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

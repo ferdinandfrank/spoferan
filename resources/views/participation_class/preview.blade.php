@@ -13,8 +13,8 @@
             @if($participationClass->canParticipate())
                 <a class="button is-success" @if(isset($onClick)) v-on:click.prevent="{{ $onClick }}" @else href="{{
                     $event->isChild() ?
-                        queryRoute(route('participation.create', ['event' => $event->parentEvent]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()])
-                        : queryRoute(route('participation.create', ['event' => $event]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()]) }}" @endif>
+                        queryRoute(route('participations.create', ['event' => $event->parentEvent]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()])
+                        : queryRoute(route('participations.create', ['event' => $event]), [config('query.child_event') => $event->getRouteKey(), config('query.participation_class') => $participationClass->getRouteKey()]) }}" @endif>
 
                     <span class="icon is-small">
                     <icon icon="{{ config('icons.buy') }}"></icon>

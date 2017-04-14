@@ -21,13 +21,37 @@ class FakerSeeder extends Seeder {
     public function run() {
         $this->faker = Faker\Factory::create();
 
-        factory(App\Models\Coupon::class, 10)->create();
+        factory(App\Models\Coupon::class, 5)->create();
+        factory(App\Models\Coupon::class)->create([
+            'code' => 'TESTCOUPON',
+            'creator_id' => null,
+            'event_id' => null,
+            'amount_off' =>null,
+            'percent_off' => 45,
+            'redeem_start' => null,
+            'redeem_end' => null,
+            'type' => 'participation',
+            'max_redemptions' => 80,
+            'times_redeemed' => 0,
+            'valid' => true
+        ]);
 
-        factory(App\Models\Athlete::class, 50)->create();
+        factory(App\Models\Athlete::class, 100)->create();
         factory(App\Models\Organizer::class, 30)->create();
         factory(App\Models\Event::class, 30)->create()->each(function ($event) {
             $event->checkPoints()->save(factory(App\Models\CheckPoint::class)->make());
-            $event->participationClasses()->saveMany(factory(App\Models\ParticipationClass::class, rand(1, 3))->make());
+
+            $start_date = $event->start_date;
+            $end_date = $event->end_date;
+
+            factory(App\Models\ParticipationClass::class, rand(1, 3))->create([
+                'event_id' => $event->id,
+                'start_date'           => $start_date,
+                'end_date'             => $end_date,
+                'register_date'        => Carbon\Carbon::instance($start_date)->subMonths(rand(12, 1)),
+                'unregister_date'      =>  Carbon\Carbon::instance($start_date)->subDays(rand(2, 27)),
+            ]);
+
             $event->labels()->attach(\App\Models\Label::orderByRaw("RAND()")->limit(2)->get()->pluck('id'));
         });
 
@@ -79,9 +103,9 @@ class FakerSeeder extends Seeder {
             'title' => 'Landkreislauf Starnberg',
         ]);
 
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2015, 10, 14), $eventGroup);
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2016, 10, 14), $eventGroup);
-        $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2017, 10, 14), $eventGroup);
+        $event = $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2015, 10, 14), $eventGroup);
+        $event = $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2016, 10, 14), $eventGroup, $event);
+        $event = $this->createFullRealEvent($organizer, \Carbon\Carbon::create(2017, 10, 14), $eventGroup, $event);
 
         $teamSportOrganizerUser = factory(App\Models\User::class)->create([
             'current_user_type' => config('spoferan.user_type.organizer'),
@@ -113,7 +137,7 @@ class FakerSeeder extends Seeder {
             'street'        => 'Dr.-Emil-Brichta-Straße 11',
         ]);
 
-        factory(App\Models\Participation::class, 50)->create();
+        factory(App\Models\Participation::class, 150)->create();
         factory(App\Models\Visit::class, 30)->create();
 
         $eventPartIds = \App\Models\Event::select('id')->where('end_date', '<', new DateTime('today'))->get();
@@ -124,7 +148,6 @@ class FakerSeeder extends Seeder {
                 $rank++;
                 $participation->rank = $rank;
                 $participation->participation_state_id = 5;
-                $participation->description = $this->faker->text;
                 $participation->save();
 
                 $params = [
@@ -132,8 +155,11 @@ class FakerSeeder extends Seeder {
                     'description' => $this->faker->text
                 ];
                 $event = $participationClass->event;
-                if (!$event->hasRater($participation->athlete)) {
-                    $event->raters()->attach($participation->athlete->user_id, $params);
+                if ($event->isChild()) {
+                    $event = $event->parentEvent;
+                }
+                if (!$event->hasRater($participation)) {
+                    $event->raters()->attach($participation->id, $params);
                 }
             }
         }
@@ -166,7 +192,7 @@ class FakerSeeder extends Seeder {
     }
 
     private function createFullRealEvent(
-        \App\Models\Organizer $organizer, \Carbon\Carbon $date, \App\Models\EventGroup $eventGroup = null,
+        \App\Models\Organizer $organizer, \Carbon\Carbon $date, \App\Models\EventGroup $eventGroup = null, \App\Models\Event $preEvent = null,
         $title = 'Landkreislauf Starnberg'
     ) {
         $title = $title . ' ' . $date->year;
@@ -174,7 +200,8 @@ class FakerSeeder extends Seeder {
 
         $event = factory(App\Models\Event::class)->create([
             'organizer_id'      => $organizer->user_id,
-            'event_group_id'    => $eventGroup->id,
+            'event_group_id'    => $eventGroup ? $eventGroup->id : null,
+            'pre_event_id' => $preEvent ? $preEvent->id : null,
             'title'             => $title,
             'description_short' => 'Der Landkreislauf ist das größte Breitensportereignis des Landkreises Starnberg und hat eine langjährige Tradition. Der 31. Starnberger Landkreislauf findet am 8. Oktober in Feldafing statt.',
             'description'       => 'Die Organisatoren und Ausrichter des 32. Starnberger Landkreislaufes, der am 8. Oktober in Feldafing im Rahmen der 900-jahrfeiern der Gemeinde stattfindet, haben die drei Teilstrecken besichtigt und deren Verlauf geplant, die jetzt mit der Polizei, Eigentümern und Behörden festgelegt werden. Ab August sind dann die Strecken wieder fürs Training markiert.Die Gesamtstrecke ist circa 42,2 Kilometer lang und gliedert sich in zehn Etappen. Die lange Runde ist 5,6 Kilometer lang und wird dreimal gelaufen. Die kürzeste Strecke hat eine Länge von 3,2 Kilometer und ist viermal zu absolvieren. Die Runden vier bis sechs sind über die mittlere Distanz auf 4,2 Kilometer festgelegt. Insgesamt entspricht dies fast genau der Originalstrecke des Marathonlaufes.Der Start- und Zielbereich ist nicht, wie im Jahr 2011 im Lennè-Park, sondern im Buchheim-Stadion in Feldafing. Damit sind auch größere Steigungen zu bewältigen. Die Strecke führt für alle Teilrunden vom Strandbad Feldafing zum Buchheimstadion. Dort wartet ein Höhenunterschied von etwa 40 Meter, zum Teil über Treppen, auf die Läufer. Alle Teilnehmer der Streckenbesichtigung am Vatertag fanden es aber auch für Kindermannschaften zu schaffen. Vor allem die mittlere Etappe ist anstrengend, weil eine weitere Steigung in Possenhofen dazu kommt.Derzeit verhandeln die Organisatoren noch mit der Stadt München über die Nutzung der Parkplätze beim Paradies in Possenhofen, da um das Stadion in Feldafing zu wenige Parkplätze vorhanden sind. Möglicherweise wird ein Shuttle-Bus zum Stadion eingesetzt.Ab August ist wie in den vergangenen Jahren geplant, die Strecken für das Training zu markieren. Interessierte Läuferinnen und Läufer können sich in Kürze die drei Teilstrecken unter der Internet-Adresse www.landkreislauf-starnberg.de ansehen.',
@@ -254,6 +281,8 @@ class FakerSeeder extends Seeder {
                 'street'    => 'Schlagenhofener Weg 11'
             ]);
         }
+
+        return $event;
     }
 
     private function createRealChildEvent(\App\Models\Event $parentEvent, $title = null) {

@@ -46,6 +46,6 @@
         @endforeach
         </tbody>
     </table>
-@else
+@elseif(!isset($ignoreNoData) || !$ignoreNoData)
     <p class="muted">{{ trans('info.event.no_participants') }}</p>
 @endif

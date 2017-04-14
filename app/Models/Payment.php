@@ -32,6 +32,10 @@ namespace App\Models;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUserId($value)
  * @mixin \Eloquent
  * @property-read \App\Models\Coupon $coupon
+ * @property int $payable_id
+ * @property string $payable_type
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment wherePayableId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment wherePayableType($value)
  */
 class Payment extends BaseModel {
 
@@ -51,6 +55,9 @@ class Payment extends BaseModel {
         'amount',
         'charge_id',
         'description',
+        'payable_id',
+        'fee',
+        'payable_type',
         'payment_type',
         'coupon_id',
         'metadata',
@@ -73,5 +80,12 @@ class Payment extends BaseModel {
      */
     public function coupon() {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * Get all of the owning payable models.
+     */
+    public function payable() {
+        return $this->morphTo();
     }
 }
