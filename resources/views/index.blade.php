@@ -62,7 +62,9 @@
                         @endif
                     </div>
                 </div>
+
                 <div class="tile">
+                    @if($loggedUser)
                     <div class="tile is-parent">
                         <div class="card tile is-child">
                             <a href="{{ route('participations.index') }}">
@@ -76,6 +78,7 @@
                             </a>
                         </div>
                     </div>
+                    @endif
                     <div class="tile is-parent">
                         <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
                             <a >

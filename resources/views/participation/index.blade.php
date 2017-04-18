@@ -23,7 +23,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <p class="no-data">{{ trans('info.participation.no_future') }}</p>
+                                <p class="no-data center">{{ trans('info.participation.no_future') }}</p>
                             @endif
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <p class="no-data">{{ trans('info.participation.no_past') }}</p>
+                                <p class="no-data center">{{ trans('info.participation.no_past') }}</p>
                             @endif
                         </div>
                     </div>

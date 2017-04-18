@@ -218,7 +218,7 @@
                                     <p class="is-warning">Du kannst deine Teilnahme noch
                                         bis {{ dateDiffForHumans($participation->participationClass->unregister_date) }}
                                         stornieren und
-                                        dich damit von diesem Event anmelden. Deine bereits gezahlten Teilnahmegebühren
+                                        dich damit von diesem Event abmelden. Deine bereits gezahlten Teilnahmegebühren
                                         werden dir vollständig zurückerstattet.</p>
 
                                     <div class="button-group">
