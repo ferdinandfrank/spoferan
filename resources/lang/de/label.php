@@ -34,6 +34,7 @@ return [
     'overview' => 'Übersicht',
     'time_and_location' => 'Ort und Zeit',
     'starter_number' => 'Starternummer',
+    'payment_status' => 'Zahlungsstatus',
     'starter_number_abbr' => 'St.Nr.',
     'status' => 'Status',
     'name' => 'Name',
@@ -70,5 +71,6 @@ return [
     'event_is_active' => 'Event läuft momentan',
     'event_has_finished' => 'Event ist bereits vorbei',
     'participation_confirmation' => 'Teilnahmebestätigung',
+    'participation_information' => 'Teilnahmeinformationen',
     'my_participations' => 'Meine Teilnahmen'
 ];

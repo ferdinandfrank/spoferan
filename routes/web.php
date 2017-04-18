@@ -35,8 +35,16 @@ Route::get('events/{event}/{child}', 'EventController@showChild')->name('events.
 Route::resource('athletes', 'AthleteController');
 
 Route::get('events/{event}/participate', 'ParticipationController@create')->name('participations.create');
-Route::get('events/{event}/participations/{participation}', 'ParticipationController@show')->name('participations.show');
+Route::get('events/{event}/participation-classes/{participationClass}/participations/{participation}', 'ParticipationController@show')->name('participations.show');
+Route::get('participations/{participation}', function (\App\Models\Participation $participation) {
+    return redirect()->action(
+        'ParticipationController@show', [$participation->participationClass->event, $participation->participationClass, $participation]
+    );
+});
+
+Route::delete('events/{event}/participation-classes/{participationClass}/participations/{participation}', 'ParticipationController@destroy')->name('participations.destroy');
 Route::get('events/{event}/participations/{participation}/download', 'ParticipationController@download')->name('participations.download');
+Route::get('participations', 'ParticipationController@index')->name('participations.index')->middleware('auth');
 Route::post('participations', 'ParticipationController@store')->name('participations.store');
 
 Route::post('webhook/stripe', 'WebhooksController@handle');

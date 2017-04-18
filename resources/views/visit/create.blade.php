@@ -8,7 +8,7 @@
                 <li><a href="{{ $event->parentEvent->getPath() }}">{{ $event->parentEvent->title }}</a></li>
             @endif
             <li><a href="{{ $event->getPath() }}">{{ $event->title }}</a></li>
-            <li>{{ trans('action.participate') }}</li>
+            <li>{{ trans('action.buy_tickets') }}</li>
         @endcomponent
         <div class="card">
             @include('event.header')
@@ -16,25 +16,25 @@
             <div class="card-content">
                 @include('event.info_level')
                 <section class="section">
-                    <h2 class="title">{{ trans('action.participate_as_athlete') }}</h2>
+                    <h2 class="title">{{ trans('action.buy_visitor_tickets') }}</h2>
                     <wizard ref="wizard"
-                            :step-props="[@if($selectedEventPart){selectedTitle: '{{ $selectedEventPart->title}}'}@if($selectedParticipationClass),{selectedTitle: '{{ $selectedParticipationClass->title}}'}@endif @endif]">
+                            :step-props="[@if($selectedEventPart){selectedTitle: '{{ $selectedEventPart->title}}'}@if($selectedVisitClass),{selectedTitle: '{{ $selectedVisitClass->title}}'}@endif @endif]">
                         @if(count($event->childEvents))
                             <section id="{{ config('query.child_event') }}" class="section wizard-section">
                                 <div class="heading">
                                     <h2 class="title wizard-title">{{ trans('action.select_event_part') }}</h2>
-                                    <p class="subtitle">Wähle den Eventteil des Events {{ $event->title }} aus, für den du dich anmelden möchtest.<br/>
-                                        <span class="is-warning">Info: Es werden nur Eventteile angezeigt, für die du dich anmelden kannst.</span></p>
+                                    <p class="subtitle">Wähle den Eventteil des Events {{ $event->title }} aus, für den du Besuchertickets erwerben möchtest.<br/>
+                                        <span class="is-warning">Info: Es werden nur Eventteile angezeigt, für die du Besuchertickets erwerben kannst.</span></p>
                                 </div>
                                 <div class="content">
                                     <div class="columns is-multiline">
-                                        @if(count($event->participationClasses))
+                                        @if(count($event->visitClasses))
                                             <div id="{{ $event->getRouteKey() }}" class="column">
                                                 @include('event.preview', ['event' => $event, 'hoverText' => trans('action.select_event_part'), 'onClick' => "select('". $event->getRouteKey(). "', '".$event->title."')"])
                                             </div>
                                         @endif
                                         @foreach($event->childEvents as $childEvent)
-                                            @if($childEvent->canParticipate())
+                                            @if($childEvent->canVisit())
                                                 <div id="{{ $childEvent->getRouteKey() }}" class="column">
                                                     @include('event.preview', [
                                                     'event' => $childEvent,
@@ -48,15 +48,14 @@
                                 </div>
                             </section>
                         @endif
-                        <section id="{{ config('query.participation_class') }}" class="section wizard-section">
+                        <section id="{{ config('query.visit_class') }}" class="section wizard-section">
                             <div class="heading">
-                                <h2 class="title wizard-title">{{ trans('action.select_participation_class') }}</h2>
-                                <p class="subtitle">Wähle die Teilnahmeklasse aus, für die du dich anmelden
-                                    möchtest. <br/><span class="is-warning">Info: Es werden nur Teilnahmeklassen angezeigt, für die du dich anmelden kannst.</span></p>
+                                <h2 class="title wizard-title">{{ trans('action.select_visit_class') }}</h2>
+                                <p class="subtitle">Wähle dein gewünschtes Besucherpaket aus. <br/><span class="is-warning">Info: Es werden nur Besucherpakete angezeigt, die du erwerben kannst.</span></p>
                             </div>
                             <div class="content">
-                                <div id="participation_classes_list" class="columns is-multiline">
-                                    @include('participation_class.index', [
+                                <div id="visit_classes_list" class="columns is-multiline">
+                                    @include('visit_class.index', [
                                     'size' => 'is-12',
                                     'event' => isset($selectedEventPart) ? $selectedEventPart : $event
                                     ])
@@ -72,7 +71,7 @@
                             </div>
                             <div class="content">
                                 <ajax-form ref="form" action="{{ route('participations.store') }}" method="POST"
-                                           alert-key="participation" detail-redirect="/participations">
+                                           alert-key="participation_payed" detail-redirect="/events/{{ $event->getRouteKey() }}/participations">
                                     <h4>1. {{ trans('label.participation_overview') }}</h4>
                                     <div class="columns">
                                         <div class="column is-6">
@@ -88,7 +87,7 @@
                                                     </li>
                                                 @endif
                                                 <li><b>Ausgewählte Teilnahmeklasse:</b>&nbsp;<span
-                                                            id="selected-participation_class-title">@{{ selectedParticipationClass.title }}</span>
+                                                            id="selected-visit_class-title">@{{ selectedParticipationClass.title }}</span>
                                                     &nbsp;<small
                                                             v-on:click.prevent="@if(count($event->childEvents))setStep(1)@else setStep(0) @endif"
                                                             class="is-secondary link">{{ trans('action.change') }}</small>
@@ -193,7 +192,7 @@
                                         </div>
                                     </div>
                                     <div class="center m-t-50">
-                                        <hidden-input name="participation_class_id"
+                                        <hidden-input name="visit_class_id"
                                                       v-model="selectedParticipationClass.id"></hidden-input>
                                         <button type="submit" class="button is-success is-medium" :disabled="!valid">
                                                 <span>
@@ -314,7 +313,7 @@
                     coupons: <?php echo $coupons; ?>,
                     selectedEvent: <?php echo $event; ?>,
                     selectedEventPart: <?php echo $selectedEventPart ?? '{}'; ?>,
-                    selectedParticipationClass: <?php echo $selectedParticipationClass ?? '{}'; ?>,
+                    selectedParticipationClass: <?php echo $selectedVisitClass ?? '{}'; ?>,
                     cards: <?php echo json_encode($loggedUser->activePaymentDetails->getCards()['data']); ?>,
                     bankAccounts: <?php echo json_encode($loggedUser->activePaymentDetails->getBankAccounts()['data']); ?>,
                     source: null,
@@ -418,7 +417,7 @@
                         @if(count($event->childEvents))
                         if (lastStep.index === 0 && lastStep.selectedKey !== this.selectedEventPart.slug) {
                             sendRequest('/events/' + lastStep.selectedKey + '/participation-classes', 'get', null, function (response) {
-                                replaceContent('#participation_classes_list', response);
+                                replaceContent('#visit_classes_list', response);
                             });
 
                             sendRequest('/api/events/' + lastStep.selectedKey, 'get', null, (response) => {

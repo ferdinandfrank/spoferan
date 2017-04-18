@@ -65,6 +65,9 @@ function getParticipationStatusClass(\App\Models\Participation $participation) {
         case 'registered':
             $class = 'is-success';
             break;
+        case 'unregistered':
+            $class = 'is-danger';
+            break;
         case 'ranked':
             $class = 'is-success';
             break;

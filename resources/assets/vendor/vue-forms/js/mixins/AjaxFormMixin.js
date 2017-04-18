@@ -559,10 +559,10 @@ module.exports = {
                 }
 
                 if (!msg) {
-                    msg = this.$t('alert.error.' + this.submitMethod + '.content', {name: this.objectName})
+                    msg = this.getLocalizedAlertMessage('error', 'content', {name: this.objectName})
                 }
 
-                showAlert('error', this.$t('alert.error.' + this.submitMethod + '.title', {name: this.objectName}), msg, this.alertDuration);
+                showAlert('error', this.getLocalizedAlertMessage('error','title', {name: this.objectName}), msg, this.alertDuration);
             }
         },
 
@@ -597,7 +597,7 @@ module.exports = {
         /**
          * Gets the localization string for an alert type and a type and falls back to the default if necessary.
          *
-         * @param alertType 'alert' or 'confirm'
+         * @param alertType 'alert', 'error' or 'confirm'
          * @param type 'title', 'content', 'cancel' or 'accept'
          * @param params localization params
          * @returns {string}

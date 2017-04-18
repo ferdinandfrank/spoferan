@@ -459,7 +459,7 @@ class Event extends SlugModel {
      */
     public function getFullTitle() {
         if ($this->isChild()) {
-            return $this->title . ' (' . $this->parentEvent->title . ')';
+            return $this->parentEvent->title . ' (' . $this->title . ')';
         }
 
         return $this->title;

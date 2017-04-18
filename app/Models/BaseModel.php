@@ -20,10 +20,10 @@ abstract class BaseModel extends Model {
      * The parents in the route paths as a string array to build the routes of the model.
      * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
      *
-     * @return array
+     * @return string
      */
-    protected static function getRouteParents() {
-        return [];
+    protected static function getRouteParent() {
+        return null;
     }
 
     /**

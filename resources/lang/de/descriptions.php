@@ -14,5 +14,7 @@ return [
         'visit_classes' => 'Für dieses Event gibt es mehrere Besucherpakete zur Auswahl. Klicke auf eine der folgenden Karten, um mehr über dieses Besucherpaket zu erfahren.',
         'participants' => 'Dieses Event besteht aus mehreren Teilevents. Die Teilnehmer sind demnach nach den Teilevents aufgeteilt, für die sie sich registriert haben.',
         'contact' => 'Du hast Fragen zu dem Event? Du kannst den Veranstalter gerne jederzeit kontaktieren.'
-    ]
+    ],
+
+    'my_participations' => 'Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events.'
 ];

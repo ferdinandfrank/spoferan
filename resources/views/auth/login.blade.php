@@ -34,7 +34,7 @@
 
                 <div class="center flex-column">
                     <a href="{{ route('register') }}" class="link">{{ trans('label.not_registered') }}</a>
-                    <a href="{{ route('password.request') }}" class="link">{{ trans('label.forgot_my_password') }}</a>
+                    <a href="#" class="link">{{ trans('label.forgot_my_password') }}</a>
                 </div>
             </ajax-form>
         </div>

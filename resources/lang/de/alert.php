@@ -2,21 +2,6 @@
 
 return [
 
-    'error' => [
-        'delete' => [
-            'title'   => 'Löschen fehlgeschlagen',
-            'content' => 'Beim Löschen von :name ist ein Fehler aufgetreten. Versuche es noch einmal.'
-        ],
-        'post'   => [
-            'title'   => 'Sorry!',
-            'content' => 'Beim Speichern ist ein Fehler aufgetreten. Versuche es noch einmal.'
-        ],
-        'put'    => [
-            'title'   => 'Sorry!',
-            'content' => 'Beim Aktualisieren von :name ist ein Fehler aufgetreten. Versuche es noch einmal.'
-        ]
-    ],
-
     'default' => [
         'delete' => [
             'title'   => 'Gelöscht!',
@@ -58,10 +43,15 @@ return [
         ]
     ],
 
-    'participation_payed' => [
+    'participation' => [
         'post' => [
             'title'   => 'Erfolgreich angemeldet!',
             'content' => 'Du hast dich erfolgreich für das Event angemeldet.'
+        ],
+
+        'delete' => [
+            'title'   => 'Anmeldung erfolgreich storniert!',
+            'content' => 'Deine Anmeldung bei dem Event :name wurde erfolgreich storniert. Die bereits gezahlte Teilnahmegebühr wurde dir auf deinem Konto gut geschrieben.'
         ]
     ],
 

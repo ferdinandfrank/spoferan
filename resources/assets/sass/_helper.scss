@@ -38,7 +38,11 @@ $orientations: (
 }
 
 .margin-auto {
-    margin: auto;
+    margin: auto !important;
+}
+
+.height-auto {
+    height: auto !important;
 }
 
 .left {

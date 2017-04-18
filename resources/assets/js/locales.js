@@ -10,12 +10,14 @@ export default {
             "confirm_account": "Account bestätigen",
             "find_event": "Event finden",
             "show_event": "Event anzeigen",
+            "show_participation": "Teilnahme anzeigen",
             "participate": "Teilnehmen",
             "participate_as_athlete": "Als Athlet an Event teilnehmen",
             "share": "Teilen",
             "add_to_watchlist": "Merken",
             "show_participants": "Teilnehmer anzeigen",
             "buy_tickets": "Tickets kaufen",
+            "buy_visitor_tickets": "Besuchertickets kaufen",
             "select_event_part": "Eventteil auswählen",
             "select_participation_class": "Teilnahmeklasse auswählen",
             "search_event": "Event finden",
@@ -31,20 +33,6 @@ export default {
             "cancel": "Abbrechen"
         },
         "alert": {
-            "error": {
-                "delete": {
-                    "title": "Löschen fehlgeschlagen",
-                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
-                },
-                "post": {
-                    "title": "Sorry!",
-                    "content": "Beim Speichern ist ein Fehler aufgetreten. Versuche es noch einmal."
-                },
-                "put": {
-                    "title": "Sorry!",
-                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
-                }
-            },
             "default": {
                 "delete": {
                     "title": "Gelöscht!",
@@ -81,10 +69,14 @@ export default {
                     "content": "Wir haben dir eine E-Mail zum Zurücksetzen deines Passworts zugeschickt."
                 }
             },
-            "participation_payed": {
+            "participation": {
                 "post": {
                     "title": "Erfolgreich angemeldet!",
                     "content": "Du hast dich erfolgreich für das Event angemeldet."
+                },
+                "delete": {
+                    "title": "Anmeldung erfolgreich storniert!",
+                    "content": "Deine Anmeldung bei dem Event {name} wurde erfolgreich storniert. Die bereits gezahlte Teilnahmegebühr wurde dir auf deinem Konto gut geschrieben."
                 }
             },
             "credit_card": {
@@ -103,6 +95,24 @@ export default {
         "auth": {
             "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
             "unconfirmed": "Dein Account wurde noch nicht bestätigt. Wir haben dir nochmals eine E-Mail an {email} gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account zu bestätigen."
+        },
+        "confirm": {
+            "default": {
+                "delete": {
+                    "title": "Wirlich löschen?",
+                    "content": "Möchtest du {name} wirklich löschen?",
+                    "accept": "Ja",
+                    "cancel": "Abbrechen"
+                }
+            },
+            "participation": {
+                "delete": {
+                    "title": "Anmeldung wirklich stornieren?",
+                    "content": "Möchtest du deine Anmeldung bei dem Event {name} wirklich stornieren? Du bist dann nicht mehr berechtigt an diesem Event teilzunehmen. Deine bereits gezahlte Teilnahmegebühr wird dir auf deinem Konto gut geschrieben.",
+                    "accept": "Ja, stornieren!",
+                    "cancel": "Nein, abbrechen!"
+                }
+            }
         },
         "countries": {
             "AF": "Afghanistan",
@@ -376,17 +386,19 @@ export default {
                 "search": "Gebe in dem Formular deine entsprechenden Suchkriterien ein, um die Events zu filtern.",
                 "time_and_location": "Klicke auf eine Markierung in der Karte, um mehr Infos zu erhalten.",
                 "child_events": "Dieses Event besteht aus mehreren Teilevents. Klicke auf eine der folgenden Karten, um mehr über dieses Teilevent zu erfahren.",
+                "pre_events": "Dieses Event findet bereits zum wiederholten Male statt. Klicke auf eine der folgenden Karten, um mehr über die Events der Vorjahre zu erfahren.",
                 "participation_classes": "Dieses Event besteht aus mehreren Teilnahmeklassen. Klicke auf eine der folgenden Karten, um mehr über diese Teilnahmeklasse zu erfahren.",
                 "visit_classes": "Für dieses Event gibt es mehrere Besucherpakete zur Auswahl. Klicke auf eine der folgenden Karten, um mehr über dieses Besucherpaket zu erfahren.",
                 "participants": "Dieses Event besteht aus mehreren Teilevents. Die Teilnehmer sind demnach nach den Teilevents aufgeteilt, für die sie sich registriert haben.",
                 "contact": "Du hast Fragen zu dem Event? Du kannst den Veranstalter gerne jederzeit kontaktieren."
-            }
+            },
+            "my_participations": "Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events."
         },
         "email": {
             "greeting": "Hallo {name}",
             "greeting_plain": "Hallo",
             "salutation": "Viele Grüße",
-            "extra": "Falls du Probleme hast den \"{button}\" Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein{}",
+            "extra": "Falls du Probleme hast den \"{button}\" Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
             "contact": {
                 "title": "Neue Kontaktnachricht über die Website"
             },
@@ -395,8 +407,30 @@ export default {
                 "content": "vielen Dank für deine Registrierung als {user_type} bei {title}. Bitte klicke auf den folgenden Link, um deine E-Mail-Adresse und damit deinen Account zu bestätigen. Bitte beachte, dass du dich erst bei {title} anmelden kannst, nachdem du deinen Acount bestätigt hast."
             },
             "password_reset": {
-                "title": "{title}{} Dein neues Passwort",
+                "title": "{title}: Dein neues Passwort",
                 "content": "du hast soeben ein neues Passwort für deinen Account bei {title} angefragt. Klicke auf den folgenden Button, um dein Passwort zurückzusetzen. Solltest du nicht um eine Zurücksetzung deines Passworts gebeten haben, so kannst du diese E-Mail ignorieren."
+            }
+        },
+        "error": {
+            "default": {
+                "delete": {
+                    "title": "Löschen fehlgeschlagen",
+                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                },
+                "post": {
+                    "title": "Sorry!",
+                    "content": "Beim Speichern ist ein Fehler aufgetreten. Versuche es noch einmal."
+                },
+                "put": {
+                    "title": "Sorry!",
+                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                }
+            },
+            "participation": {
+                "delete": {
+                    "title": "Stornieren fehlgeschlagen",
+                    "content": "Beim Stornieren deiner Anmeldung beim Event {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                }
             }
         },
         "info": {
@@ -408,7 +442,15 @@ export default {
             },
             "event": {
                 "no_participants": "Für dieses Event hat sich bisher noch kein Athlet angemeldet.",
-                "no_results": "Für deine Suchanfrage wurden leider keine Events gefunden. Versuche es noch einmal mit einer anderen Suchanfrage."
+                "no_results": "Für deine Suchanfrage wurden leider keine Events gefunden. Versuche es noch einmal mit einer anderen Suchanfrage.",
+                "no_ratings": "Dieses Event wurde bisher noch nicht bewertet.",
+                "pre_event_ratings": "Dieses Event hat noch nicht gestartet. Es werden deshalb die Bewertungen des Events {event} aus dem Vorjahr angezeigt. Die Gesamtbewertung ergibt sich durch Einberechnung aller Bewertungen aus allen Events der Vorjahre.",
+                "no_ratings_not_started": "Dieses Event hat noch nicht gestartet und konnte deshalb noch keine Bewertungen erhalten."
+            },
+            "participation": {
+                "no_info": "Der Veranstalter hat bisher noch keine Informationen über deine Teilnahme mit dir geteilt.",
+                "no_future": "Du hast demnächst kein Event, für welches du dich angemeldet hast.",
+                "no_past": "Du hast bisher an noch keinem Event teilgenommen."
             }
         },
         "input": {
@@ -493,10 +535,12 @@ export default {
             "child_events": "Eventteile",
             "child_event": "Eventteil",
             "about_the_organizer": "Über den Veranstalter",
+            "pre_events": "Events der Vorjahre",
             "ratings": "Bewertungen",
             "overview": "Übersicht",
             "time_and_location": "Ort und Zeit",
             "starter_number": "Starternummer",
+            "payment_status": "Zahlungsstatus",
             "starter_number_abbr": "St.Nr.",
             "status": "Status",
             "name": "Name",
@@ -527,7 +571,14 @@ export default {
             "start_info": "Informationen zum Start",
             "finish_info": "Informationen zum Ziel",
             "participation_overview": "Teilnahmeübersicht",
-            "event_recommendations": "Empfehlungen für dein nächstes Event"
+            "event_recommendations": "Empfehlungen für dein nächstes Event",
+            "registration_is_active": "Anmeldephase ist aktiv",
+            "registration_is_over": "Anmeldephase ist vorbei",
+            "event_is_active": "Event läuft momentan",
+            "event_has_finished": "Event ist bereits vorbei",
+            "participation_confirmation": "Teilnahmebestätigung",
+            "participation_information": "Teilnahmeinformationen",
+            "my_participations": "Meine Teilnahmen"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -535,15 +586,20 @@ export default {
         },
         "param_label": {
             "by_name": "von {name}",
-            "num_of_participants": "{num} Teilnehmer|{num} Teilnehmer",
-            "already_num_of_participants": "Bereits {num} Teilnehmer|Bereits {num} Teilnehmer",
+            "num_of_participants": "{num} Teilnehmer\/-in|{num} Teilnehmer\/-innen",
+            "num_of_raters": "{num} Bewertung|{num} Bewertungen",
+            "already_num_of_participants": "Bereits {num} Teilnehmer\/-in|Bereits {num} Teilnehmer\/-innen",
             "num_of_visitors": "{num} Besucher|{num} Besucher",
-            "already_num_of_visitors": "Bereits {num} Besucher|Bereits {num} Besucher",
+            "already_num_of_visitors": "Bereits {num} Besucher\/-in|Bereits {num} Besucher\/-innen",
             "date_at_time": "{date} um {time} Uhr",
-            "child_event_of_event": "Teilevent von {event}"
+            "child_event_of_event": "Teilevent von {event}",
+            "registration_starts_at_date": "Anmeldephase startet am {date}",
+            "registration_starts_day": "Anmeldephase startet {day}",
+            "registration_starts_in_days": "Anmeldephase startet in {days}"
         },
         "participation_states": {
             "registered": "Angemeldet",
+            "unregistered": "Abgemeldet",
             "ranked": "Platziert"
         },
         "passwords": {
@@ -626,8 +682,8 @@ export default {
                 "string": "Bitte gebe max. {max} Zeichen ein.",
                 "array": "The {attribute} may not have more than {max} items."
             },
-            "mimes": "The {attribute} must be a file of type{} {values}.",
-            "mimetypes": "The {attribute} must be a file of type{} {values}.",
+            "mimes": "The {attribute} must be a file of type: {values}.",
+            "mimetypes": "The {attribute} must be a file of type: {values}.",
             "min": {
                 "numeric": "The {attribute} must be at least {min}.",
                 "file": "The {attribute} must be at least {min} kilobytes.",
@@ -806,8 +862,8 @@ export default {
                 "string": "The {attribute} may not be greater than {max} characters.",
                 "array": "The {attribute} may not have more than {max} items."
             },
-            "mimes": "The {attribute} must be a file of type{} {values}.",
-            "mimetypes": "The {attribute} must be a file of type{} {values}.",
+            "mimes": "The {attribute} must be a file of type: {values}.",
+            "mimetypes": "The {attribute} must be a file of type: {values}.",
             "min": {
                 "numeric": "The {attribute} must be at least {min}.",
                 "file": "The {attribute} must be at least {min} kilobytes.",

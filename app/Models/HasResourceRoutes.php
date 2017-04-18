@@ -86,43 +86,35 @@ trait HasResourceRoutes {
      * @return string
      */
     private function buildResourcePath(string $action, bool $isEditingRoute = true) {
-        $routeName = '';
+
+        $routeId = $this->getRouteId();
+        $routeName = $routeId . '.' . $action;
+
         $routeParams = [];
-
-        if (method_exists($this, 'getRouteParents')) {
-            foreach ($this->getRouteParents() as $routeParent) {
-                $routeParentModel = $this[$routeParent];
-                if (method_exists($routeParentModel, 'getRouteId')) {
-                    $routeName .= $routeParentModel->getRouteId() . '.';
-                } else {
-                    $routeName .= $this->getBasicRouteId($routeParentModel) . '.';
-                }
-                $routeParams[$routeParent] = $routeParentModel;
-            }
-        }
-
-        if (method_exists($this, 'getRouteId')) {
-            $routeId = $this->getRouteId();
-        } else {
-            $routeId = $this->getBasicRouteId($this);
-        }
-
-        $routeName .= $routeId . '.';
-
         if ($isEditingRoute) {
             $routeParams[$routeId] = $this;
         }
 
-        return route($routeName . $action, $routeParams);
+        if (method_exists($this, 'getRouteParent')) {
+            $routeParent = $this->getRouteParent();
+            $routeParentModel = $routeParent ? $this[$routeParent] : null;
+            while ($routeParentModel) {
+                $routeParams[$routeParent] = $routeParentModel;
+
+                $routeParent = $routeParentModel->getRouteParent();
+                $routeParentModel = $routeParent ? $routeParentModel[$routeParent] : null;
+            }
+        }
+
+        return route($routeName, $routeParams);
     }
 
     /**
      * Gets the route id of the model.
      *
-     * @param Model $model
-     * @return mixed
+     * @return string
      */
-    private function getBasicRouteId($model) {
-        return str_replace("_", "-", $model->getTable());
+    protected function getRouteId() {
+        return str_replace("_", "-", $this->getTable());
     }
 }

@@ -19,6 +19,8 @@ return [
     ],
 
     'participation' => [
-        'no_info' => 'Der Veranstalter hat bisher noch keine Informationen über deine Teilnahme mit dir geteilt.'
+        'no_info' => 'Der Veranstalter hat bisher noch keine Informationen über deine Teilnahme mit dir geteilt.',
+        'no_future' => 'Du hast demnächst kein Event, für welches du dich angemeldet hast.',
+        'no_past' => 'Du hast bisher an noch keinem Event teilgenommen.'
     ]
 ];

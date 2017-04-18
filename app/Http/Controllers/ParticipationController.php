@@ -14,6 +14,7 @@ use DB;
 use Exception;
 use Stripe\Charge;
 use Stripe\Customer;
+use Stripe\Refund;
 use Stripe\Stripe;
 
 /**
@@ -34,17 +35,25 @@ class ParticipationController extends Controller {
      * @return \Illuminate\View\View
      */
     public function index() {
-        return view('participation.index');
+        $futureParticipations = Participation::future()->latest()->get();
+        $pastParticipations = Participation::past()->latest()->get();
+        $canceledParticipations = Participation::whereAthleteId(\Auth::id())->onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+
+        return view('participation.index', compact('futureParticipations', 'pastParticipations', 'canceledParticipations'));
     }
 
     /**
      * Displays the specified participation.
      *
      * @param Event $event
-     * @param Participation $participation
+     * @param ParticipationClass $participationClass
+     * @param Participation|int $participation
      * @return \Illuminate\View\View
      */
-    public function show(Event $event, Participation $participation) {
+    public function show(Event $event, ParticipationClass $participationClass, $participation) {
+        if (!$participation instanceof Participation) {
+            $participation = Participation::findByKey($participation)->withTrashed()->firstOrFail();
+        }
         if (\Gate::denies('view', $participation)) {
             abort(404, 'Page not found.');
         }
@@ -56,7 +65,9 @@ class ParticipationController extends Controller {
             $event = $event->parentEvent;
         }
 
-        return view('participation.show', compact('participation', 'event', 'childEvent'));
+        $charge = $participation->payment ? $participation->payment->getCharge() : null;
+
+        return view('participation.show', compact('participation', 'event', 'childEvent', 'charge'));
     }
 
     /**
@@ -79,7 +90,11 @@ class ParticipationController extends Controller {
         }
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('participation.download', ['participation' => $participation, 'event' => $event, 'childEvent' => $childEvent]);
+        $pdf->loadView('participation.download', [
+            'participation' => $participation,
+            'event' => $event,
+            'childEvent' => $childEvent
+        ]);
         return $pdf->stream();
     }
 
@@ -140,10 +155,10 @@ class ParticipationController extends Controller {
             $participation = DB::transaction(function () use ($participationClass, $request) {
                 $participation = Participation::create([
                     'participation_class_id' => $participationClass->getKey(),
-                    'athlete_id'             => \Auth::id(),
+                    'athlete_id' => \Auth::id(),
                     'participation_state_id' => ParticipationState::whereLabel('registered')->first()->id,
-                    'privacy'                => $request->get('privacy', 0),
-                    'starter_number'         => \Auth::user()->athlete->starter_number
+                    'privacy' => $request->get('privacy', 0),
+                    'starter_number' => \Auth::user()->athlete->starter_number
                 ]);
                 $customerId = \Auth::user()->activePaymentDetails->stripe_id;
 
@@ -153,19 +168,19 @@ class ParticipationController extends Controller {
                 $price = $participationClass->getDiscountPrice($coupon);
 
                 Charge::create([
-                    'customer'    => $customerId,
-                    'source'      => $request->get('source'),
-                    'amount'      => $price,
+                    'customer' => $customerId,
+                    'source' => $request->get('source'),
+                    'amount' => $price,
                     "description" => "Charge for participation '" . $participation->getKey() . "' in event '"
-                                     . $participationClass->event->title . "' at class '" . $participationClass->title
-                                     . "'.",
-                    "metadata"    => [
+                        . $participationClass->event->title . "' at class '" . $participationClass->title
+                        . "'.",
+                    "metadata" => [
                         'payable_id' => $participation->getKey(),
                         'payable_type' => Participation::class,
                         'coupon_id' => $coupon ? $coupon->getKey() : null,
                         'fee' => calculateCCFee($price)
                     ],
-                    'currency'    => 'eur'
+                    'currency' => 'eur'
                 ]);
 
                 return $participation;
@@ -204,7 +219,7 @@ class ParticipationController extends Controller {
      * Updates the specified participation with the specified request data in the database.
      *
      * @param ParticipationCreateRequest $request
-     * @param Participation              $participation
+     * @param Participation $participation
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -223,14 +238,33 @@ class ParticipationController extends Controller {
     /**
      * Removes the specified participation from the database.
      *
-     * @param  \App\Models\Participation $participation
-     *
+     * @param Event $event
+     * @param ParticipationClass $participationClass
+     * @param  Participation $participation
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Participation $participation) {
+    public function destroy(Event $event, ParticipationClass $participationClass, Participation $participation) {
+
         if (\Gate::denies('delete', $participation)) {
             abort(403);
         }
+
+        $payment = $participation->payment;
+        if ($payment && $payment->charge_id) {
+            try {
+                $charge = Charge::retrieve($payment->charge_id);
+                if (!$charge->refunded) {
+                    Refund::create(array(
+                        "charge" => $payment->charge_id
+                    ));
+                }
+            } catch (Exception $e) {
+                return response()->json(['msg' => $e->getMessage()], 422);
+            }
+        }
+
+        $participation->participation_state_id = ParticipationState::whereLabel('unregistered')->first()->id;
+        $participation->save();
 
         if ($participation->delete()) {
             return response()->json($participation);

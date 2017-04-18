@@ -113,9 +113,9 @@
                                 @endif
                             </div>
                             <div class="content">
-                                @if(count($event->participations))
+                                @if(count($event->participations()->withTrashed()->get()))
                                     @foreach($event->participationClasses as $participationClass)
-                                        @include('participation.table', ['participations' => $participationClass->participations, 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
+                                        @include('participation.table', ['participations' => $participationClass->participations()->withTrashed()->get(), 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
                                     @endforeach
                                 @elseif(!count($event->childEvents))
                                     <p class="muted">{{ trans('info.event.no_participants') }}</p>
@@ -125,7 +125,7 @@
                                     <h4>{{ trans('label.child_event') }}: {{ $childEvent->title }}</h4>
                                     <div class="m-b-40">
                                         @foreach($childEvent->participationClasses as $participationClass)
-                                            @include('participation.table', ['participations' => $participationClass->participations, 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
+                                            @include('participation.table', ['participations' => $participationClass->participations()->withTrashed()->get(), 'finished' => $participationRestriction == 'restr_finished', 'ignoreNoData' => true])
                                         @endforeach
                                     </div>
                                 @endforeach

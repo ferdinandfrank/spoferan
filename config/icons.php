@@ -79,4 +79,8 @@ return [
     'rating_star_empty' => 'fa fa-fw fa-star-o',
     'print' => 'fa fa-fw fa-print',
     'message' => 'fa fa-fw fa-comments',
+    'starter_number' => 'fa fa-fw fa-list-ol',
+    'ranking' => 'fa fa-fw fa-line-chart',
+    'payment' => 'fa fa-fw fa-shopping-cart',
+    'participation_class' => 'fa fa-fw fa-list-alt',
 ];

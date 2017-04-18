@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -98,5 +100,68 @@ class Participation extends BaseModel {
         return $this->belongsTo(ParticipationState::class, 'participation_state_id');
     }
 
+    /**
+     * The parents in the route paths as a string array to build the routes of the model.
+     * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
+     *
+     * @return string
+     */
+    protected static function getRouteParent() {
+        return 'participationClass';
+    }
+
+    /**
+     * Scopes the query to only include participations of the specified athlete whose event has not yet started.
+     *
+     * @param Builder $query
+     * @param UserModel|User|null $athlete
+     * @return Builder
+     */
+    public function scopeFuture($query, $athlete = null) {
+
+        // Get the id of the specified athlete
+        if (!$athlete) {
+            if (\Auth::check()) {
+                $athlete = \Auth::id();
+            } else {
+                return $query;
+            }
+        } elseif ($athlete instanceof UserModel) {
+            $athlete = $athlete->user_id;
+        } elseif ($athlete instanceof User) {
+            $athlete = $athlete->id;
+        }
+
+        return $query->where('athlete_id', $athlete)->whereHas('participationClass', function ($subQuery) {
+            $subQuery->whereDate('start_date', '>', Carbon::now());
+        });
+    }
+
+    /**
+     * Scopes the query to only include participations of the specified athlete whose event has already finished.
+     *
+     * @param Builder $query
+     * @param UserModel|User|null $athlete
+     * @return Builder
+     */
+    public function scopePast($query, $athlete = null) {
+
+        // Get the id of the specified athlete
+        if (!$athlete) {
+            if (\Auth::check()) {
+                $athlete = \Auth::id();
+            } else {
+                return $query;
+            }
+        } elseif ($athlete instanceof UserModel) {
+            $athlete = $athlete->user_id;
+        } elseif ($athlete instanceof User) {
+            $athlete = $athlete->id;
+        }
+
+        return $query->where('athlete_id', $athlete)->whereHas('participationClass', function ($subQuery) {
+            $subQuery->whereDate('end_date', '<', Carbon::now());
+        });
+    }
 }
 

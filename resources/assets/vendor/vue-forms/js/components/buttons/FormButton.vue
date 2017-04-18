@@ -36,8 +36,8 @@
 
         computed: {
 
-            // The submit button of the form. Used to show the loader as soon as the submit request is pending.
-            button: function() {
+            // The submit button of the form. Used to show a loader as soon as the submit request is pending.
+            submitButton: function () {
                 return $(this.$el);
             },
         },

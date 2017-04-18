@@ -64,8 +64,8 @@
                 </div>
                 <div class="tile">
                     <div class="tile is-parent">
-                        <div class="card tile is-child disabled" title="{{ trans('info.not_available_yet') }}">
-                            <a >
+                        <div class="card tile is-child">
+                            <a href="{{ route('participations.index') }}">
                                 <div class="card-header card-header-image">
                                     <div class="card-image" style="background-image: url({{ asset('images/participation.jpg') }})"></div>
                                     <div class="card-header-info">
@@ -101,12 +101,15 @@
                 <p class="subtitle">{{ trans('descriptions.event.recommendations') }}</p>
             </div>
             <div class="content">
-
+                @if(count($events))
                 <slider>
                     @foreach($events as $event)
                         @include('event.preview')
                     @endforeach
                 </slider>
+                    @else
+                    <p class="no-data">Bisher gibt es keine Events, die auf dein Profil passen würden.</p>
+                @endif
             </div>
         </section>
 

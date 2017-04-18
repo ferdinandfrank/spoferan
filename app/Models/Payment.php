@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Stripe\Charge;
+
 /**
  * App\Models\Payment
  *
@@ -80,6 +82,19 @@ class Payment extends BaseModel {
      */
     public function coupon() {
         return $this->belongsTo(Coupon::class);
+    }
+
+    /**
+     * Retrieves the corresponding stripe charge object for this payment.
+     *
+     * @return null|Charge
+     */
+    public function getCharge() {
+        if ($this->charge_id) {
+            return Charge::retrieve($this->charge_id);
+        }
+
+        return null;
     }
 
     /**

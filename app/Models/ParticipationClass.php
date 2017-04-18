@@ -172,6 +172,16 @@ class ParticipationClass extends BaseModel {
     }
 
     /**
+     * The parents in the route paths as a string array to build the routes of the model.
+     * Shall be the same as the class name of the 'belongsTo' relationship between the parent and this model.
+     *
+     * @return string
+     */
+    protected static function getRouteParent() {
+        return 'event';
+    }
+
+    /**
      * Checks if an user is the creator of the class.
      *
      * @param User $user

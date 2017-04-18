@@ -196,3 +196,7 @@ $message-box-header-text-color: $white !default;
 $message-box-success-background-color: lighten($success, 50%) !default;
 $message-box-success-header-background-color: $success !default;
 $message-box-success-header-text-color: $white !default;
+
+$message-box-danger-background-color: lighten($danger, 50%) !default;
+$message-box-danger-header-background-color: $danger !default;
+$message-box-danger-header-text-color: $white !default;

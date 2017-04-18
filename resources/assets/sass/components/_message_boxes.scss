@@ -7,6 +7,7 @@
  *  1. Declarations
  *  2. General
  *  3. Success Message Box
+ *  4. Danger Message Box
  */
 
 /*********************
@@ -67,6 +68,26 @@ $message-box-padding-v: 0.75rem;
 
         p, p * {
             color: darken($message-box-success-background-color, 80%);
+        }
+    }
+}
+
+/*********************
+  4. Danger Message Box
+**********************/
+.message-box.is-danger {
+    background-color: $message-box-danger-background-color;
+
+    .message-box-header {
+        background-color: $message-box-danger-header-background-color;
+        color: $message-box-danger-header-text-color;
+    }
+
+    .message-box-content {
+        border-color: $message-box-danger-header-background-color;
+
+        p, p * {
+            color: darken($message-box-danger-background-color, 80%);
         }
     }
 }
