@@ -30,7 +30,8 @@ export default {
             "add_credit_card": "Kreditkarte hinzufügen",
             "add_bank_account": "Bankkonto hinzufügen",
             "save": "Speichern",
-            "cancel": "Abbrechen"
+            "cancel": "Abbrechen",
+            "send_us_an_email": "Schicke uns eine E-Mail"
         },
         "alert": {
             "default": {
@@ -47,7 +48,7 @@ export default {
                     "content": "{name} wurde erfolgreich aktualisiert."
                 }
             },
-            "registration": {
+            "user": {
                 "post": {
                     "title": "Account bestätigen!",
                     "content": "Wir haben dir eine E-Mail an deine E-Mail-Adresse gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account und deine E-Mail-Adresse zu bestätigen."
@@ -398,13 +399,17 @@ export default {
             "greeting": "Hallo {name}",
             "greeting_plain": "Hallo",
             "salutation": "Viele Grüße",
-            "extra": "Falls du Probleme hast den \"{button}\" Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
+            "any_questions": "Du hast Fragen oder benötigst Hilfe?",
+            "button_help": "Falls du Probleme hast den Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
             "contact": {
                 "title": "Neue Kontaktnachricht über die Website"
             },
             "registration": {
-                "title": "Deine Registrierung bei {title}",
-                "content": "vielen Dank für deine Registrierung als {user_type} bei {title}. Bitte klicke auf den folgenden Link, um deine E-Mail-Adresse und damit deinen Account zu bestätigen. Bitte beachte, dass du dich erst bei {title} anmelden kannst, nachdem du deinen Acount bestätigt hast."
+                "subject": "Deine Registrierung bei {title}",
+                "title": "Vielen Dank für deine Registrierung!",
+                "content": "vielen Dank für deine Registrierung als {user_type} bei {title}. Bitte klicke auf den folgenden Button, um deine E-Mail-Adresse und damit deinen Account zu bestätigen. Bitte beachte, dass du dich erst bei {title} anmelden kannst, nachdem du deinen Account bestätigt hast.",
+                "salutation": "Wir wünschen dir viel Spaß",
+                "receiving_info": "Du erhälst diese E-Mail, weil du dich auf der Seite {title} registriert hast. Sollte diese Aktion nicht von dir selber getätigt worden sein, so kannst du diese E-Mail ignorieren."
             },
             "password_reset": {
                 "title": "{title}: Dein neues Passwort",
@@ -415,21 +420,27 @@ export default {
             "default": {
                 "delete": {
                     "title": "Löschen fehlgeschlagen",
-                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 },
                 "post": {
                     "title": "Sorry!",
-                    "content": "Beim Speichern ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Speichern ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 },
                 "put": {
                     "title": "Sorry!",
-                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 }
             },
             "participation": {
                 "delete": {
                     "title": "Stornieren fehlgeschlagen",
-                    "content": "Beim Stornieren deiner Anmeldung beim Event {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Stornieren deiner Anmeldung beim Event {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
+                }
+            },
+            "user": {
+                "post": {
+                    "title": "Registrieren fehlgeschlagen",
+                    "content": "Beim Registrieren ist ein unbekannter Fehler aufgetreten. Bitte versuche es noch einmal."
                 }
             }
         },

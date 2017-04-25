@@ -41,8 +41,14 @@ $navbar-item-font-size: 1rem;
     flex-direction: column;
 
     > .content {
-        position: relative;
-        margin-top: $navbar-height + 10px;
+        &:not(.welcome) {
+            position: relative;
+            margin-top: $navbar-height + 10px;
+        }
+
+        &.welcome {
+            @extend .full-height;
+        }
     }
 }
 
@@ -54,7 +60,7 @@ $navbar-item-font-size: 1rem;
     border-top: $navbar-bottom-top-width solid $primary;
     @include linear-gradient($navbar-background-gradient-start, $navbar-background-gradient-end);
     border-bottom: $navbar-border-bottom-width solid $navbar-border-bottom-color;
-    box-shadow: 0 1px 2px -2px $grey;
+    box-shadow: 0 1px 5px -2px $grey;
     position: fixed;
     width: 100%;
     z-index: 1000;

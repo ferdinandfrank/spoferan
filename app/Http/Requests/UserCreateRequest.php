@@ -32,20 +32,25 @@ class UserCreateRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'email'      => 'required|email|unique:users,email|max:' . config('validation.user.email.max'),
-            'password'   => 'required|confirmed|max:' . config('validation.user.password.max') . '|min:'
-                            . config('validation.user.password.min'),
+            'email'      => 'required|email|unique:users,email|max:' . config('validation.email.max'),
+            'password'   => 'required|confirmed|max:' . config('validation.password.max') . '|min:'
+                            . config('validation.password.min'),
             'avatar'     => '',
-            'country'    => 'max:' . config('validation.user.country.max'),
-            'postcode'   => 'max:' . config('validation.user.postcode.max'),
-            'street'     => 'max:' . config('validation.user.street.max'),
-            'phone'      => 'max:' . config('validation.user.phone.max'),
-            'city'       => 'max:' . config('validation.user.city.max'),
-            'first_name' => 'required_if:user_type,' . config('spoferan.user_type.athlete'),
-            'last_name'  => 'required_if:user_type,' . config('spoferan.user_type.athlete'),
+            'country'    => 'max:' . config('validation.country.max'),
+            'postcode'   => 'max:' . config('validation.postcode.max'),
+            'street'     => 'max:' . config('validation.street.max'),
+            'phone'      => 'max:' . config('validation.phone.max'),
+            'city'       => 'max:' . config('validation.city.max'),
+            'title'      => 'max:' . config('validation.athlete.title.max'),
+            'first_name' => 'required_if:user_type,' . config('spoferan.user_type.athlete') . '|max:'
+                            . config('validation.athlete.first_name.max') . '|min:'
+                            . config('validation.athlete.first_name.min'),
+            'last_name'  => 'required_if:user_type,' . config('spoferan.user_type.athlete') . '|max:'
+                            . config('validation.athlete.last_name.max') . '|min:'
+                            . config('validation.athlete.first_name.min'),
             'gender'     => ['required_if:user_type,' . config('spoferan.user_type.athlete'), Rule::in(['m', 'w'])],
             'name'       => 'unique:organizers,name|required_if:user_type,' . config('spoferan.user_type.organizer'),
-            'user_type'  => [
+            'current_user_type'  => [
                 'required',
                 Rule::in(config('spoferan.user_type')),
             ],

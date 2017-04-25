@@ -1,4 +1,4 @@
-<nav class="navbar">
+<nav id="navbar" class="navbar">
     <div class="container">
         <div class="nav-left nav-menu">
             <a href="{{ route('index') }}" class="nav-item is-tab @if (isRoute('index')) is-active @endif">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="nav-item">
-                    <dropdown activate="#user-menu" class="button is-large user-button">
+                    <dropdown id="user-nav" activate="#user-menu" class="button is-large user-button">
                         <div class="avatar x-small"
                              style="background-image: url({{ $loggedUser->avatar }})"></div>
                         <div class="profile-info"><span class="name">{{ $loggedUser->getDisplayName() }}</span><span

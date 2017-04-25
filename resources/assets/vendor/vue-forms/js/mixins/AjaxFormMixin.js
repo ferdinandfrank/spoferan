@@ -62,7 +62,7 @@ module.exports = {
         // The duration of the alert, that will be shown after the form has been submitted.
         alertDuration: {
             type: Number,
-            default: 3000
+            default: 4000
         },
 
         // The suffix of the event names to call after the form has been submitted.
@@ -237,8 +237,11 @@ module.exports = {
             // States if any error exists on the form.
             hasError: false,
 
-            // The key of a general error message from the server, that does not belong to a specific input.
-            generalErrorKey: 'msg'
+            // The key of a general error message from the server, that belongs to multiple inputs.
+            generalErrorKey: 'msg',
+
+            // The key of a general error that occurred on the server, that does not belong to a specific input.
+            serverErrorKey: 'server'
         }
 
     },
@@ -289,13 +292,15 @@ module.exports = {
                 }
             });
             window.eventHub.$on('input-error-changed', (name, error) => {
-
-                // Check if the input is part of this form
-                if (this.form.has(name)) {
-                    this.setError(name, error);
-                }
+                this.setError(name, error);
             });
         })
+    },
+
+    updated: function () {
+        // Re-init on update to include any added component
+        this.initializeValues();
+        this.initializeErrors();
     },
 
     methods: {
@@ -304,10 +309,24 @@ module.exports = {
          * Initializes the input values in the form object.
          */
         initializeValues: function () {
+            this.inputs = [];
+            this.form = new Form();
             getListOfChildren(this).forEach((child) => {
                 if (child.submitName && child.hasOwnProperty('submitValue')) {
                     this.form.set(child.submitName, child.submitValue);
                     this.inputs.push(child);
+                }
+            });
+        },
+
+        /**
+         * Initializes the error messages of the form inputs.
+         */
+        initializeErrors: function () {
+            this.errors = {};
+            this.inputs.forEach((child) => {
+                if (child.submitName && child.hasOwnProperty('errorMessage')) {
+                    this.setError(child.submitName, child.errorMessage);
                 }
             });
         },
@@ -394,7 +413,8 @@ module.exports = {
 
         /**
          * Adds the specified error to the specified field. The field can be an object with error messages
-         * to merge to the current error messages.
+         * to merge to the current error messages. If the error field is the key of the general error,
+         * it is assumed that an unknown exception occurred on the server, so a resubmit is still possible.
          *
          * @param field
          * @param error
@@ -402,11 +422,14 @@ module.exports = {
         setError: function (field, error) {
             if (typeof field === 'object') {
                 Object.assign(this.errors, field);
-                this.hasError = true;
-            }else if (error === null) {
+            } else if (error === null) {
                 this.removeError(field);
-            } else {
+            } else if (field && error) {
                 this.errors[field] = error;
+            }
+
+            // Only disable a submit of the form, if at least one error exists and a server error isn't the only one
+            if ((Object.keys(this.errors).length > 0 && !this.errors[this.serverErrorKey]) || Object.keys(this.errors).length > 1) {
                 this.hasError = true;
             }
         },
@@ -467,13 +490,14 @@ module.exports = {
          * @param response The response from the server.
          */
         handleError: function (response) {
+
             this.setError(response);
 
             // Notify the child inputs of the errors
             window.eventHub.$emit('form-errors-changed', response);
 
             // Set the general error
-            if (this.errorWrapper && response.hasOwnProperty('msg')) {
+            if (this.errorWrapper && response.hasOwnProperty(this.generalErrorKey)) {
                 $(this.errorWrapper).html(response[this.generalErrorKey][0]);
             }
 
@@ -551,18 +575,20 @@ module.exports = {
 
             // Check if an error message shall be shown to the user.
             if (this.alertError) {
-                let msg = this.errors['msg'];
+                let msg = this.errors[this.serverErrorKey];
 
-                // If no general error was found, just alert the first random one
-                if (!msg) {
+                if (msg) {
+
+                    // Server error was found: check if a more specific error message for the alert key exists,
+                    // otherwise just print the default error
+                    msg = this.getLocalizedAlertMessage('error', 'content', {name: this.objectName})
+                } else {
+
+                    // No general error was found: just alert the first random one
                     msg = this.errors[Object.keys(this.errors)[0]];
                 }
 
-                if (!msg) {
-                    msg = this.getLocalizedAlertMessage('error', 'content', {name: this.objectName})
-                }
-
-                showAlert('error', this.getLocalizedAlertMessage('error','title', {name: this.objectName}), msg, this.alertDuration);
+                showAlert('error', this.getLocalizedAlertMessage('error', 'title', {name: this.objectName}), msg, this.alertDuration);
             }
         },
 

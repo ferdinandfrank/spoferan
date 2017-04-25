@@ -14,8 +14,13 @@
 
         watch: {
 
-            submitValue: function (value) {
+            value: function (value) {
+                this.submitValue = value;
+            },
+
+            submitValue: function (value, oldValue) {
                 this.inputChanged();
+                this.valueChanged = value !== oldValue;
             }
         },
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\EmailConfirmationMail;
+use App\Mail\UserConfirmationMail;
 use App\Models\User;
 use App\Http\Requests\UserCreateRequest;
-use Auth;
 use DB;
+use Illuminate\Support\Facades\App;
 
 /**
  * UserController
@@ -80,12 +80,18 @@ class UserController extends Controller {
      */
     public function store(UserCreateRequest $request) {
         $user = DB::transaction(function () use ($request) {
+
+            // Create the user with the request data
             $user = new User($request->all());
-            $user->confirmation_token = bin2hex(random_bytes(10));
-            $user->confirmed = false;
-            $user->verified = false;
-            $user->save();
-            if ($user) {
+
+            // Let the user confirm his email address if the environment is local or production
+            if (App::environment('testing')) {
+                $user->confirmed = true;
+            } else {
+                $user->setConfirmationToken();
+            }
+
+            if ($user->save()) {
                 $userType = null;
                 if ($user->isType(config('spoferan.user_type.athlete'))) {
                     $userType = $user->athlete()->create($request->all());
@@ -93,9 +99,18 @@ class UserController extends Controller {
                     $userType = $user->organizer()->create($request->all());
                 }
 
-                \Mail::to($user)->send(new EmailConfirmationMail($user));
-                return !empty($userType) ? $user : false;
+                if ($userType) {
+
+                    // Only send confirmation email, if the user is not yet confirmed, i.e. the app environment is
+                    // set as 'testing'
+                    if (!$user->confirmed) {
+                        \Mail::to($user)->queue((new UserConfirmationMail($user))->onQueue('emails'));
+                    }
+
+                    return $user;
+                }
             }
+
             return false;
         });
 

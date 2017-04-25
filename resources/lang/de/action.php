@@ -10,14 +10,14 @@ return [
     'confirm_account'               => 'Account bestätigen',
     'find_event'                    => 'Event finden',
     'show_event'                    => 'Event anzeigen',
-    'show_participation'                    => 'Teilnahme anzeigen',
+    'show_participation'            => 'Teilnahme anzeigen',
     'participate'                   => 'Teilnehmen',
     'participate_as_athlete'        => 'Als Athlet an Event teilnehmen',
     'share'                         => 'Teilen',
     'add_to_watchlist'              => 'Merken',
     'show_participants'             => 'Teilnehmer anzeigen',
     'buy_tickets'                   => 'Tickets kaufen',
-    'buy_visitor_tickets' => 'Besuchertickets kaufen',
+    'buy_visitor_tickets'           => 'Besuchertickets kaufen',
     'select_event_part'             => 'Eventteil auswählen',
     'select_participation_class'    => 'Teilnahmeklasse auswählen',
     'search_event'                  => 'Event finden',
@@ -31,4 +31,6 @@ return [
     'add_bank_account'              => 'Bankkonto hinzufügen',
     'save'                          => 'Speichern',
     'cancel'                        => 'Abbrechen',
+    'send_us_an_email'              => 'Schicke uns eine E-Mail',
+    'reset_password'                => 'Passwort zurücksetzen'
 ];

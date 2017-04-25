@@ -2014,33 +2014,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(this.$refs.input).datetimepicker({
                 locale: 'de',
                 format: this.format,
-                defaultDate: this.submitValue
+                defaultDate: this.submitValue,
+                minDate: this.minDate,
+                maxDate: this.maxDate
             });
             $(this.$refs.input).on("dp.change", function (moment) {
                 _this.submitValue = moment.date.format("YYYY-MM-DD");
                 _this.inputChanged();
             });
+
+            if ((this.maxDate || this.minDate) && !this.submitValue) {
+                $(this.$refs.input).val('');
+            }
         });
-    },
-
-    methods: {
-        /**
-         * Resets the value of the input.
-         */
-        reset: function reset() {
-            this.submitValue = this.value;
-            $(this.$refs.input).val(this.value);
-            this.inputChanged();
-        },
-
-        /**
-         * Clears the value of the input.
-         */
-        clear: function clear() {
-            this.submitValue = '';
-            $(this.$refs.input).val('');
-            this.inputChanged();
-        }
     }
 });
 
@@ -2105,12 +2091,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(this.$refs.input).datetimepicker({
                 locale: 'de',
                 format: 'YYYY-MM-DD HH:mm:ss',
-                defaultDate: this.submitValue
+                defaultDate: this.submitValue,
+                minDate: this.minDate,
+                maxDate: this.maxDate
             });
             $(this.$refs.input).on("dp.change", function (moment) {
                 _this.submitValue = moment.date.format("YYYY-MM-DD HH:mm:ss");
                 _this.inputChanged();
             });
+
+            if ((this.maxDate || this.minDate) && !this.submitValue) {
+                $(this.$refs.input).val('');
+            }
         });
     }
 });
@@ -2354,7 +2346,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     data: function data() {
         return {
-            input: ''
+            input: null
         };
     },
 
@@ -2394,6 +2386,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          */
         value: function value(_value) {
             this.input.select2().select2('val', _value);
+        },
+
+        hasSuccess: function hasSuccess(success) {
+            if (success) {
+                this.input.select2("dropdown").addClass("has-success");
+            } else {
+                this.input.select2("dropdown").removeClass("has-success");
+            }
         }
     },
 
@@ -2594,8 +2594,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     watch: {
 
-        submitValue: function submitValue(value) {
+        value: function value(_value) {
+            this.submitValue = _value;
+        },
+
+        submitValue: function submitValue(value, oldValue) {
             this.inputChanged();
+            this.valueChanged = value !== oldValue;
         }
     }
 });
@@ -48877,7 +48882,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\CollapsibleCard.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\CollapsibleCard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] CollapsibleCard.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48912,7 +48917,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Dropdown.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Dropdown.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Dropdown.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48947,7 +48952,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\MessageBox.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\MessageBox.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MessageBox.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -48982,7 +48987,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\ModalForm.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\ModalForm.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ModalForm.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49017,7 +49022,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\ScrollspyList.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\ScrollspyList.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ScrollspyList.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49052,7 +49057,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Slider.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Slider.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Slider.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49087,7 +49092,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\StripeForm.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\StripeForm.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] StripeForm.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49122,7 +49127,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Wizard.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\js\\components\\Wizard.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Wizard.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -49504,7 +49509,8 @@ window.formatMoney = function (cents) {
             "add_credit_card": "Kreditkarte hinzufügen",
             "add_bank_account": "Bankkonto hinzufügen",
             "save": "Speichern",
-            "cancel": "Abbrechen"
+            "cancel": "Abbrechen",
+            "send_us_an_email": "Schicke uns eine E-Mail"
         },
         "alert": {
             "default": {
@@ -49521,7 +49527,7 @@ window.formatMoney = function (cents) {
                     "content": "{name} wurde erfolgreich aktualisiert."
                 }
             },
-            "registration": {
+            "user": {
                 "post": {
                     "title": "Account bestätigen!",
                     "content": "Wir haben dir eine E-Mail an deine E-Mail-Adresse gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account und deine E-Mail-Adresse zu bestätigen."
@@ -49872,13 +49878,17 @@ window.formatMoney = function (cents) {
             "greeting": "Hallo {name}",
             "greeting_plain": "Hallo",
             "salutation": "Viele Grüße",
-            "extra": "Falls du Probleme hast den \"{button}\" Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
+            "any_questions": "Du hast Fragen oder benötigst Hilfe?",
+            "button_help": "Falls du Probleme hast den Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
             "contact": {
                 "title": "Neue Kontaktnachricht über die Website"
             },
             "registration": {
-                "title": "Deine Registrierung bei {title}",
-                "content": "vielen Dank für deine Registrierung als {user_type} bei {title}. Bitte klicke auf den folgenden Link, um deine E-Mail-Adresse und damit deinen Account zu bestätigen. Bitte beachte, dass du dich erst bei {title} anmelden kannst, nachdem du deinen Acount bestätigt hast."
+                "subject": "Deine Registrierung bei {title}",
+                "title": "Vielen Dank für deine Registrierung!",
+                "content": "vielen Dank für deine Registrierung als {user_type} bei {title}. Bitte klicke auf den folgenden Button, um deine E-Mail-Adresse und damit deinen Account zu bestätigen. Bitte beachte, dass du dich erst bei {title} anmelden kannst, nachdem du deinen Account bestätigt hast.",
+                "salutation": "Wir wünschen dir viel Spaß",
+                "receiving_info": "Du erhälst diese E-Mail, weil du dich auf der Seite {title} registriert hast. Sollte diese Aktion nicht von dir selber getätigt worden sein, so kannst du diese E-Mail ignorieren."
             },
             "password_reset": {
                 "title": "{title}: Dein neues Passwort",
@@ -49889,21 +49899,27 @@ window.formatMoney = function (cents) {
             "default": {
                 "delete": {
                     "title": "Löschen fehlgeschlagen",
-                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Löschen von {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 },
                 "post": {
                     "title": "Sorry!",
-                    "content": "Beim Speichern ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Speichern ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 },
                 "put": {
                     "title": "Sorry!",
-                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Aktualisieren von {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
                 }
             },
             "participation": {
                 "delete": {
                     "title": "Stornieren fehlgeschlagen",
-                    "content": "Beim Stornieren deiner Anmeldung beim Event {name} ist ein Fehler aufgetreten. Versuche es noch einmal."
+                    "content": "Beim Stornieren deiner Anmeldung beim Event {name} ist ein Fehler aufgetreten. Bitte versuche es noch einmal."
+                }
+            },
+            "user": {
+                "post": {
+                    "title": "Registrieren fehlgeschlagen",
+                    "content": "Beim Registrieren ist ein unbekannter Fehler aufgetreten. Bitte versuche es noch einmal."
                 }
             }
         },
@@ -60907,11 +60923,6 @@ if (!window.eventHub) {
     window.eventHub = new Vue();
 }
 
-// Vue production settings
-// Vue.config.devtools = false;
-// Vue.config.debug = false;
-// Vue.config.silent = true;
-
 /***/ }),
 
 /***/ "./resources/assets/sass/app.scss":
@@ -60934,7 +60945,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\ConfirmDeleteModal.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\ConfirmDeleteModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ConfirmDeleteModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -60969,7 +60980,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\CreateFolderModal.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\CreateFolderModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] CreateFolderModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61004,7 +61015,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\Errors.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\Errors.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Errors.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61039,7 +61050,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MediaManager.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MediaManager.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MediaManager.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61074,7 +61085,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MediaModal.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MediaModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MediaModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61109,7 +61120,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MoveItemModal.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\MoveItemModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] MoveItemModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61144,7 +61155,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\RenameItemModal.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\talvbansal\\media-manager\\js\\components\\RenameItemModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] RenameItemModal.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61262,7 +61273,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\AjaxForm.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\AjaxForm.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] AjaxForm.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61297,7 +61308,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\Icon.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\Icon.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Icon.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61332,7 +61343,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\FormButton.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\FormButton.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormButton.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61367,7 +61378,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\FormLink.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\FormLink.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormLink.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61402,7 +61413,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\RemoveButton.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\buttons\\RemoveButton.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] RemoveButton.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61437,7 +61448,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormCheckbox.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormCheckbox.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormCheckbox.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61472,7 +61483,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormCodearea.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormCodearea.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormCodearea.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61507,7 +61518,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormDateInput.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormDateInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormDateInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61542,7 +61553,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormDateTimeInput.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormDateTimeInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormDateTimeInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61577,7 +61588,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormInput.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61612,7 +61623,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormRadio.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormRadio.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormRadio.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61647,7 +61658,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormSelect.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormSelect.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormSelect.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61682,7 +61693,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormSwitch.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormSwitch.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormSwitch.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61717,7 +61728,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormTextarea.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\FormTextarea.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FormTextarea.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -61752,7 +61763,7 @@ var Component = __webpack_require__("./node_modules/vue-loader/lib/component-nor
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\ferdi\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\HiddenInput.vue"
+Component.options.__file = "C:\\Users\\Agando\\PhpstormProjects\\spoferan\\resources\\assets\\vendor\\vue-forms\\js\\components\\inputs\\HiddenInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] HiddenInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -62344,7 +62355,7 @@ module.exports = {
         // The duration of the alert, that will be shown after the form has been submitted.
         alertDuration: {
             type: Number,
-            default: 3000
+            default: 4000
         },
 
         // The suffix of the event names to call after the form has been submitted.
@@ -62516,8 +62527,11 @@ module.exports = {
             // States if any error exists on the form.
             hasError: false,
 
-            // The key of a general error message from the server, that does not belong to a specific input.
-            generalErrorKey: 'msg'
+            // The key of a general error message from the server, that belongs to multiple inputs.
+            generalErrorKey: 'msg',
+
+            // The key of a general error that occurred on the server, that does not belong to a specific input.
+            serverErrorKey: 'server'
         };
     },
 
@@ -62569,13 +62583,15 @@ module.exports = {
                 }
             });
             window.eventHub.$on('input-error-changed', function (name, error) {
-
-                // Check if the input is part of this form
-                if (_this.form.has(name)) {
-                    _this.setError(name, error);
-                }
+                _this.setError(name, error);
             });
         });
+    },
+
+    updated: function updated() {
+        // Re-init on update to include any added component
+        this.initializeValues();
+        this.initializeErrors();
     },
 
     methods: {
@@ -62586,10 +62602,26 @@ module.exports = {
         initializeValues: function initializeValues() {
             var _this2 = this;
 
+            this.inputs = [];
+            this.form = new Form();
             getListOfChildren(this).forEach(function (child) {
                 if (child.submitName && child.hasOwnProperty('submitValue')) {
                     _this2.form.set(child.submitName, child.submitValue);
                     _this2.inputs.push(child);
+                }
+            });
+        },
+
+        /**
+         * Initializes the error messages of the form inputs.
+         */
+        initializeErrors: function initializeErrors() {
+            var _this3 = this;
+
+            this.errors = {};
+            this.inputs.forEach(function (child) {
+                if (child.submitName && child.hasOwnProperty('errorMessage')) {
+                    _this3.setError(child.submitName, child.errorMessage);
                 }
             });
         },
@@ -62610,7 +62642,7 @@ module.exports = {
          * Starts the form submitting process.
          */
         submit: function submit() {
-            var _this3 = this;
+            var _this4 = this;
 
             if (this.hasError) {
                 window.eventHub.$emit('prevented_' + this.callbackName, this);
@@ -62620,8 +62652,8 @@ module.exports = {
             // Let the user confirm his submit action, if a confirm shall be shown.
             if (this.showConfirm) {
                 showConfirm(this.confirmType, this.confirmTitle, this.confirmMessage, function () {
-                    _this3.startLoader();
-                    _this3.sendData();
+                    _this4.startLoader();
+                    _this4.sendData();
                 }, null, this.confirmAccept, this.confirmCancel);
             } else {
                 this.startLoader();
@@ -62654,21 +62686,22 @@ module.exports = {
          * Sends the data of the form to the server.
          */
         sendData: function sendData() {
-            var _this4 = this;
+            var _this5 = this;
 
             // Let the parent chain know, that the submit will be processed.
             window.eventHub.$emit('submitting_' + this.callbackName, this);
 
             this.form.submit(this.submitMethod, this.submitAction).then(function (response) {
-                _this4.handleResponse(true, response);
+                _this5.handleResponse(true, response);
             }).catch(function (error) {
-                _this4.handleResponse(false, error);
+                _this5.handleResponse(false, error);
             });
         },
 
         /**
          * Adds the specified error to the specified field. The field can be an object with error messages
-         * to merge to the current error messages.
+         * to merge to the current error messages. If the error field is the key of the general error,
+         * it is assumed that an unknown exception occurred on the server, so a resubmit is still possible.
          *
          * @param field
          * @param error
@@ -62676,11 +62709,14 @@ module.exports = {
         setError: function setError(field, error) {
             if ((typeof field === 'undefined' ? 'undefined' : _typeof(field)) === 'object') {
                 Object.assign(this.errors, field);
-                this.hasError = true;
             } else if (error === null) {
                 this.removeError(field);
-            } else {
+            } else if (field && error) {
                 this.errors[field] = error;
+            }
+
+            // Only disable a submit of the form, if at least one error exists and a server error isn't the only one
+            if (Object.keys(this.errors).length > 0 && !this.errors[this.serverErrorKey] || Object.keys(this.errors).length > 1) {
                 this.hasError = true;
             }
         },
@@ -62702,7 +62738,7 @@ module.exports = {
          * @param response The response from the server.
          */
         handleResponse: function handleResponse(success, response) {
-            var _this5 = this;
+            var _this6 = this;
 
             // Check the success type, show the corresponding alerts and call the corresponding callback methods.
             if (!success) {
@@ -62711,7 +62747,7 @@ module.exports = {
 
                 if (this.showAlert) {
                     showAlert('success', this.alertTitle, this.alertMessage, this.alertDuration, function () {
-                        _this5.handleSuccess(response);
+                        _this6.handleSuccess(response);
                     });
                 } else {
                     this.handleSuccess(response);
@@ -62732,7 +62768,7 @@ module.exports = {
             // - component: The current instance of this component (useful to extract the form with 'component.$el'
             setTimeout(function () {
                 // noinspection JSUnresolvedFunction
-                window.eventHub.$emit('response_' + _this5.callbackName, success, response, _this5.submitMethod, _this5);
+                window.eventHub.$emit('response_' + _this6.callbackName, success, response, _this6.submitMethod, _this6);
             }, this.alertError && !success || this.showAlert ? this.alertDuration : 0);
         },
 
@@ -62742,13 +62778,14 @@ module.exports = {
          * @param response The response from the server.
          */
         handleError: function handleError(response) {
+
             this.setError(response);
 
             // Notify the child inputs of the errors
             window.eventHub.$emit('form-errors-changed', response);
 
             // Set the general error
-            if (this.errorWrapper && response.hasOwnProperty('msg')) {
+            if (this.errorWrapper && response.hasOwnProperty(this.generalErrorKey)) {
                 $(this.errorWrapper).html(response[this.generalErrorKey][0]);
             }
 
@@ -62826,15 +62863,17 @@ module.exports = {
 
             // Check if an error message shall be shown to the user.
             if (this.alertError) {
-                var msg = this.errors['msg'];
+                var msg = this.errors[this.serverErrorKey];
 
-                // If no general error was found, just alert the first random one
-                if (!msg) {
-                    msg = this.errors[Object.keys(this.errors)[0]];
-                }
+                if (msg) {
 
-                if (!msg) {
+                    // Server error was found: check if a more specific error message for the alert key exists,
+                    // otherwise just print the default error
                     msg = this.getLocalizedAlertMessage('error', 'content', { name: this.objectName });
+                } else {
+
+                    // No general error was found: just alert the first random one
+                    msg = this.errors[Object.keys(this.errors)[0]];
                 }
 
                 showAlert('error', this.getLocalizedAlertMessage('error', 'title', { name: this.objectName }), msg, this.alertDuration);
@@ -62969,6 +63008,16 @@ module.exports = {
             default: ''
         },
 
+        // The minimum date to select.
+        minDate: {
+            type: String
+        },
+
+        // The maximum date to select.
+        maxDate: {
+            type: String
+        },
+
         // The range of the date picker, i.e. which dates can be selected.
         // Valid values: 'all', 'past' (Before today), 'future' (After today)
         range: {
@@ -62983,6 +63032,26 @@ module.exports = {
             // The format of the date
             format: 'DD.MM.YYYY'
         };
+    },
+
+    methods: {
+        /**
+         * Resets the value of the input.
+         */
+        reset: function reset() {
+            this.submitValue = this.value;
+            $(this.$refs.input).val(this.value);
+            this.inputChanged();
+        },
+
+        /**
+         * Clears the value of the input.
+         */
+        clear: function clear() {
+            this.submitValue = '';
+            $(this.$refs.input).val('');
+            this.inputChanged();
+        }
     }
 };
 
@@ -63114,7 +63183,7 @@ module.exports = {
 
         // States if the current input value is valid.
         hasSuccess: function hasSuccess() {
-            return !this.errorMessage && this.valueChanged;
+            return !this.errorMessage && (this.valueChanged || !this.required);
         },
 
         // The name of the input. Will also be the name of the value, when the form gets submitted.
@@ -63125,10 +63194,16 @@ module.exports = {
 
     mounted: function mounted() {
         this.$nextTick(function () {
+            var _this = this;
+
             this.checkInput();
             window.eventHub.$on('form-errors-changed', function (errors) {
-                if (errors.hasOwnProperty(this.submitName)) {
-                    this.errorMessage = errors[this.submitName][0];
+                if (errors.hasOwnProperty(_this.submitName)) {
+                    if (errors[_this.submitName] instanceof Object || errors[_this.submitName] instanceof Array) {
+                        _this.errorMessage = errors[_this.submitName][0];
+                    } else {
+                        _this.errorMessage = errors[_this.submitName];
+                    }
                 }
             });
         });
@@ -63166,6 +63241,7 @@ module.exports = {
         inputChanged: function inputChanged() {
             this.valueChanged = this.submitValue !== this.value;
             window.eventHub.$emit('input-value-changed', this.submitName, this.submitValue);
+            this.$emit('input', this.submitValue); // Necessary to update the data on the root instance
             this.checkInput();
         },
 
@@ -63188,15 +63264,15 @@ module.exports = {
          * updates the input's label, based on the input's value.
          */
         checkInput: function checkInput() {
-            var _this = this;
+            var _this2 = this;
 
             if (this.checkRequired() && this.checkComponentSpecific()) {
                 if (isFunction(this.check)) {
                     this.check(this.submitValue, function (valid, errorMessage) {
                         if (valid) {
-                            _this.errorMessage = null;
+                            _this2.errorMessage = null;
                         } else {
-                            _this.errorMessage = errorMessage;
+                            _this2.errorMessage = errorMessage;
                         }
                     });
                 } else {

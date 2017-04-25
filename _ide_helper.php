@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.18 on 2017-04-14.
+ * Generated for Laravel 5.4.19 on 2017-04-21.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -1913,6 +1913,31 @@ namespace Illuminate\Support\Facades {
         public static function authenticate()
         {
             return \Illuminate\Auth\SessionGuard::authenticate();
+        }
+        
+        /**
+         * Register a custom macro.
+         *
+         * @param string $name
+         * @param callable $macro
+         * @return void 
+         * @static 
+         */
+        public static function macro($name, $macro)
+        {
+            \Illuminate\Auth\SessionGuard::macro($name, $macro);
+        }
+        
+        /**
+         * Checks if macro is registered.
+         *
+         * @param string $name
+         * @return bool 
+         * @static 
+         */
+        public static function hasMacro($name)
+        {
+            return \Illuminate\Auth\SessionGuard::hasMacro($name);
         }
         
     }         
@@ -5576,6 +5601,31 @@ namespace Illuminate\Support\Facades {
             return \Illuminate\Mail\Mailer::setQueue($queue);
         }
         
+        /**
+         * Register a custom macro.
+         *
+         * @param string $name
+         * @param callable $macro
+         * @return void 
+         * @static 
+         */
+        public static function macro($name, $macro)
+        {
+            \Illuminate\Mail\Mailer::macro($name, $macro);
+        }
+        
+        /**
+         * Checks if macro is registered.
+         *
+         * @param string $name
+         * @return bool 
+         * @static 
+         */
+        public static function hasMacro($name)
+        {
+            return \Illuminate\Mail\Mailer::hasMacro($name);
+        }
+        
     }         
 
     class Notification {
@@ -5912,7 +5962,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function size($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::size($queue);
+            return \Illuminate\Queue\DatabaseQueue::size($queue);
         }
         
         /**
@@ -5922,12 +5972,11 @@ namespace Illuminate\Support\Facades {
          * @param mixed $data
          * @param string $queue
          * @return mixed 
-         * @throws \Exception|\Throwable
          * @static 
          */
         public static function push($job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::push($job, $data, $queue);
+            return \Illuminate\Queue\DatabaseQueue::push($job, $data, $queue);
         }
         
         /**
@@ -5941,7 +5990,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function pushRaw($payload, $queue = null, $options = array())
         {
-            return \Illuminate\Queue\SyncQueue::pushRaw($payload, $queue, $options);
+            return \Illuminate\Queue\DatabaseQueue::pushRaw($payload, $queue, $options);
         }
         
         /**
@@ -5951,12 +6000,40 @@ namespace Illuminate\Support\Facades {
          * @param string $job
          * @param mixed $data
          * @param string $queue
-         * @return mixed 
+         * @return void 
          * @static 
          */
         public static function later($delay, $job, $data = '', $queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::later($delay, $job, $data, $queue);
+            \Illuminate\Queue\DatabaseQueue::later($delay, $job, $data, $queue);
+        }
+        
+        /**
+         * Push an array of jobs onto the queue.
+         *
+         * @param array $jobs
+         * @param mixed $data
+         * @param string $queue
+         * @return mixed 
+         * @static 
+         */
+        public static function bulk($jobs, $data = '', $queue = null)
+        {
+            return \Illuminate\Queue\DatabaseQueue::bulk($jobs, $data, $queue);
+        }
+        
+        /**
+         * Release a reserved job back onto the queue.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJobRecord $job
+         * @param int $delay
+         * @return mixed 
+         * @static 
+         */
+        public static function release($queue, $job, $delay)
+        {
+            return \Illuminate\Queue\DatabaseQueue::release($queue, $job, $delay);
         }
         
         /**
@@ -5968,7 +6045,31 @@ namespace Illuminate\Support\Facades {
          */
         public static function pop($queue = null)
         {
-            return \Illuminate\Queue\SyncQueue::pop($queue);
+            return \Illuminate\Queue\DatabaseQueue::pop($queue);
+        }
+        
+        /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string $queue
+         * @param string $id
+         * @return void 
+         * @static 
+         */
+        public static function deleteReserved($queue, $id)
+        {
+            \Illuminate\Queue\DatabaseQueue::deleteReserved($queue, $id);
+        }
+        
+        /**
+         * Get the underlying database instance.
+         *
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */
+        public static function getDatabase()
+        {
+            return \Illuminate\Queue\DatabaseQueue::getDatabase();
         }
         
         /**
@@ -5983,7 +6084,7 @@ namespace Illuminate\Support\Facades {
         public static function pushOn($queue, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::pushOn($queue, $job, $data);
+            return \Illuminate\Queue\DatabaseQueue::pushOn($queue, $job, $data);
         }
         
         /**
@@ -5999,22 +6100,7 @@ namespace Illuminate\Support\Facades {
         public static function laterOn($queue, $delay, $job, $data = '')
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::laterOn($queue, $delay, $job, $data);
-        }
-        
-        /**
-         * Push an array of jobs onto the queue.
-         *
-         * @param array $jobs
-         * @param mixed $data
-         * @param string $queue
-         * @return mixed 
-         * @static 
-         */
-        public static function bulk($jobs, $data = '', $queue = null)
-        {
-            //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::bulk($jobs, $data, $queue);
+            return \Illuminate\Queue\DatabaseQueue::laterOn($queue, $delay, $job, $data);
         }
         
         /**
@@ -6026,7 +6112,7 @@ namespace Illuminate\Support\Facades {
         public static function getConnectionName()
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::getConnectionName();
+            return \Illuminate\Queue\DatabaseQueue::getConnectionName();
         }
         
         /**
@@ -6039,7 +6125,7 @@ namespace Illuminate\Support\Facades {
         public static function setConnectionName($name)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            return \Illuminate\Queue\SyncQueue::setConnectionName($name);
+            return \Illuminate\Queue\DatabaseQueue::setConnectionName($name);
         }
         
         /**
@@ -6052,7 +6138,7 @@ namespace Illuminate\Support\Facades {
         public static function setContainer($container)
         {
             //Method inherited from \Illuminate\Queue\Queue            
-            \Illuminate\Queue\SyncQueue::setContainer($container);
+            \Illuminate\Queue\DatabaseQueue::setContainer($container);
         }
         
     }         
@@ -11592,17 +11678,144 @@ namespace Intervention\Image\Facades {
     }         
 }
     
-namespace App\Models {
+namespace Barryvdh\DomPDF {
 
-    class Settings {
+    class Facade {
         
-    }         
-
-    class Country {
+        /**
+         * Get the DomPDF instance
+         *
+         * @return \Barryvdh\DomPDF\Dompdf 
+         * @static 
+         */
+        public static function getDomPDF()
+        {
+            return \Barryvdh\DomPDF\PDF::getDomPDF();
+        }
         
-    }         
-
-    class State {
+        /**
+         * Set the paper size (default A4)
+         *
+         * @param string $paper
+         * @param string $orientation
+         * @return $this 
+         * @static 
+         */
+        public static function setPaper($paper, $orientation = 'portrait')
+        {
+            return \Barryvdh\DomPDF\PDF::setPaper($paper, $orientation);
+        }
+        
+        /**
+         * Show or hide warnings
+         *
+         * @param bool $warnings
+         * @return $this 
+         * @static 
+         */
+        public static function setWarnings($warnings)
+        {
+            return \Barryvdh\DomPDF\PDF::setWarnings($warnings);
+        }
+        
+        /**
+         * Load a HTML string
+         *
+         * @param string $string
+         * @param string $encoding Not used yet
+         * @return static 
+         * @static 
+         */
+        public static function loadHTML($string, $encoding = null)
+        {
+            return \Barryvdh\DomPDF\PDF::loadHTML($string, $encoding);
+        }
+        
+        /**
+         * Load a HTML file
+         *
+         * @param string $file
+         * @return static 
+         * @static 
+         */
+        public static function loadFile($file)
+        {
+            return \Barryvdh\DomPDF\PDF::loadFile($file);
+        }
+        
+        /**
+         * Load a View and convert to HTML
+         *
+         * @param string $view
+         * @param array $data
+         * @param array $mergeData
+         * @param string $encoding Not used yet
+         * @return static 
+         * @static 
+         */
+        public static function loadView($view, $data = array(), $mergeData = array(), $encoding = null)
+        {
+            return \Barryvdh\DomPDF\PDF::loadView($view, $data, $mergeData, $encoding);
+        }
+        
+        /**
+         * Set/Change an option in DomPdf
+         *
+         * @param array $options
+         * @return static 
+         * @static 
+         */
+        public static function setOptions($options)
+        {
+            return \Barryvdh\DomPDF\PDF::setOptions($options);
+        }
+        
+        /**
+         * Output the PDF as a string.
+         *
+         * @return string The rendered PDF as string
+         * @static 
+         */
+        public static function output()
+        {
+            return \Barryvdh\DomPDF\PDF::output();
+        }
+        
+        /**
+         * Save the PDF to a file
+         *
+         * @param $filename
+         * @return static 
+         * @static 
+         */
+        public static function save($filename)
+        {
+            return \Barryvdh\DomPDF\PDF::save($filename);
+        }
+        
+        /**
+         * Make the PDF downloadable by the user
+         *
+         * @param string $filename
+         * @return \Illuminate\Http\Response 
+         * @static 
+         */
+        public static function download($filename = 'document.pdf')
+        {
+            return \Barryvdh\DomPDF\PDF::download($filename);
+        }
+        
+        /**
+         * Return a response with the PDF to show in the browser
+         *
+         * @param string $filename
+         * @return \Illuminate\Http\Response 
+         * @static 
+         */
+        public static function stream($filename = 'document.pdf')
+        {
+            return \Barryvdh\DomPDF\PDF::stream($filename);
+        }
         
     }         
 }
@@ -12092,6 +12305,18 @@ namespace {
         public static function without($relations)
         {
             return \Illuminate\Database\Eloquent\Builder::without($relations);
+        }
+        
+        /**
+         * Create a new instance of the model being queried.
+         *
+         * @param array $attributes
+         * @return \Illuminate\Database\Eloquent\Model 
+         * @static 
+         */
+        public static function newModelInstance($attributes = array())
+        {
+            return \Illuminate\Database\Eloquent\Builder::newModelInstance($attributes);
         }
         
         /**
@@ -13637,6 +13862,8 @@ namespace {
     
     class Image extends \Intervention\Image\Facades\Image {}
     
+    class PDF extends \Barryvdh\DomPDF\Facade {}
+
     class Settings extends \App\Models\Settings {}
     
     class Country extends \App\Models\Country {}

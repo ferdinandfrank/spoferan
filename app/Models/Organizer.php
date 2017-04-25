@@ -11,9 +11,9 @@ use App\Events\OrganizerCreated;
  * @property string $name
  * @property string $slug
  * @property string $description
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $raters
- * @property-read \App\Models\User $user
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Athlete[] $raters
+ * @property \App\Models\User $user
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)

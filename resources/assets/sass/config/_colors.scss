@@ -153,11 +153,14 @@ $input-focus-border-color: rgba($secondary, 0.6);
 
 $select-search-choice-background-color: $primary;
 $select-search-choice-text-color: $primary-invert;
-$input-background-color: $white;
+$input-background-color: rgba($white, 0.2);
 
-$datetimepicker-active-background-color: $primary;
+$datetimepicker-active-background-color: $secondary;
 $datetimepicker-active-text-color: $white-smooth;
+$datetimepicker-btn-hover-text-color: $white-smooth;
 $datetimepicker-btn-hover-background-color: $primary;
+$datetimepicker-header-btn-hover-background-color: $secondary;
+$datetimepicker-header-btn-hover-text-color: $white-smooth;
 $datetimepicker-btn-disabled-color: $disabled;
 
 /*********************

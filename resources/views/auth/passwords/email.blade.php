@@ -1,46 +1,54 @@
-@extends('layouts.main')
+{{-------------------------------------------------------
+    SEND RESET PASSWORD EMAIL PAGE
+    _______________
+    Shows the form to enter an users email address to receive a "forgot password" mail.
+---------------------------------------------------------}}
+
+@extends('layouts.welcome')
+
+@section('title', trans('label.forgot_my_password'))
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    <div class="login-form card transparent">
+        <h1 class="center">{{ trans('label.forgot_my_password') }}</h1>
+        <hr class="light">
+        <ajax-form action="{{ route('password.email') }}" method="POST" alert-key="password_forgot" class="card-content"
+                   redirect="{{ route('login') }}">
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('password.email') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Send Password Reset Link
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <div class="columns is-multiline">
+                <div class="column is-12">
+                    <p>{{ trans('descriptions.forgot_password') }}</p>
+                </div>
+                <div class="column is-12">
+                    <form-input icon-left="{{ config('icons.email') }}" type="email" name="email"
+                                :required="true"></form-input>
                 </div>
             </div>
-        </div>
+
+            <div class="center">
+                <button type="submit" class="button is-success">
+                    <span>
+                        <span class="icon is-small">
+                            <icon icon="{{ config('icons.send') }}"></icon>
+                        </span>
+                        <span>{{ trans('action.reset_password') }}</span>
+                    </span>
+                </button>
+            </div>
+            <hr class="light">
+
+            <div class="center flex-column">
+                <a href="{{ route('login') }}" class="link">{{ trans('label.know_my_password') }}</a>
+            </div>
+        </ajax-form>
     </div>
-</div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        new VueModel({
+            el: '#app'
+        });
+    });
+</script>@endpush

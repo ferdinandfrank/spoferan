@@ -16,14 +16,14 @@ use App\Events\AthleteCreated;
  * @property string $gender
  * @property int $sport_type_id
  * @property string $starter_number
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $eventRatings
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $nextParticipations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Organizer[] $organizerRatings
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $pastParticipations
- * @property-read \App\Models\SportType $sportType
- * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $eventRatings
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $nextParticipations
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Organizer[] $organizerRatings
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $participations
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Participation[] $pastParticipations
+ * @property \App\Models\SportType $sportType
+ * @property \App\Models\User $user
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Visit[] $visits
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UserModel confirmed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\SlugModel findByKey($key)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\BaseModel ignore($id)

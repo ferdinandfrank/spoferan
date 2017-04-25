@@ -20,6 +20,26 @@ function isRoute($routeKey, $recursive = false) {
 }
 
 /**
+ * Gets the relative path of the specified route.
+ *
+ * @param string $route
+ *
+ * @return string
+ */
+function getRelativeRoute($route) {
+    $currentUrl = url()->current();
+    if (substr($route, 0, strlen($currentUrl)) == $currentUrl) {
+        $route = substr($route, strlen($currentUrl));
+    }
+
+    if (substr($route, 0, 1) != '/') {
+        $route = '/' . $route;
+    }
+
+    return $route;
+}
+
+/**
  * Formats the specified amount of cents to a localized money string.
  *
  * @param $cents

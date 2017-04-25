@@ -121,7 +121,7 @@ module.exports = {
 
         // States if the current input value is valid.
         hasSuccess: function () {
-            return !this.errorMessage && this.valueChanged;
+            return !this.errorMessage && (this.valueChanged || !this.required);
         },
 
         // The name of the input. Will also be the name of the value, when the form gets submitted.
@@ -133,9 +133,13 @@ module.exports = {
     mounted: function () {
         this.$nextTick(function () {
             this.checkInput();
-            window.eventHub.$on('form-errors-changed', function (errors) {
+            window.eventHub.$on('form-errors-changed', (errors) => {
                 if (errors.hasOwnProperty(this.submitName)) {
-                    this.errorMessage = errors[this.submitName][0];
+                    if (errors[this.submitName] instanceof Object || errors[this.submitName] instanceof Array) {
+                        this.errorMessage = errors[this.submitName][0];
+                    } else {
+                        this.errorMessage = errors[this.submitName];
+                    }
                 }
             });
         })
@@ -173,6 +177,7 @@ module.exports = {
         inputChanged: function () {
             this.valueChanged = this.submitValue !== this.value;
             window.eventHub.$emit('input-value-changed', this.submitName, this.submitValue);
+            this.$emit('input', this.submitValue); // Necessary to update the data on the root instance
             this.checkInput();
         },
 

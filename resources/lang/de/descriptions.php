@@ -16,5 +16,7 @@ return [
         'contact' => 'Du hast Fragen zu dem Event? Du kannst den Veranstalter gerne jederzeit kontaktieren.'
     ],
 
-    'my_participations' => 'Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events.'
+    'my_participations' => 'Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events.',
+
+    'forgot_password' => 'Gebe im folgendem Eingabefeld die E-Mail-Adresse deines Accounts ein und schicke das Formular ab. Daraufhin erhälst du eine E-Mail mit einem Link, der dich auf die Seite zum Zurücksetzen deines Passworts führt.'
 ];

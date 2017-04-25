@@ -46,12 +46,18 @@
                 $(this.$refs.input).datetimepicker({
                     locale: 'de',
                     format: 'YYYY-MM-DD HH:mm:ss',
-                    defaultDate: this.submitValue
+                    defaultDate: this.submitValue,
+                    minDate: this.minDate,
+                    maxDate: this.maxDate
                 });
                 $(this.$refs.input).on("dp.change", (moment) => {
                     this.submitValue = moment.date.format("YYYY-MM-DD HH:mm:ss");
                     this.inputChanged();
                 });
+
+                if ((this.maxDate || this.minDate) && !this.submitValue) {
+                    $(this.$refs.input).val('');
+                }
             })
         },
     }

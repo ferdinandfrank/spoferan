@@ -83,8 +83,3 @@ window.VueModel = Vue.extend({
 if (!window.eventHub) {
     window.eventHub = new Vue();
 }
-
-// Vue production settings
-// Vue.config.devtools = false;
-// Vue.config.debug = false;
-// Vue.config.silent = true;

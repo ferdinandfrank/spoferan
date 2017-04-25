@@ -7,7 +7,6 @@ use App\Events\UserCreated;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -270,6 +269,15 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function getStoragePath() {
         return $this->getType()->getStoragePath();
+    }
+
+    /**
+     * Sets a new confirmation token for the user and resets
+     * the confirmation state.
+     */
+    public function setConfirmationToken() {
+        $this->confirmation_token = bin2hex(random_bytes(10));
+        $this->confirmed = false;
     }
 
     /**

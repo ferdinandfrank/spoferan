@@ -16,10 +16,15 @@ use Illuminate\Queue\SerializesModels;
  * @version 1.0
  * @package App\Mail
  */
-class EmailConfirmationMail extends Mailable {
+class UserConfirmationMail extends Mailable {
 
     use Queueable, SerializesModels;
 
+    /**
+     * The user who shall receive the mail.
+     *
+     * @var User
+     */
     private $user;
 
     /**
@@ -40,9 +45,8 @@ class EmailConfirmationMail extends Mailable {
         $link = route('login') . '?id=' . $this->user->id . '&token=' . $this->user->confirmation_token;
 
         return $this
-            ->subject(trans('email.registration.title', ['title' => \Settings::title()]))
-            ->view('emails.registration')
-            ->with([
+            ->subject(trans('email.registration.subject', ['title' => \Settings::title()]))
+            ->markdown('emails.registration', [
                 'user' => $this->user,
                 'link' => $link
             ]);

@@ -1,76 +1,64 @@
-@extends('layouts.main')
+{{-------------------------------------------------------
+    RESET PASSWORD PAGE
+    _______________
+    Shows the form to reset a password. Users will be redirected to this page after they requested a
+    "forgot password" mail and clicked on the reset link in the email.
+---------------------------------------------------------}}
+
+@extends('layouts.welcome')
+
+@section('title', trans('action.reset_password'))
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
+    <div class="login-form card transparent">
+        <h1 class="center">{{ trans('action.reset_password') }}</h1>
+        <hr class="light">
+        <ajax-form action="{{ route('password.reset.post') }}" method="POST" alert-key="password_reset" class="card-content"
+                   redirect="{{ route('login') }}">
 
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+            <hidden-input name="token" value="{{ $token }}"></hidden-input>
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('password.request') }}">
-                        {{ csrf_field() }}
-
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Reset Password
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+            <div class="columns is-multiline">
+                <div class="column is-12">
+                    <form-input icon-left="{{ config('icons.email') }}" type="email" name="email" :required="true"
+                                :max-length="{{ config('validation.email.max') }}"></form-input>
+                </div>
+                <div class="column is-6">
+                    <form-input icon-left="{{ config('icons.password') }}" type="password" name="password"
+                                :required="true" :max-length="{{ config('validation.password.max') }}"
+                                :min-length="{{ config('validation.password.min') }}"></form-input>
+                </div>
+                <div class="column is-6">
+                    <form-input icon-left="{{ config('icons.password') }}" type="password" name="password_confirmation"
+                                :confirmed="true" :required="true"></form-input>
                 </div>
             </div>
-        </div>
+
+            <div class="center">
+                <button type="submit" class="button is-success">
+                    <span>
+                        <span class="icon is-small">
+                            <icon icon="{{ config('icons.check') }}"></icon>
+                        </span>
+                        <span>{{ trans('action.reset_password') }}</span>
+                    </span>
+                </button>
+            </div>
+            <hr class="light">
+
+            <div class="center flex-column">
+                <a href="{{ route('login') }}" class="link">{{ trans('label.know_my_password') }}</a>
+            </div>
+        </ajax-form>
     </div>
-</div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        new VueModel({
+            el: '#app'
+        });
+    });
+</script>
+@endpush

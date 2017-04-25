@@ -11,6 +11,15 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * UserCreated
+ * -----------------------
+ * Event that gets triggered as soon as a new user was created.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Events
+ */
 class UserCreated {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;

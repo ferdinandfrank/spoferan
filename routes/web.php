@@ -13,21 +13,26 @@
 
 Route::get('/', 'IndexController@index')->name('index');
 
+// TODO: Remove
+Route::get('/email', function () {
+    return view((new \Illuminate\Auth\Notifications\ResetPassword('bla'))->toMail('test'));
+});
+
 // Authentication Routes...
-$this->get('login', 'Auth\LoginController@show')->name('login');
-$this->post('login', 'Auth\LoginController@login')->name('login.post');
-$this->post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('login', 'Auth\LoginController@show')->name('login');
+Route::post('login', 'Auth\LoginController@login')->name('login.post');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Registration Routes...
-$this->get('register', 'UserController@create')->name('register');
+Route::get('register', 'UserController@create')->name('register');
+Route::post('users', 'UserController@store')->name('users.store');
 
 // Password Reset Routes...
-$this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-$this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-$this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset.post');
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset.post');
 
-Route::resource('users', 'UserController');
 Route::resource('events', 'EventController');
 Route::get('events/{event}/participate', 'ParticipationController@create')->name('participation.create');
 Route::resource('events/{event}/participation-classes', 'ParticipationClassController');

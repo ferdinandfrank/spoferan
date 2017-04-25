@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\EmailConfirmationMail;
+use App\Mail\UserConfirmationMail;
 use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -68,7 +68,7 @@ class LoginController extends Controller {
         $email = $request->get('email');
         $unconfirmedUser = User::where('email', $email)->where('confirmed', false)->first();
         if ($unconfirmedUser) {
-            \Mail::to($unconfirmedUser)->send(new EmailConfirmationMail($unconfirmedUser));
+            \Mail::to($unconfirmedUser)->send(new UserConfirmationMail($unconfirmedUser));
             return response()->json([
                 'msg' => trans('auth.unconfirmed', ['email' => $email])
             ], 403);

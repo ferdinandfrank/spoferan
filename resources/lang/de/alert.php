@@ -17,7 +17,7 @@ return [
         ]
     ],
 
-    'registration' => [
+    'user' => [
         'post' => [
             'title'   => 'Account bestätigen!',
             'content' => 'Wir haben dir eine E-Mail an deine E-Mail-Adresse gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account und deine E-Mail-Adresse zu bestätigen.'

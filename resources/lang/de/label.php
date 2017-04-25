@@ -5,6 +5,7 @@ return [
     'forgot_my_password' => 'Passwort vergessen?',
     'already_registered' => 'Bereits registriert? Melde dich jetzt an.',
     'not_registered' => 'Noch keinen Account? Jetzt registrieren!',
+    'know_my_password' => 'Du kennst dein Passwort? Jetzt anmelden!',
     'male' => 'Männlich',
     'female' => 'Weiblich',
     'events' => 'Events',

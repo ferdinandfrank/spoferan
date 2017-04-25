@@ -25,6 +25,10 @@ $card-hover-transition-duration: .5s;
     position: relative;
     border-radius: 2px;
 
+    &.transparent {
+        background: rgba($white, 0.8);
+    }
+
     &.suggestion {
         border: 2px solid $success;
     }
@@ -159,7 +163,6 @@ $card-hover-transition-duration: .5s;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        background: $white;
         padding: 10px;
         z-index: 2;
 

@@ -9,18 +9,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class CreateUserRelatedTables {
 
     /**
-     * Create the event listener.
+     * Creates the event listener.
      */
     public function __construct() {
         //
     }
 
     /**
-     * Handle the event.
+     * Handles the event.
      *
      * @param  UserCreated $event
-     *
-     * @return void
      */
     public function handle(UserCreated $event) {
         $user = $event->user;

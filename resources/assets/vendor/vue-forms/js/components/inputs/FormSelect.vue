@@ -58,7 +58,7 @@
 
         data: function () {
             return {
-                input: '',
+                input: null,
             }
         },
 
@@ -98,6 +98,14 @@
              */
             value: function (value) {
                 this.input.select2().select2('val', value);
+            },
+
+            hasSuccess: function (success) {
+                if (success) {
+                    this.input.select2("dropdown").addClass("has-success");
+                } else {
+                    this.input.select2("dropdown").removeClass("has-success");
+                }
             }
         },
 

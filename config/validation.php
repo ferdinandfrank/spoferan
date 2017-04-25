@@ -69,10 +69,12 @@ return [
             'max' => 10
         ],
         'first_name' => [
-            'max' => 50
+            'max' => 50,
+            'min' => 2
         ],
         'last_name'  => [
-            'max' => 50
+            'max' => 50,
+            'min' => 2
         ]
     ],
 
