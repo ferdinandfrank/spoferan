@@ -207,7 +207,7 @@
                                             <span>{{ trans('action.login') }}</span>
                                         </a>
                                     @else
-                                        @if($loggedUser->athlete && $event->isParticipant($loggedUser->athlete))
+                                        @if($loggedUser && $loggedUser->athlete && $event->isParticipant($loggedUser->athlete))
                                             <p class="is-warning">{{ trans('label.hint') }}: Du bist für dieses Event bereits angemeldet. Es gibt jedoch keine weitere Teilnahmeklasse, für die du dich zusätzlich anmelden könntest.</p>
                                         @else
                                             <p class="is-danger">{{ trans('label.hint') }}: {{ trans('validation.event.' . $participationRestriction) }}</p>
