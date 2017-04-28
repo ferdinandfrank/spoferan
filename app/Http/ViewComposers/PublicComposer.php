@@ -8,7 +8,7 @@ use Illuminate\View\View;
 /**
  * PublicComposer
  * -----------------------
- * ${CARET}
+ * View composer class to make necessary global variables available for all pages.
  *
  * @author  Ferdinand Frank
  * @version 1.0

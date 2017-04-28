@@ -43,7 +43,7 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
         'postcode' => $faker->postcode,
         'city' => $faker->city,
         'street' => $faker->streetAddress,
-        'cover' => $faker->imageUrl(600, 300, 'sports')
+        'cover' => null
     ];
 });
 

@@ -11,14 +11,29 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * CouponRedeemed
+ * -----------------------
+ * Event that gets triggered as soon as a coupon code gets redeemed.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Events
+ */
 class CouponRedeemed {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * The redeemed coupon.
+     *
+     * @var Coupon
+     */
     public $coupon;
 
     /**
      * Creates a new event instance.
+     *
      * @param Coupon $coupon
      */
     public function __construct(Coupon $coupon) {

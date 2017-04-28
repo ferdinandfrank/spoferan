@@ -52,7 +52,8 @@ Route::get('events/{event}/participations/{participation}/download', 'Participat
 Route::get('participations', 'ParticipationController@index')->name('participations.index')->middleware('auth');
 Route::post('participations', 'ParticipationController@store')->name('participations.store');
 
-Route::post('webhook/stripe', 'WebhooksController@handle');
+
+Route::post('webhook/stripe', 'WebhooksController@handleStripe');
 
 Route::post('payment-details/{paymentDetails}', 'PaymentDetailsController@store')->name('payment_details.store');
 

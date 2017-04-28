@@ -9,7 +9,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'email'             => $faker->email,
         'password'          => bcrypt(str_random(10)),
         'confirmed'         => true,
-        'avatar'            => $faker->imageUrl(200, 200, 'people')
+        'avatar'            => null
     ];
 });
 

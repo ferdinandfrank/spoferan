@@ -31,7 +31,8 @@ export default {
             "add_bank_account": "Bankkonto hinzufügen",
             "save": "Speichern",
             "cancel": "Abbrechen",
-            "send_us_an_email": "Schicke uns eine E-Mail"
+            "send_us_an_email": "Schicke uns eine E-Mail",
+            "reset_password": "Passwort zurücksetzen"
         },
         "alert": {
             "default": {
@@ -61,7 +62,7 @@ export default {
             "password_reset": {
                 "post": {
                     "title": "Passwort zurückgesetzt",
-                    "content": "Dein Passwort wurde erfolgreich zurückgesetzt."
+                    "content": "Dein Passwort wurde erfolgreich zurückgesetzt. Du wirst nun automatisch eingeloggt."
                 }
             },
             "password_forgot": {
@@ -393,14 +394,15 @@ export default {
                 "participants": "Dieses Event besteht aus mehreren Teilevents. Die Teilnehmer sind demnach nach den Teilevents aufgeteilt, für die sie sich registriert haben.",
                 "contact": "Du hast Fragen zu dem Event? Du kannst den Veranstalter gerne jederzeit kontaktieren."
             },
-            "my_participations": "Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events."
+            "my_participations": "Hier findest eine Übersicht deiner vergangenen und geplanten Teilnahmen an Events.",
+            "forgot_password": "Gebe im folgendem Eingabefeld die E-Mail-Adresse deines Accounts ein und schicke das Formular ab. Daraufhin erhälst du eine E-Mail mit einem Link, der dich auf die Seite zum Zurücksetzen deines Passworts führt."
         },
         "email": {
             "greeting": "Hallo {name}",
             "greeting_plain": "Hallo",
             "salutation": "Viele Grüße",
             "any_questions": "Du hast Fragen oder benötigst Hilfe?",
-            "button_help": "Falls du Probleme hast den Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein:",
+            "button_help": "Falls du Probleme hast den \"{button}\" Button zu klicken, kopiere den folgenden Link und füge ihn in deinen Browser ein",
             "contact": {
                 "title": "Neue Kontaktnachricht über die Website"
             },
@@ -412,7 +414,7 @@ export default {
                 "receiving_info": "Du erhälst diese E-Mail, weil du dich auf der Seite {title} registriert hast. Sollte diese Aktion nicht von dir selber getätigt worden sein, so kannst du diese E-Mail ignorieren."
             },
             "password_reset": {
-                "title": "{title}: Dein neues Passwort",
+                "title": "Dein neues Passwort auf Spoferan",
                 "content": "du hast soeben ein neues Passwort für deinen Account bei {title} angefragt. Klicke auf den folgenden Button, um dein Passwort zurückzusetzen. Solltest du nicht um eine Zurücksetzung deines Passworts gebeten haben, so kannst du diese E-Mail ignorieren."
             }
         },
@@ -522,6 +524,7 @@ export default {
             "forgot_my_password": "Passwort vergessen?",
             "already_registered": "Bereits registriert? Melde dich jetzt an.",
             "not_registered": "Noch keinen Account? Jetzt registrieren!",
+            "know_my_password": "Du kennst dein Passwort? Jetzt anmelden!",
             "male": "Männlich",
             "female": "Weiblich",
             "events": "Events",
@@ -618,7 +621,7 @@ export default {
             "reset": "Your password has been reset!",
             "sent": "We have e-mailed your password reset link!",
             "token": "This password reset token is invalid.",
-            "user": "We can't find a user with that e-mail address."
+            "user": "Es existiert kein Nutzer mit dieser E-Mail-Adresse."
         },
         "sport_types": {
             "other": "Unbekannte Sportart",
@@ -721,12 +724,12 @@ export default {
             },
             "string": "The {attribute} must be a string.",
             "timezone": "The {attribute} must be a valid zone.",
-            "unique": "The {attribute} has already been taken.",
+            "unique": "{attribute} wird bereits verwendet.",
             "uploaded": "The {attribute} failed to upload.",
             "url": "The {attribute} format is invalid.",
             "custom": {
-                "attribute-name": {
-                    "rule-name": "custom-message"
+                "email": {
+                    "unique": "Die E-Mail-Adresse wird bereits verwendet."
                 }
             },
             "attributes": [],

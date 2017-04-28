@@ -20,7 +20,7 @@
 @endcomponent
 
 <!-- Salutation -->
-{{ trans('email.registration.salutation') }},<br>{{ config('app.name') }}
+{{ trans('email.registration.salutation') }}<br>{{ config('app.name') }}
 
 <!-- Subcopy -->
 @slot('subcopy')

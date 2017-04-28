@@ -9,6 +9,15 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
+/**
+ * AthleteCreated
+ * -----------------------
+ * Event that gets triggered as soon as a new athlete gets inserted into the database.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Events
+ */
 class AthleteCreated {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -21,7 +30,7 @@ class AthleteCreated {
     public $athlete;
 
     /**
-     * Create a new event instance.
+     * Creates a new event instance.
      *
      * @param Athlete $athlete
      */
@@ -30,7 +39,7 @@ class AthleteCreated {
     }
 
     /**
-     * Get the channels the event should broadcast on.
+     * Gets the channels the event should broadcast on.
      *
      * @return Channel|array
      */

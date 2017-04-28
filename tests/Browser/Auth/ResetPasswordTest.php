@@ -56,6 +56,9 @@ class ResetPasswordTest extends DuskTestCase {
             // Wait a maximum of ten seconds and assert a success alert is shown
             $browser->waitForText(trans('alert.password_reset.post.content'), 10);
 
+            // Wait until alert disappears and a redirect occurs
+            $browser->pause(5000);
+
             // Logout because it is assumed that the user gets logged in after a password reset
             $browser->executeLogout();
 

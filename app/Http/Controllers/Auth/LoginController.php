@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\UserConfirmationMail;
 use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -31,28 +30,36 @@ class LoginController extends Controller {
     }
 
     /**
-     * Show the application's login form.
+     * Shows the application's login form.
      *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show(Request $request) {
+        $this->confirmUser($request);
+
+        return view('auth.login');
+    }
+
+    /**
+     * Checks if the necessary params exists in the current request to confirm a user
+     * and executes the confirmation if the params are valid.
+     *
+     * @param Request $request
+     */
+    private function confirmUser(Request $request) {
         $token = $request->input('token');
         $id = $request->input('id');
         if ($id && $token) {
             $user = User::find($id);
-            if ($user && $user->confirmation_token == $token && !$user->confirmed) {
-                $user->confirmed = true;
-                $user->confirmation_token = null;
-                $user->save();
 
+            // Check if the confirmation token is valid and the user has not be confirmed
+            if ($user && $user->confirmation_token == $token && !$user->confirmed) {
+                $user->confirm();
                 $request->session()->flash('success', trans('alert.account_confirmed'));
-                return view('auth.login');
             }
         }
-
-        return view('auth.login');
     }
 
     /**
@@ -65,12 +72,14 @@ class LoginController extends Controller {
     public function login(Request $request) {
         $this->validateLogin($request);
 
+        // Check if the user is still unconfirmed. If so, resend the confirmation mail.
         $email = $request->get('email');
         $unconfirmedUser = User::where('email', $email)->where('confirmed', false)->first();
         if ($unconfirmedUser) {
-            \Mail::to($unconfirmedUser)->send(new UserConfirmationMail($unconfirmedUser));
+            $unconfirmedUser->sendConfirmationMail();
+
             return response()->json([
-                'msg' => trans('auth.unconfirmed', ['email' => $email])
+                'msg' => trans('error.unconfirmed', ['email' => $email])
             ], 403);
         }
 
@@ -96,17 +105,6 @@ class LoginController extends Controller {
     }
 
     /**
-     * Gets the failed login response instance.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function sendFailedLoginResponse() {
-        return response()->json([
-            'msg' => [trans('validation.auth.failed')]
-        ], 403);
-    }
-
-    /**
      * Handles the action when the user has been authenticated.
      *
      * @param Request $request
@@ -127,11 +125,44 @@ class LoginController extends Controller {
      */
     public function logout(Request $request) {
         $this->guard()->logout();
-
         $request->session()->flush();
-
         $request->session()->regenerate();
 
         return response()->json(true);
+    }
+
+    /**
+     * Gets the failed login response instance.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function sendFailedLoginResponse() {
+        return response()->json([
+            'msg' => [trans('validation.auth.failed')]
+        ], 403);
+    }
+
+    /**
+     * Redirects the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendLockoutResponse(Request $request) {
+        $seconds = $this->limiter()->availableIn(
+            $this->throttleKey($request)
+        );
+
+        $message = trans('error.throttle', ['seconds' => $seconds]);
+        $errors = [config('spoferan.server_error_key') => $message];
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 423);
+        }
+
+        return redirect()->back()
+                         ->withInput($request->only($this->username(), 'remember'))
+                         ->withErrors($errors);
     }
 }

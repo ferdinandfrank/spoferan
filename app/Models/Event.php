@@ -126,6 +126,17 @@ class Event extends SlugModel {
     }
 
     /**
+     * Gets the url of the event's default cover image.
+     *
+     * @return string
+     */
+    protected function getDefaultCover() {
+        $sportType = $this->sportType;
+
+        return asset('images/covers/sport_types/' . $sportType->label . '.jpg');
+    }
+
+    /**
      * Gets the corresponding organizer instance, which is the creator of the event.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

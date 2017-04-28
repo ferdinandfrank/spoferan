@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\AthleteCreated;
 use App\Events\UserCreated;
+use App\Mail\UserConfirmationMail;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Authenticatable;
@@ -217,7 +218,13 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @return string
      */
     public function getAvatarAttribute($avatar) {
-        return $avatar ?? asset('images/avatar_default.png');
+        if ($avatar) {
+            return $avatar;
+        } elseif ($this->isType(config('spoferan.user_type.athlete'))) {
+            return asset('images/avatars/' . $this->athlete->gender . '.jpg');
+        }
+
+        return asset('images/avatars/default.png');
     }
 
     /**
@@ -301,9 +308,18 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
+     * Sends a confirmation email to the user, if the user is not yet confirmed.
+     */
+    public function sendConfirmationMail() {
+        if (!$this->confirmed) {
+            \Mail::to($this)->queue((new UserConfirmationMail($this))->onQueue('emails'));
+        }
+    }
+
+    /**
      * Confirms the user and activates his account.
      */
-    public function activate() {
+    public function confirm() {
         $this->confirmed = true;
         $this->confirmation_token = null;
         $this->save();

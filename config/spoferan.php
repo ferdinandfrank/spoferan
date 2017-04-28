@@ -10,11 +10,20 @@ return [
     |
     */
 
-    'user_type' => [
+    'user_type'        => [
         'athlete'   => 'athlete',
         'organizer' => 'organizer',
         'trainer'   => 'trainer',
         'company'   => 'company',
         'admin'     => 'admin',
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | General Error Key
+    |--------------------------------------------------------------------------
+    | The key name of json server responses with errors that occured on the server.
+    |
+    */
+    'server_error_key' => 'server',
 ];

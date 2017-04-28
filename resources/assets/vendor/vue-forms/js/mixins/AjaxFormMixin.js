@@ -580,11 +580,11 @@ module.exports = {
                 if (msg) {
 
                     // Server error was found: check if a more specific error message for the alert key exists,
-                    // otherwise just print the default error
-                    msg = this.getLocalizedAlertMessage('error', 'content', {name: this.objectName})
+                    // otherwise just print the default error from the server
+                    msg = this.getLocalizedAlertMessage('error', 'content', {name: this.objectName}, msg)
                 } else {
 
-                    // No general error was found: just alert the first random one
+                    // No server error was found: just alert the first random one
                     msg = this.errors[Object.keys(this.errors)[0]];
                 }
 
@@ -626,17 +626,16 @@ module.exports = {
          * @param alertType 'alert', 'error' or 'confirm'
          * @param type 'title', 'content', 'cancel' or 'accept'
          * @param params localization params
+         * @param defaultMessage The default message to show if no message exists for the specified params
          * @returns {string}
          */
-        getLocalizedAlertMessage: function (alertType, type, params = null) {
-            let key = alertType + '.' + this.alertKey + '.' + this.submitMethod + '.' + type;
-            let defaultKey = alertType + '.default.' + this.submitMethod + '.' + type;
-            let text = this.$t(key, params);
-            if (key === text) {
-                text = this.$t(defaultKey, params);
+        getLocalizedAlertMessage: function (alertType, type, params = null, defaultMessage = null) {
+            if (this.alertKey === 'default' && defaultMessage) {
+                return defaultMessage;
             }
+            let key = alertType + '.' + this.alertKey + '.' + this.submitMethod + '.' + type;
 
-            return text;
+            return this.$t(key, params);
         },
 
         /**

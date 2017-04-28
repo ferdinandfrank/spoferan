@@ -84,12 +84,8 @@ class UserController extends Controller {
             // Create the user with the request data
             $user = new User($request->all());
 
-            // Let the user confirm his email address if the environment is local or production
-            if (App::environment('testing')) {
-                $user->confirmed = true;
-            } else {
-                $user->setConfirmationToken();
-            }
+            // Let the user confirm his email address
+            $user->setConfirmationToken();
 
             if ($user->save()) {
                 $userType = null;
@@ -100,12 +96,7 @@ class UserController extends Controller {
                 }
 
                 if ($userType) {
-
-                    // Only send confirmation email, if the user is not yet confirmed, i.e. the app environment is
-                    // set as 'testing'
-                    if (!$user->confirmed) {
-                        \Mail::to($user)->queue((new UserConfirmationMail($user))->onQueue('emails'));
-                    }
+                    $user->sendConfirmationMail();
 
                     return $user;
                 }

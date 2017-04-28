@@ -1,12 +1,12 @@
 <template>
     <div class="slider columns">
-        <div v-if="canNavigateLeft" class="action" @click="currentPosition--">
+        <div v-show="canNavigateLeft" class="action" @click="currentPosition--">
             <icon icon="fa fa-fw fa-chevron-left"></icon>
         </div>
 
         <slot></slot>
 
-        <div v-if="canNavigateRight" class="action" @click="currentPosition++">
+        <div v-show="canNavigateRight" class="action" @click="currentPosition++">
             <icon icon="fa fa-fw fa-chevron-right"></icon>
         </div>
     </div>

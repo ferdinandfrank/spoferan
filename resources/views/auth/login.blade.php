@@ -17,10 +17,12 @@
             <div class="columns is-multiline">
                 <div class="column is-12">
                     <form-input icon-left="{{ config('icons.email') }}" type="email"
+                                value="athlete@example.com"
                                 name="email" :required="true"></form-input>
                 </div>
                 <div class="column is-12">
                     <form-input icon-left="{{ config('icons.password') }}" type="password"
+                                value="password"
                                 name="password" :required="true"></form-input>
                 </div>
                 <div class="column is-12 p-t-none p-b-none">
@@ -33,11 +35,10 @@
             <div class="center">
                 <button type="submit" class="button is-success">{{ trans('action.login') }}</button>
             </div>
-            {{--<p class="is-warning m-t-20">Info: Dieser Prototyp dient lediglich zur Darstellung einiger Kernfunktionen
-                von
-                Spoferan und ist nicht für die Öffentlichkeit bestimmt.
-                Alle Daten der Veranstaltungen, Veranstaltern und Athleten sind frei erfunden bzw. teilweise automatisch
-                generiert.</p>--}}
+            <p class="is-warning m-t-20">Info: Dieser Prototyp dient lediglich zur Darstellung einiger Kernfunktionen
+                von Spoferan und ist nicht für die Öffentlichkeit bestimmt.
+                Alle Daten der Veranstaltungen, Veranstalter und Athleten sind frei erfunden bzw. teilweise automatisch
+                generiert.</p>
             <hr class="light">
 
             <div class="center flex-column">

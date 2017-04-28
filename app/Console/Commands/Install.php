@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Install Command
  * -----------------------
- * Console command to install the page with all the mandatory information and setting.
+ * Console command to install the page with all the mandatory information and settings.
  *
  * @author  Ferdinand Frank
  * @version 1.0
@@ -53,7 +53,7 @@ class Install extends Command {
     private $admin;
 
     /**
-     * The setting names to save during the install.
+     * The settings to insert in the settings database during the install.
      *
      * @var array
      */
@@ -75,14 +75,14 @@ class Install extends Command {
     ];
 
     /**
-     * States if old available date shall be kept in the database.
+     * States if old available data shall be kept in the database.
      *
      * @var boolean
      */
     private $keepOldData;
 
     /**
-     * Get the console command arguments.
+     * Gets the console command arguments.
      *
      * @return array
      */
@@ -119,7 +119,7 @@ class Install extends Command {
     }
 
     /**
-     * Save the old data.
+     * Saves the old existing data from the database, so it can be inserted again after the installation if specified.
      */
     private function saveOldData() {
         if ($this->keepOldData) {
@@ -142,6 +142,9 @@ class Install extends Command {
         }
     }
 
+    /**
+     * Deletes the old stripe data.
+     */
     private function resetStripeData() {
         if (Schema::hasTable('payment_details')) {
             foreach (PaymentDetails::all() as $paymentDetails) {

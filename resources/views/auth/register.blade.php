@@ -63,12 +63,12 @@
             </div>
 
             <div class="center">
-                {{--<p class="is-warning">Die Registrierung ist zur Darstellung des Prototypen deaktiviert.
+                <button type="submit" class="button is-success">{{ trans('action.login') }}</button>
+
+                <p class="is-warning">Die Registrierung ist zur Darstellung des Prototypen deaktiviert.
                     Um den Prototypen zu testen, navigiere bitte zum <a href="{{ route('login') }}" class="link">Login</a> und melde dich
-                mit dem verfügbaren Gast-Account durch das bereits ausgefüllte Formular ein.</p>--}}
-                <button type="submit" class="button is-success">
-                    <span>{{ trans('action.register') }}</span>
-                </button>
+                mit dem verfügbaren Gast-Account durch das bereits ausgefüllte Formular ein.</p>
+
             </div>
 
             <hr class="light">

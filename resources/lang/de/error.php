@@ -2,6 +2,27 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | General error messages
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    'throttle'    => 'Zu viele Versuche. Bitte versuche es in :seconds Sekunden erneut.',
+    'unconfirmed' => 'Dein Account wurde noch nicht bestätigt. Wir haben dir nochmals eine E-Mail an :email gesendet. Bitte klicke auf den darin enthaltenen Link, um deinen Account zu bestätigen.',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Alert error messages
+    |--------------------------------------------------------------------------
+    | Error messages which will be shown within a alert. The first key defines the 'alert-key' i.e. the
+    | circumstances of the alert to show. The second key defines the request method.
+    |
+    */
+
     'default' => [
         'delete' => [
             'title'   => 'Löschen fehlgeschlagen',

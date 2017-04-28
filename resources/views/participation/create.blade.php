@@ -521,6 +521,13 @@
                 },
 
                 validateCoupon: function (value, callback) {
+
+                    // Ignore if no value is set
+                    if (!value) {
+                        callback(true);
+                        return;
+                    }
+
                     let coupon = getObjectByValue(this.coupons, 'code', value);
 
                     this.coupon = coupon;

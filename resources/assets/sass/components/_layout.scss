@@ -9,6 +9,7 @@
  *  3. Content
  *  4. Navbar
  *  5. Sections
+ *  6. Footer
  */
 
 /*********************
@@ -48,6 +49,7 @@ $navbar-item-font-size: 1rem;
 
         &.welcome {
             @extend .full-height;
+            margin-bottom: 0;
         }
     }
 }
@@ -59,7 +61,6 @@ $navbar-item-font-size: 1rem;
     height: $navbar-height;
     border-top: $navbar-bottom-top-width solid $primary;
     @include linear-gradient($navbar-background-gradient-start, $navbar-background-gradient-end);
-    border-bottom: $navbar-border-bottom-width solid $navbar-border-bottom-color;
     box-shadow: 0 1px 5px -2px $grey;
     position: fixed;
     width: 100%;
@@ -107,6 +108,20 @@ $navbar-item-font-size: 1rem;
         .icon {
             > i {
                 font-size: $font-size-large;
+            }
+        }
+
+        &.is-tab {
+
+            &:hover {
+                border-bottom: 2px solid $primary;
+                padding-bottom: calc(0.5rem - 2px);
+            }
+
+            &.is-active {
+                border-bottom: 3px solid $primary;
+                color: $primary;
+                padding-bottom: calc(0.5rem - 3px);
             }
         }
     }
@@ -217,4 +232,13 @@ $navbar-item-font-size: 1rem;
     .content {
         padding: 0 5px;
     }
+}
+
+/*********************
+  6. Footer
+**********************/
+.footer {
+    background: $footer-background-color;
+    border-top: 1px solid $footer-border-color;
+    margin: 0 10%;
 }

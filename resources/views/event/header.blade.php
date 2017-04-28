@@ -1,4 +1,4 @@
-<div id="overview" class="card-header card-header-image">
+<div id="overview" class="card-header card-header-image large">
     <div class="card-image" style="background-image: url({{ $event->cover }})"></div>
     <div class="card-header-info">
         <icon icon="{{ config('icons.event') }}"></icon>

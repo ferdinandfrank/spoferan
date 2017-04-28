@@ -14,6 +14,7 @@
  *  8. Dropdowns
  *  9. Lists
  * 10. Message Boxes
+ * 11. Footer
  */
 
 /*********************
@@ -127,7 +128,6 @@ $link-active-border: $grey-dark !default;
 **********************/
 $navbar-background-gradient-start: $default 0%;
 $navbar-background-gradient-end: $white 45%;
-$navbar-border-bottom-color: $default;
 
 $navbar-buttons-text-color: $grey;
 $navbar-buttons-background-color: transparent;
@@ -203,3 +203,9 @@ $message-box-success-header-text-color: $white !default;
 $message-box-danger-background-color: lighten($danger, 50%) !default;
 $message-box-danger-header-background-color: $danger !default;
 $message-box-danger-header-text-color: $white !default;
+
+/*********************
+  11. Footer
+**********************/
+$footer-background-color: $white-smooth !default;
+$footer-border-color: $grey-light !default;

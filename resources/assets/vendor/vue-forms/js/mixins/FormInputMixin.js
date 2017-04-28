@@ -121,7 +121,7 @@ module.exports = {
 
         // States if the current input value is valid.
         hasSuccess: function () {
-            return !this.errorMessage && (this.valueChanged || !this.required);
+            return !this.errorMessage && this.valueChanged;
         },
 
         // The name of the input. Will also be the name of the value, when the form gets submitted.

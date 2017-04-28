@@ -98,6 +98,10 @@ $card-hover-transition-duration: .5s;
             background: $dark;
             min-height: 200px;
             overflow: hidden;
+
+            &.large {
+                min-height: 300px;
+            }
         }
 
         .rating-stars {

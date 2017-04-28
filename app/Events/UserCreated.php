@@ -14,7 +14,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 /**
  * UserCreated
  * -----------------------
- * Event that gets triggered as soon as a new user was created.
+ * Event that gets triggered as soon as a new user gets inserted into the database.
  *
  * @author  Ferdinand Frank
  * @version 1.0
@@ -32,7 +32,7 @@ class UserCreated {
     public $user;
 
     /**
-     * Create a new event instance.
+     * Creates a new event instance.
      *
      * @param User $user
      */
@@ -41,7 +41,7 @@ class UserCreated {
     }
 
     /**
-     * Get the channels the event should broadcast on.
+     * Gets the channels the event should broadcast on.
      *
      * @return Channel|array
      */

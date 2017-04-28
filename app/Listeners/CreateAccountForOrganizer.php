@@ -7,14 +7,18 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Stripe\Account;
 
+/**
+ * CreateAccountForOrganizer
+ * -----------------------
+ * Listener of the organizer created event to create a Stripe account for the created organizer.
+ *
+ * @see \App\Events\OrganizerCreated
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Listeners
+ */
 class CreateAccountForOrganizer {
-
-    /**
-     * Create the event listener.
-     */
-    public function __construct() {
-        //
-    }
 
     /**
      * Handle the event.

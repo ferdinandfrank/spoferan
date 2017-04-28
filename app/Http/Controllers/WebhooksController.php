@@ -23,7 +23,7 @@ class WebhooksController extends Controller {
      *
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function handle() {
+    public function handleStripe() {
         $payload = request()->all();
 
         // Call specific method dependent on the event type

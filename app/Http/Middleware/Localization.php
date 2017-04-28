@@ -8,7 +8,7 @@ use Closure;
 /**
  * Localization
  * -----------------------
- * Middleware to handle the Localization of the application.
+ * Middleware to handle the localization / internationalization of the application.
  *
  * @author  Ferdinand Frank
  * @version 1.0
@@ -26,7 +26,7 @@ class Localization {
     public function handle($request, Closure $next) {
         $locale = $request->segment(1);
 
-        // Make sure current locale exists.
+        // Make sure current locale is supported by the application, otherwise use default locale
         if (!array_key_exists($locale, config('app.locales'))) {
             $locale = config('app.fallback_locale');
         }

@@ -10,7 +10,7 @@
 
 {{-- Greeting --}}
 @if (!empty($greeting))
-# {{ $greeting }}
+# {{ $greeting }},
 @else
 @if ($level == 'error')
 # Whoops!
@@ -51,9 +51,9 @@
 
 <!-- Salutation -->
 @if (!empty($salutation))
-    {{ $salutation }}
+{{ $salutation }}
 @else
-    {{ trans('email.salutation') }},<br>{{ config('app.name') }}
+{{ trans('email.salutation') }}<br>{{ config('app.name') }}
 @endif
 
 <!-- Subcopy -->

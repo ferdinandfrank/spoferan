@@ -32,7 +32,7 @@ return [
     'password_reset' => [
         'post' => [
             'title'   => 'Passwort zurückgesetzt',
-            'content' => 'Dein Passwort wurde erfolgreich zurückgesetzt.'
+            'content' => 'Dein Passwort wurde erfolgreich zurückgesetzt. Du wirst nun automatisch eingeloggt.'
         ]
     ],
 

@@ -6,6 +6,7 @@ use App\Models\Athlete;
 use App\Models\Organizer;
 use App\Models\User;
 use Carbon\Carbon;
+use Tests\Browser\Pages\Login;
 use Tests\Browser\Pages\Registration;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
@@ -70,6 +71,8 @@ class RegistrationTest extends DuskTestCase {
 
         $this->browse(function (Browser $browser) {
 
+            $email = self::$registeredAthlete->user->email;
+
             // Type the necessary data into the inputs and submit the registration form
             $browser->visit(new Registration)
                     ->executeRegister(self::$registeredAthlete, \FakerSeeder::$USER_PASSWORD);
@@ -77,14 +80,34 @@ class RegistrationTest extends DuskTestCase {
             // Wait a maximum of ten seconds and assert a success alert is shown
             $browser->waitForText(trans('alert.user.post.content'), 10);
 
-            // Assert the data was inserted in the database
+            // Assert the data was inserted in the database and the user is unconfirmed
             $this->assertDatabaseHas(self::$registeredAthlete->user->getTable(), [
-                'email' => self::$registeredAthlete->user->email
+                'email' => $email,
+                'confirmed' => false
             ]);
             $this->assertDatabaseHas(self::$registeredAthlete->getTable(), [
                 'first_name' => self::$registeredAthlete->first_name,
                 'last_name'  => self::$registeredAthlete->last_name,
                 'birth_date' => self::$registeredAthlete->birth_date->toDateString()
+            ]);
+
+            // Check if the user cannot login because he has to confirm his email address
+            $browser->visit(new Login)
+                    ->executeLogin($email, \FakerSeeder::$USER_PASSWORD);
+
+            // Wait a maximum of ten seconds and assert the unconfirmed error alert is shown
+            $browser->waitForText(trans('error.unconfirmed', ['email' => $email]), 10);
+
+            // Visit the confirmation link to confirm the user
+            // TODO: Implement with mocking as soon as it gets supported for Dusk
+            $user = User::whereEmail($email)->first();
+            $browser->visit(route('login') . '?id=' . $user->id . '&token=' . $user->confirmation_token);
+            $browser->waitForText(trans('alert.account_confirmed.content'), 10);
+
+            // Check if the user has been confirmed
+            $this->assertDatabaseHas(self::$registeredAthlete->user->getTable(), [
+                'email' => $email,
+                'confirmed' => true
             ]);
         });
     }

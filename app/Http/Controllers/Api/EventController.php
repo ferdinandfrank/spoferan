@@ -17,7 +17,6 @@ use App\Models\Event;
  */
 class EventController extends Controller {
 
-
     /**
      * Gets the data of the specified event.
      *
