@@ -13,6 +13,13 @@ return [
         'title' => 'Neue Kontaktnachricht über die Website',
     ],
 
+    'test' => [
+        'subject'        => 'Test-E-Mail von :title',
+        'title'          => 'Hier steht der Titel der E-Mail!',
+        'content'        => 'hier steht der Hauptinhalt der E-Mail, welcher dem Empfänger wichtige Informationen mitteilt, wie etwa eine Registrierungs- oder Zahlungsbestätigung. Dieser kann zusätzlich dynamische Daten über Benutzer von :title enthalten.',
+        'receiving_info' => 'Du erhälst diese E-Mail, weil auf :title eine Test-E-Mail angefordert wurde.'
+    ],
+
     'registration' => [
         'subject'        => 'Deine Registrierung bei :title',
         'title'          => 'Vielen Dank für deine Registrierung!',

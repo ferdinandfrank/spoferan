@@ -17,4 +17,4 @@ mix.js([
     assetsPath + 'js/app.js',
     assetsPath + 'talvbansal/media-manager/js/media-manager.js',
 ], exportPath + 'js')
-   .sass('resources/assets/sass/app.scss', exportPath + 'css').version();
+   .sass(assetsPath + 'sass/app.scss', exportPath + 'css').version();

@@ -6,6 +6,7 @@ use App\Console\Commands\Install;
 use App\Console\Commands\PolicyMakeCommand;
 use App\Console\Commands\RequestMakeCommand;
 use App\Console\Commands\ResourceMakeCommand;
+use App\Console\Commands\SendTestEmail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,7 +27,8 @@ class Kernel extends ConsoleKernel {
      * @var array
      */
     protected $commands = [
-        Install::class
+        Install::class,
+        SendTestEmail::class
     ];
 
     /**

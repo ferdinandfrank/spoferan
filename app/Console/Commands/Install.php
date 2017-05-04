@@ -22,14 +22,14 @@ use Symfony\Component\Console\Input\InputOption;
  * @version 1.0
  * @package App\Console\Commands
  */
-class Install extends Command {
+class Install extends BaseCommand {
 
     /**
      * The name of the console command.
      *
      * @var string
      */
-    protected $name = 'page:install';
+    protected $name = 'spoferan:install';
 
     /**
      * The console command description.
@@ -37,13 +37,6 @@ class Install extends Command {
      * @var string
      */
     protected $description = 'Install and configure the page.';
-
-    /**
-     * The logger to print information on the console.
-     *
-     * @var ConsoleLogger
-     */
-    private $logger;
 
     /**
      * The admin to insert during the install.
@@ -96,8 +89,6 @@ class Install extends Command {
      * Executes the console command.
      */
     public function handle() {
-        $this->logger = new ConsoleLogger($this, $this->output);
-
         $this->keepOldData = !!$this->option('keep');
 
         $this->logger->comment('Welcome to the page installation! You\'ll be up and running in no time...');
