@@ -6,12 +6,21 @@ use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
+/**
+ * DuskTestCase
+ * -----------------------
+ * Abstract class to setup the driver for Dusk test cases.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package Tests
+ */
 abstract class DuskTestCase extends BaseTestCase {
 
     use CreatesApplication;
 
     /**
-     * Prepare for Dusk test execution.
+     * Prepares for Dusk test execution.
      *
      * @beforeClass
      */
@@ -20,7 +29,7 @@ abstract class DuskTestCase extends BaseTestCase {
     }
 
     /**
-     * Create the RemoteWebDriver instance.
+     * Creates the RemoteWebDriver instance.
      *
      * @return \Facebook\WebDriver\Remote\RemoteWebDriver
      */

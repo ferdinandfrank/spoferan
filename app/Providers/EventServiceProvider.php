@@ -2,9 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+/**
+ * EventServiceProvider
+ * -----------------------
+ * Service provider to register all events and their listeners for the application.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Providers
+ */
 class EventServiceProvider extends ServiceProvider {
 
     /**
@@ -13,24 +21,22 @@ class EventServiceProvider extends ServiceProvider {
      * @var array
      */
     protected $listen = [
-        'App\Events\AthleteCreated' => [
+        'App\Events\AthleteCreated'   => [
             'App\Listeners\CreateCustomerForAthlete',
         ],
         'App\Events\OrganizerCreated' => [
             'App\Listeners\CreateAccountForOrganizer',
         ],
-        'App\Events\UserCreated' => [
+        'App\Events\UserCreated'      => [
             'App\Listeners\CreateUserRelatedTables',
         ],
-        'App\Events\CouponRedeemed' => [
+        'App\Events\CouponRedeemed'   => [
             'App\Listeners\IncreaseCouponRedemptions',
         ]
     ];
 
     /**
-     * Register any events for your application.
-     *
-     * @return void
+     * Registers any events for your application.
      */
     public function boot() {
         parent::boot();

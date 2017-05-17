@@ -3,7 +3,7 @@
 /**
  * Checks if the current path is the path of the specified key's route.
  *
- * @param string $routeKey The key of the route to check.
+ * @param string $routeKey  The key of the route to check.
  * @param bool   $recursive {@code false} if also child routes shall be checked
  *
  * @return bool if the current path is equal to the specified key's route.
@@ -47,7 +47,8 @@ function getRelativeRoute($route) {
  * @return string
  */
 function formatMoney($cents) {
-    $fmt = new NumberFormatter( 'de_DE', NumberFormatter::CURRENCY );
+    $fmt = new NumberFormatter('de_DE', NumberFormatter::CURRENCY);
+
     return $fmt->formatCurrency($cents / 100, "EUR");
 }
 
@@ -68,7 +69,8 @@ function dateDiffForHumans(\Carbon\Carbon $date, $withTime = true) {
         $withTime = false;
     }
 
-    return $withTime ? trans('param_label.date_at_time', ['date' => $formattedDate, 'time' => $date->formatLocalized('%H:%M')]) : $formattedDate;
+    return $withTime ? trans('param_label.date_at_time',
+        ['date' => $formattedDate, 'time' => $date->formatLocalized('%H:%M')]) : $formattedDate;
 }
 
 /**
@@ -115,7 +117,15 @@ function queryRoute($route, array $queryParams) {
     return $route;
 }
 
+/**
+ * Calculates the credit card fee as defined in the database of the specified amount of cents.
+ *
+ * @param $cents
+ *
+ * @return float
+ */
 function calculateCCFee($cents) {
     $fullAmount = ($cents + intval(Settings::stripeCCFeeAmount())) / (1 - floatval(Settings::stripeCCFeePercent()));
+
     return round($fullAmount - $cents);
 }

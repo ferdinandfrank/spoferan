@@ -14,8 +14,6 @@ class DatabaseSeeder extends Seeder {
 
     /**
      * Runs the database seeds.
-     *
-     * @return void
      */
     public function run() {
         $this->call(MandatorySeeder::class);

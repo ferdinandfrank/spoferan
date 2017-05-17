@@ -1,6 +1,15 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Input Validation Rules
+|--------------------------------------------------------------------------
+| Defines the rules for input fields.
+|
+*/
+
 return [
+
     'email'              => [
         'max' => 190
     ],
@@ -11,10 +20,10 @@ return [
     'street'             => [
         'max' => 60
     ],
-    'user_type'             => [
+    'user_type'          => [
         'max' => 10
     ],
-    'state'             => [
+    'state'              => [
         'max' => 10
     ],
     'country'            => [
@@ -32,35 +41,35 @@ return [
     'confirmation_token' => [
         'max' => 190
     ],
-    'slug'       => [
+    'slug'               => [
         'max' => 190
     ],
-    'facebook'              => [
+    'facebook'           => [
         'max' => 50
     ],
-    'twitter'              => [
+    'twitter'            => [
         'max' => 20
     ],
-    'youtube'              => [
+    'youtube'            => [
         'max' => 20
     ],
-    'instagram'              => [
+    'instagram'          => [
         'max' => 30
     ],
-    'snapchat'              => [
+    'snapchat'           => [
         'max' => 30
     ],
-    'starter_number' => [
+    'starter_number'     => [
         'max' => 10
     ],
-    'stripe_id'              => [
+    'stripe_id'          => [
         'max' => 50
     ],
-    'charge_id'              => [
+    'charge_id'          => [
         'max' => 50
     ],
 
-    'payment_type'              => [
+    'payment_type' => [
         'max' => 20
     ],
 
@@ -118,13 +127,13 @@ return [
     ],
 
     'event_group' => [
-        'title'             => [
+        'title' => [
             'max' => 100
         ]
     ],
 
     'coupon' => [
-        'code'             => [
+        'code' => [
             'max' => 10
         ],
         'type' => [
@@ -133,19 +142,19 @@ return [
     ],
 
     'conversation' => [
-        'title'             => [
+        'title' => [
             'max' => 50
         ]
     ],
 
     'ad' => [
-        'title'             => [
+        'title'       => [
             'max' => 100
         ],
-        'text'             => [
+        'text'        => [
             'max' => 200
         ],
-        'label'             => [
+        'label'       => [
             'max' => 100
         ],
         'budget_type' => [
@@ -154,19 +163,19 @@ return [
     ],
 
     'target_group' => [
-        'title'             => [
+        'title' => [
             'max' => 100
         ],
     ],
 
     'image' => [
-        'title'             => [
+        'title' => [
             'max' => 30
         ]
     ],
 
     'check_point' => [
-        'title'    => [
+        'title' => [
             'max' => 100
         ]
     ],
@@ -217,7 +226,7 @@ return [
         'label' => [
             'max' => 50
         ],
-        'type' => [
+        'type'  => [
             'max' => 50
         ]
     ],

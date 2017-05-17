@@ -255,14 +255,14 @@ return [
          */
         'Excel'        => Maatwebsite\Excel\Facades\Excel::class,
         'Image'        => Intervention\Image\Facades\Image::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF'          => Barryvdh\DomPDF\Facade::class,
 
         /*
          * Custom Aliases
          */
         'Settings'     => \App\Models\Settings::class,
-        'Country'     => \App\Models\Country::class,
-        'State'     => \App\Models\State::class
+        'Country'      => \App\Models\Country::class,
+        'State'        => \App\Models\State::class
     ],
 
 ];

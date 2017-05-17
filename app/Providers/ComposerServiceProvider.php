@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\ViewComposers\Frontend\AdvertisementComposer;
-use App\Http\ViewComposers\Backend\SidebarComposer;
 use App\Http\ViewComposers\PublicComposer;
 use Illuminate\Support\ServiceProvider;
 use View;
@@ -11,7 +9,7 @@ use View;
 /**
  * ComposerServiceProvider
  * -----------------------
- * Provides the view composer services for the application.
+ * Service provider to provide the view composer services for the application.
  *
  * @author  Ferdinand Frank
  * @version 1.0

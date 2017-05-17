@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
  * FakerSeeder
  * -----------------------
  * Fills the database with fake data.
- * -----------------------
  *
  * @author  Ferdinand Frank
  * @version 1.0

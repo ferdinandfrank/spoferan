@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
  * MandatorySeeder
  * -----------------------
  * Fills the database with mandatory data.
- * -----------------------
  *
  * @author  Ferdinand Frank
  * @version 1.0

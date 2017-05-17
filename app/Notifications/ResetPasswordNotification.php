@@ -4,9 +4,17 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
+/**
+ * ResetPasswordNotification
+ * -----------------------
+ * Notification class to notify an user about his requested password reset, i.e. send him a 'reset password' mail.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Notifications
+ */
 class ResetPasswordNotification extends Notification {
 
     use Queueable;

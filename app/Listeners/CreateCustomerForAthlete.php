@@ -3,25 +3,25 @@
 namespace App\Listeners;
 
 use App\Events\AthleteCreated;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Stripe\Customer;
 
+/**
+ * CreateCustomerForAthlete
+ * -----------------------
+ * Listener of the athlete created event to create a Stripe customer for the created athlete.
+ *
+ * @see \App\Events\AthleteCreated
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Listeners
+ */
 class CreateCustomerForAthlete {
-
-    /**
-     * Create the event listener.
-     */
-    public function __construct() {
-        //
-    }
 
     /**
      * Handle the event.
      *
      * @param  AthleteCreated $event
-     *
-     * @return void
      */
     public function handle(AthleteCreated $event) {
         $user = $event->athlete->user;

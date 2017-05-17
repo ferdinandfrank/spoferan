@@ -6,14 +6,18 @@ use App\Events\UserCreated;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * CreateUserRelatedTables
+ * -----------------------
+ * Listener of the user created event to create the user related database entries.
+ *
+ * @see \App\Events\UserCreated
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Listeners
+ */
 class CreateUserRelatedTables {
-
-    /**
-     * Creates the event listener.
-     */
-    public function __construct() {
-        //
-    }
 
     /**
      * Handles the event.

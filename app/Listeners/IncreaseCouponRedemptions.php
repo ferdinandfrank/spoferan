@@ -6,14 +6,18 @@ use App\Events\CouponRedeemed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * IncreaseCouponRedemptions
+ * -----------------------
+ * Listener of the coupon redeemed event to increase the coupon redemption count of the redeemed coupon in the database.
+ *
+ * @see \App\Events\CouponRedeemed
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Listeners
+ */
 class IncreaseCouponRedemptions {
-
-    /**
-     * Create the event listener.
-     */
-    public function __construct() {
-        //
-    }
 
     /**
      * Handle the event.

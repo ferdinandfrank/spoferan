@@ -2,19 +2,25 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\PolicyMakeCommand;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\DuskServiceProvider;
 use Queue;
 use Stripe\Stripe;
 
+/**
+ * AppServiceProvider
+ * -----------------------
+ * Service provider to setup or register any necessary services, which need to be run on deployment.
+ *
+ * @author  Ferdinand Frank
+ * @version 1.0
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider {
 
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
+     * Bootstraps any application services.
      */
     public function boot() {
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -29,9 +35,7 @@ class AppServiceProvider extends ServiceProvider {
     }
 
     /**
-     * Register any application services.
-     *
-     * @return void
+     * Registers any application services.
      */
     public function register() {
         if ($this->app->environment('local', 'testing')) {
